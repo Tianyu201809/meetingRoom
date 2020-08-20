@@ -6,7 +6,6 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import axios from 'axios'
-import { getToken, setToken } from './api/token'
 Vue.config.productionTip = false
 Vue.use(ElementUI)
 Vue.use(axios)
