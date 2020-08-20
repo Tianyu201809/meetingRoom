@@ -42,7 +42,7 @@
                      trigger="click"
                      @command="handleCommand">
           <span class="el-dropdown-link">
-            {{username}}
+            {{userInfo.userName}}
             <i class="el-icon-caret-bottom"></i>
           </span>
           <el-dropdown-menu slot="dropdown">
@@ -60,7 +60,9 @@
 </template>
 <script>
 import bus from '../common/bus'
-import {setToken} from '../../api/token'
+import { setToken } from '../../api/token'
+import store from '../../store'
+import { setLocalProp, getLocalProp } from '@/api/localMethods'
 export default {
   data() {
     return {
@@ -68,20 +70,24 @@ export default {
       fullscreen: false,
       name: 'linxin',
       message: 2,
+      userInfo: {
+          userName:'',
+          email:'',
+          password:''
+      },
     }
   },
   props: {
     title: {
       type: String,
-      default: function () {
+      default() {
         return '会议室管理系统'
       },
     },
   },
   computed: {
     username() {
-      let username = localStorage.getItem('ms_username')
-      return username ? username : this.name
+      return this.userInfo.userName
     },
   },
   methods: {
@@ -130,6 +136,9 @@ export default {
     if (document.body.clientWidth < 1500) {
       this.collapseChage()
     }
+    this.userInfo.userName = getLocalProp('userName')
+    this.userInfo.email = getLocalProp('email')
+    this.userInfo.password = getLocalProp('password')
   },
 }
 </script>

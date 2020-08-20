@@ -5,32 +5,35 @@
              style="height:252px;">
       <div class="user-info">
         <keep-alive>
-          <el-avatar  @error="errorHandler"
+          <el-avatar @error="errorHandler"
                      :size="120">
             <img src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"
                  class="user-avator-index"
-                 alt 
-                 ref="avatar"/>
+                 alt
+                 ref="avatar" />
           </el-avatar>
         </keep-alive>
 
         <div class="user-info-cont">
-          <div class="user-info-name">{{user.name}}</div>
-          <div>{{user.role}}</div>
+          <div class="user-info-name">{{userInfo.userName}}</div>
+          <div>{{userInfo.email}}</div>
         </div>
       </div>
       <div class="user-info-list">
-        上次登录日期：
-        <span>2020-08-17</span>
+        本次登录日期：
+        <span>{{loginDate}}</span>
       </div>
       <div class="user-info-list">
-        上次登录时间：
-        <span>09:00</span>
+        本次登录时间：
+        <span>{{loginTime}}</span>
       </div>
     </el-card>
   </div>
 </template>
 <script>
+import store from '../../../store'
+import { getLocalProp, setLocalProp } from '../../../api/localMethods'
+import dayjs from 'dayjs'
 export default {
   name: 'myInfoCard',
   props: {
@@ -41,11 +44,34 @@ export default {
       },
     },
   },
+  data() {
+    return {
+      userInfo: {
+        userName: '',
+        email: '',
+      },
+    }
+  },
+  mounted() {
+    this.userInfo.userName = getLocalProp('userName')
+    this.userInfo.email = getLocalProp('email')
+  },
   methods: {
     errorHandler() {
-        debugger;
-        this.refs.avatar.src = 'https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png'
+      debugger
+      this.refs.avatar.src =
+        'https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png'
       return true
+    },
+  },
+  computed: {
+    loginDate() {
+      return dayjs(new Date()).format('YYYY-MM-DD')
+    },
+    loginTime() {
+      let dateString = dayjs(new Date()).format('YYYY-MM-DD HH:mm:ss')
+      let timeString = dateString.split(' ')[1]
+      return timeString
     },
   },
 }

@@ -54,6 +54,7 @@
 <script>
 import { loginUser, getUserEmail } from '@/api/user'
 import { getToken, setToken } from '@/api/token'
+import {setLocalProp, getLocalProp} from '@/api/localMethods'
 export default {
   data: function () {
     return {
@@ -82,7 +83,12 @@ export default {
               self.$store.state.userInfo.email = email.data.data.email
               self.$store.state.userInfo.userName = self.param.userName
               self.$store.state.userInfo.password = self.param.password
-              //self.email =
+
+              //将数据设置在localStoreage中（web本地存储器）
+              setLocalProp('email', email.data.data.email)
+              setLocalProp('userName', self.param.userName)
+              //setLocalProp('password', self.param.password)
+
               console.log(self.param)
               let param = self.param
               self.$store
@@ -153,16 +159,16 @@ export default {
   height: 400px;
   display: inline-block;
   margin: 50px 0 0 140px;
+  -webkit-user-drag: none;
 }
 .middleBox {
   margin: 0 auto;
   width: 1200px;
+  position: relative;
+  left: 0%;
+  top: 3%;
 }
-.middleBox::after {
-  content: '';
-  display: block;
-  clear: both;
-}
+
 .login-wrap {
   position: relative;
   width: 100%;

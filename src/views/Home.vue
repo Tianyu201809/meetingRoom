@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper">
-    <v-head title="会议室管理系统"></v-head>
+    <v-head title="会议室管理系统" :userInfo="userInfo"></v-head>
     <v-sidebar></v-sidebar>
     <div class="content-box"
          :class="{'content-collapse':collapse}">
@@ -25,16 +25,13 @@ import vSidebar from '@/components/common/Sidebar.vue'
 import bus from '@/components/common/bus'
 import { getUserInfo } from '@/api/user'
 import { setToken, getToken } from '@/api/token'
+// import store from '../store'
 export default {
   data() {
     return {
       tagsList: [],
       collapse: false,
-      loginUserInfo: {
-        userName: '',
-        userId: '',
-        userEmail: '',
-      },
+      userInfo: {},
     }
   },
   components: {
@@ -92,12 +89,10 @@ export default {
     })
   },
   mounted() {
-    //获取用户信息
+
   },
   mothods: {
-    getUserInfo() {
-      getUserInfo(this.loginUserInfo).then(() => {})
-    },
+ 
   },
 }
 </script>
