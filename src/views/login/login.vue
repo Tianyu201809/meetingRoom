@@ -45,7 +45,7 @@
 
 <script>
 import { loginUser, getUserEmail } from '@/api/user'
-import {getToken, setToken} from '@/api/token'
+import { getToken, setToken } from '@/api/token'
 export default {
   data: function () {
     return {
@@ -65,32 +65,69 @@ export default {
   },
   methods: {
     login() {
+      let self = this;
       this.$refs.login.validate((valid) => {
         if (valid) {
           console.log(this.param)
-          getUserEmail(this.param).then((email) => {
-            this.email = email
-            loginUser(this.param).then((res) => {
-              if (parseInt(res.data.code) === 200 && res.data.mes === 'success') {
-                //localStorage.setItem('token', )
-                setToken(res.data.data.token)
-                this.$message.success('登录成功')
-                localStorage.setItem('ms_username', this.param.username)
-                this.$router.push('/')
-              } else {
-                this.$message.error('输入的密码不正确，请重新输入')
-                console.log('error submit!!')
-                return false
-              }
-            }).catch(e => {
-                console.log(e)
+          getUserEmail(self.param)
+            .then((email) => {
+              self.$store.state.userInfo.email = email.data.data.email
+              self.$store.state.userInfo.userName = self.param.userName
+              self.$store.state.userInfo.password = self.param.password
+              //self.email = 
+              console.log(self.param)
+              let param = self.param
+              self.$store.dispatch('login', self.$store.state.userInfo).then((res) => {
+                if (
+                  parseInt(res.data.code) === 200 &&
+                  res.data.mes === 'success'
+                ) {
+                  //localStorage.setItem('token', )
+                  setToken(res.data.data.token)
+                  self.$message.success('登录成功')
+                  // localStorage.setItem('ms_username', this.param.username)
+                  self.$router.replace('/')
+                } else {
+                  self.$message.error('输入的密码不正确，请重新输入')
+                  console.log(res.data)
+                  return false
+                }
+              }).catch(error => {
+                  debugger
+                 self.$message.error(error.mes);
+                 return false
+              })
+              //   loginUser(this.param)
+              //     .then((res) => {
+              //       if (
+              //         parseInt(res.data.code) === 200 &&
+              //         res.data.mes === 'success'
+              //       ) {
+              //         //localStorage.setItem('token', )
+              //         setToken(res.data.data.token)
+              //         this.$message.success('登录成功')
+              //         // localStorage.setItem('ms_username', this.param.username)
+              //         this.$router.push({ name: 'index' })
+              //       } else {
+              //         this.$message.error('输入的密码不正确，请重新输入')
+              //         console.log(res.data)
+              //         return false
+              //       }
+              //     })
+              //     .catch((e) => {
+              //       this.$message.error(e)
+              //       console.log(e)
+              //       return false
+              //     })
             })
-          }).catch(e => {
+            .catch((e) => {
+              this.$message.error('输入的密码不正确，请重新输入')
               console.log(e)
-          })
+              return false
+            })
         } else {
           this.$message.error('请输入账号和密码')
-          console.log('error submit!!')
+          console.log(e)
           return false
         }
       })

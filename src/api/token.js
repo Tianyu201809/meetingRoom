@@ -1,10 +1,11 @@
 /**
  * 设置token和获取token
  */
-export const getToken = () => {
-	return localStorage.getItem('token')
+import Cookies from 'js-cookie'
+export const getToken = (tokenName = 'token') => {
+	return Cookies.get(tokenName)
 }
 
-export const setToken = (token) => {
-	localStorage.setItem('token', token)
+export const setToken = (token, tokenName = 'token') => {
+   Cookies.set(tokenName, token)
 }

@@ -1,5 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import { getToken, setToken } from '@/api/token'
+import store from '../store'
 
 /**
  * 解决element-ui重复点击同一个地址时的报错代码
@@ -9,7 +11,9 @@ const originalPush = Router.prototype.push
 Router.prototype.push = function push(location) {
 	return originalPush.call(this, location).catch((err) => err)
 }
-export default new Router({
+//设置一个全局导航守卫
+
+const router = new Router({
 	beforeRouteUpdate(to, from, next) {},
 	routes: [
 		{
@@ -59,6 +63,7 @@ export default new Router({
 		},
 		{
 			path: '/login',
+			name: 'login',
 			component: () => import('../views/login/login.vue'),
 			meta: { title: '登录' },
 		},
@@ -72,3 +77,25 @@ export default new Router({
 		},
 	],
 })
+
+router.beforeEach((to, from, next) => {
+	const token = getToken()
+	debugger
+	if (token) {
+		store.dispatch('authorization', token).then(() => {
+			debugger
+			if (to.path === '/login') next({ name: 'index' })
+			else next()
+		})
+		// .catch((e) => {
+		// 	setToken('')
+		// 	console.log(e)
+		// 	next({ name: 'login' })
+		// })
+	} else {
+		if (to.path === '/login') next()
+		else next({ name: 'login' })
+	}
+})
+
+export default router
