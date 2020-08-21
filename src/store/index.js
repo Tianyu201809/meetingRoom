@@ -35,8 +35,8 @@ export default new Vuex.Store({
 						} else {
 							//
 							reject({
-                                mes:'登录信息不匹配'
-                            })
+								mes: '登录信息不匹配',
+							})
 						}
 
 						console.log(res)
@@ -48,23 +48,29 @@ export default new Vuex.Store({
 			})
 		},
 		authorization({ commit }, token) {
+			let self = this
 			return new Promise((resolve, reject) => {
-                debugger
+				debugger
 				authorization(token).then((res) => {
-                        debugger
-						if (res.data.code === 401) {
-							reject(new Error('token error'))
-						} else {
-							//每次路由跳转都会生成一个新的token
-							//这样做的话，只要用户在使用系统，token就一直都是有效的
-							setToken(res.data.data.token)
-							resolve()
+					debugger
+					if (res.data.code === 401) {
+						try {
+							reject('error')
+							self.$router.push('/login')
+						} catch (error) {
+							console.log(error)
 						}
-					})
-					// .cacth((e) => {
-                    //     debugger;
-					// 	reject(e)
-					// })
+					} else {
+						//每次路由跳转都会生成一个新的token
+						//这样做的话，只要用户在使用系统，token就一直都是有效的
+						setToken(res.data.data.token)
+						resolve()
+					}
+				})
+				// .cacth((e) => {
+				//     debugger;
+				// 	reject(e)
+				// })
 			})
 		},
 	},

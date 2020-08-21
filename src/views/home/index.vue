@@ -38,6 +38,7 @@ import myCalendar from './children/myCalendar'
 import todoList from './children/todoList'
 import { getUserInfo } from '@/api/user'
 import { setToken, getToken } from '@/api/token'
+
 export default {
   name: 'index',
   components: {
@@ -45,7 +46,7 @@ export default {
     todayMeetingCard,
     notification,
     myCalendar,
-    todoList,
+    todoList
   },
   beforeRouteEnter(to, from, next) {
     //设置组件导航首位，如果cookit中没有页面，不进行跳转

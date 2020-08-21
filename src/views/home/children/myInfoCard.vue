@@ -1,10 +1,11 @@
 <template>
-  <div>
-    <el-card shadow="hover"
-             class="mgb20"
-             style="height:252px;">
-      <div class="user-info">
-        <keep-alive>
+  <div class="card-container">
+    <keep-alive>
+      <el-card shadow="hover"
+               class="mgb20"
+               style="height:252px;">
+        <div class="user-info">
+
           <el-avatar @error="errorHandler"
                      :size="120">
             <img src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"
@@ -12,22 +13,24 @@
                  alt
                  ref="avatar" />
           </el-avatar>
-        </keep-alive>
 
-        <div class="user-info-cont">
-          <div class="user-info-name">{{userInfo.userName}}</div>
-          <div>{{userInfo.email}}</div>
+          <div class="user-info-cont">
+            <div class="user-info-name">{{userInfo.userName}}</div>
+            <div>{{userInfo.email}}</div>
+            <div class="edit-info"><a href="#">修改</a></div>
+          </div>
         </div>
-      </div>
-      <div class="user-info-list">
-        本次登录日期：
-        <span>{{loginDate}}</span>
-      </div>
-      <div class="user-info-list">
-        本次登录时间：
-        <span>{{loginTime}}</span>
-      </div>
-    </el-card>
+        <div class="user-info-list">
+          本次登录日期：
+          <span>{{loginDate}}</span>
+        </div>
+        <div class="user-info-list">
+          本次登录时间：
+          <span>{{loginTime}}</span>
+        </div>
+      </el-card>
+    </keep-alive>
+
   </div>
 </template>
 <script>
@@ -50,11 +53,22 @@ export default {
         userName: '',
         email: '',
       },
+      loginTime: '',
+      loginDate: '',
     }
   },
   mounted() {
     this.userInfo.userName = getLocalProp('userName')
     this.userInfo.email = getLocalProp('email')
+
+    let dateString = dayjs(new Date()).format('YYYY-MM-DD HH:mm:ss')
+    let timeString = dateString.split(' ')[1]
+
+    /**
+     * 有BUG以后登录时间需要存在后台数据库中
+     */
+    this.loginDate = dayjs(new Date()).format('YYYY-MM-DD')
+    this.loginTime = timeString
   },
   methods: {
     errorHandler() {
@@ -64,16 +78,7 @@ export default {
       return true
     },
   },
-  computed: {
-    loginDate() {
-      return dayjs(new Date()).format('YYYY-MM-DD')
-    },
-    loginTime() {
-      let dateString = dayjs(new Date()).format('YYYY-MM-DD HH:mm:ss')
-      let timeString = dateString.split(' ')[1]
-      return timeString
-    },
-  },
+  computed: {},
 }
 </script>
 <style scoped>
@@ -111,5 +116,15 @@ export default {
 
 .user-info-list span {
   margin-left: 70px;
+}
+
+.edit-info {
+  margin-top: 5px;
+  font-size: 13px;
+  font-family: initial;
+  font-weight: 400;
+}
+.edit-info a {
+  color: rgb(8, 168, 8);
 }
 </style>

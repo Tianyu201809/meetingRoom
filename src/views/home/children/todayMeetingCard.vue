@@ -1,5 +1,6 @@
 <template>
   <div>
+    <meeting-detail-dialog ref="dialog"></meeting-detail-dialog>
     <el-card shadow="hover"
              style="height:267px;">
       <div slot="header"
@@ -15,9 +16,13 @@
           </template>
         </el-table-column> -->
         <el-table-column>
-          <template slot-scope="scope">
+          <!-- <template slot-scope="scope">
             <div class="today-meeting-item"
                  :class="{'today-todo-item-del': scope.row.status}">{{scope.row.title}}</div>
+          </template> -->
+          <template slot-scope="scope">
+            <a href="#"
+               @click="showDetail(scope.row._id)">{{scope.row.title}}</a>
           </template>
         </el-table-column>
       </el-table>
@@ -35,8 +40,12 @@
   </div>
 </template>
 <script>
+import meetingDetailDialog from './meetingDetailDialog'
 export default {
   name: 'todayMeetingCard',
+  components: {
+    meetingDetailDialog,
+  },
   data() {
     return {}
   },
@@ -46,6 +55,11 @@ export default {
       default: function () {
         return []
       },
+    },
+  },
+  methods: {
+    showDetail() {
+    this.$refs.dialog.openDialog()
     },
   },
 }

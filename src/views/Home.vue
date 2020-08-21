@@ -2,6 +2,7 @@
   <div class="wrapper">
     <v-head title="会议室管理系统" :userInfo="userInfo"></v-head>
     <v-sidebar></v-sidebar>
+
     <div class="content-box"
          :class="{'content-collapse':collapse}">
       <!-- <v-tags></v-tags> -->
@@ -26,6 +27,7 @@ import bus from '@/components/common/bus'
 import { getUserInfo } from '@/api/user'
 import { setToken, getToken } from '@/api/token'
 // import store from '../store'
+import meetingDetailDialog from './home/children/meetingDetailDialog'
 export default {
   data() {
     return {
@@ -37,6 +39,7 @@ export default {
   components: {
     vHead,
     vSidebar,
+    meetingDetailDialog
     // vTags
   },
   //   beforeRouteUpdate(to, from, next) {
