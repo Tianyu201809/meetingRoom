@@ -22,6 +22,7 @@
           </template> -->
           <template slot-scope="scope">
             <a href="#"
+               class="list-item"
                @click="showDetail(scope.row._id)">{{scope.row.title}}</a>
           </template>
         </el-table-column>
@@ -59,7 +60,7 @@ export default {
   },
   methods: {
     showDetail() {
-    this.$refs.dialog.openDialog()
+      this.$refs.dialog.openDialog()
     },
   },
 }
@@ -77,5 +78,13 @@ export default {
   display: flex;
   margin-top: 15px;
   justify-content: center;
+}
+.list-item {
+  color: #606266;
+}
+.list-item:hover {
+  color: green;
+  text-decoration: underline !important;
+  cursor: pointer !important;
 }
 </style>
