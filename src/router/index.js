@@ -82,11 +82,17 @@ router.beforeEach((to, from, next) => {
 	const token = getToken()
 	debugger
 	if (token) {
-		store.dispatch('authorization', token).then(() => {
-			debugger
-			if (to.path === '/login') next({ name: 'index' })
-			else next()
-		})
+		store.dispatch('authorization', token).then(
+			() => {
+				debugger
+				if (to.path === '/login') next({ name: 'index' })
+				else next()
+			},
+			(e) => {
+				console.log(e)
+				next({ name: 'login' })
+			}
+		)
 		// .catch((e) => {
 		// 	setToken('')
 		// 	console.log(e)

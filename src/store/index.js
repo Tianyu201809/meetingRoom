@@ -55,8 +55,9 @@ export default new Vuex.Store({
 					debugger
 					if (res.data.code === 401) {
 						try {
-							reject('error')
-							self.$router.push('/login')
+                            setToken('')
+							reject('token authorization error')
+							//self.$router.push('/login')
 						} catch (error) {
 							console.log(error)
 						}
