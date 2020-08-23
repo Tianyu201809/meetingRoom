@@ -22,11 +22,11 @@
         </div>
         <div class="user-info-list">
           本次登录日期：
-          <span>{{loginDate}}</span>
+          <span>{{userInfo.loginDate}}</span>
         </div>
         <div class="user-info-list">
           本次登录时间：
-          <span>{{loginTime}}</span>
+          <span>{{userInfo.loginTime}}</span>
         </div>
       </el-card>
     </keep-alive>
@@ -34,41 +34,18 @@
   </div>
 </template>
 <script>
-import store from '../../../store'
-import { getLocalProp, setLocalProp } from '../../../api/localMethods'
-import dayjs from 'dayjs'
+// import store from '../../../store'
+// import { getLocalProp, setLocalProp } from '../../../api/localMethods'
+// import dayjs from 'dayjs'
 export default {
   name: 'myInfoCard',
   props: {
-    user: {
+    userInfo: {
       type: Object,
       default: function () {
         return {}
       },
     },
-  },
-  data() {
-    return {
-      userInfo: {
-        userName: '',
-        email: '',
-      },
-      loginTime: '',
-      loginDate: '',
-    }
-  },
-  mounted() {
-    this.userInfo.userName = getLocalProp('userName')
-    this.userInfo.email = getLocalProp('email')
-
-    let dateString = dayjs(new Date()).format('YYYY-MM-DD HH:mm:ss')
-    let timeString = dateString.split(' ')[1]
-
-    /**
-     * 有BUG以后登录时间需要存在后台数据库中
-     */
-    this.loginDate = dayjs(new Date()).format('YYYY-MM-DD')
-    this.loginTime = timeString
   },
   methods: {
     errorHandler() {

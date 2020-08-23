@@ -1,6 +1,7 @@
 <template>
   <div>
-    <meeting-detail-dialog ref="dialog" :selectedItem="currentItem"></meeting-detail-dialog>
+    <meeting-detail-dialog ref="dialog"
+                           :selectedItem="currentItem"></meeting-detail-dialog>
     <el-card shadow="hover"
              style="height:267px;">
       <div slot="header"
@@ -32,7 +33,7 @@
           <el-pagination small
                          layout="prev, pager, next"
                          :page-size="3"
-                         :total="50">
+                         :total="total">
           </el-pagination>
         </div>
 
@@ -42,14 +43,19 @@
 </template>
 <script>
 import meetingDetailDialog from './meetingDetailDialog'
+import store from '../../../store'
+import {getUserJoinedMeetingCount, userJoinedMeeting} from '@/api/appointment'
 export default {
   name: 'todayMeetingCard',
   components: {
     meetingDetailDialog,
   },
+  props: {
+    meetingDate: String,
+  },
   data() {
     return {
-    
+      total: '',
     }
   },
   props: {
@@ -59,18 +65,42 @@ export default {
         return []
       },
     },
-    currentItem:{
+    userInfo:{
         type:Object,
         default:function(){
             return {}
         }
-    }
+    },
+    currentItem: {
+      type: Object,
+      default: function () {
+        return {}
+      },
+    },
+  },
+  mounted() {
+    // const obj = {
+    //   email,
+    //   meetingDate
+    // }
+    // getUserJoinedMeetingCount(obj).then((count) => {
+    //   this.total = count
+    // })
   },
   methods: {
     showDetail(i) {
-        debugger;
-      this.currentItem = this.meetingList[i];
+      debugger
+      this.currentItem = this.meetingList[i]
       this.$refs.dialog.openDialog()
+    },
+
+    //获取当日会议数量
+    getUserJoinedMeetingCount(obj) {
+      return new Promise((resolve, reject) => {
+        getUserJoinedMeetingCount(obj).then((res) => {
+          resolve(res)
+        })
+      })
     },
   },
 }

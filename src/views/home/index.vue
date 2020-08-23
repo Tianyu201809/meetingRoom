@@ -2,15 +2,14 @@
   <div>
     <el-row :gutter="20">
       <el-col :span="8">
-
-        <my-info-card :user="user"></my-info-card>
+        <!-- 传递用户信息email和name给子组件 -->
+        <my-info-card :userInfo="userInfo"></my-info-card>
         <todo-list :todoList="todoList"></todo-list>
 
       </el-col>
       <el-col :span="8">
         <el-row :gutter="0"
                 class="mgb20">
-
           <my-calendar></my-calendar>
         </el-row>
 
@@ -20,6 +19,7 @@
                 class="mgb20">
           <notification :notification="notification"></notification>
           <today-meeting-card :meetingList="meetingList"
+                              :userInfo="userInfo"
                               style="margin-top:10px"></today-meeting-card>
         </el-row>
       </el-col>
@@ -38,6 +38,11 @@ import myCalendar from './children/myCalendar'
 import todoList from './children/todoList'
 import { getUserInfo } from '@/api/user'
 import { setToken, getToken } from '@/api/token'
+import { getUserJoinedMeetingCount, userJoinedMeeting } from '@/api/appointment'
+
+import store from '../../store'
+import { getLocalProp, setLocalProp } from '../../api/localMethods'
+import dayjs from 'dayjs'
 
 export default {
   name: 'index',
@@ -46,15 +51,15 @@ export default {
     todayMeetingCard,
     notification,
     myCalendar,
-    todoList
+    todoList,
   },
   beforeRouteEnter(to, from, next) {
     //设置组件导航首位，如果cookit中没有页面，不进行跳转
     //并将提示信息返回给前端
-    debugger;
+    debugger
     const path = to.path
     const token = getToken()
-    console.log(this);
+    console.log(this)
     if (!token) {
       this.$router.push('/login')
     }
@@ -67,13 +72,6 @@ export default {
   },
   data() {
     return {
-      user: {
-        name: localStorage.getItem('ms_username') || 'hello',
-        role:
-          localStorage.getItem('ms_username') == 'admin'
-            ? '超级管理员'
-            : '普通用户',
-      },
       todoList: [],
       meetingList: [
         {
@@ -116,7 +114,27 @@ export default {
           date: '2020-07-09',
         },
       ],
+      userInfo: {
+        userName: '',
+        email: '',
+        loginDate: '',
+        loginTime: '',
+      },
     }
+  },
+  mounted() {
+    debugger
+    this.userInfo.userName = getLocalProp('userName')
+    this.userInfo.email = getLocalProp('email')
+
+    let dateString = dayjs(new Date()).format('YYYY-MM-DD HH:mm:ss')
+    let timeString = dateString.split(' ')[1]
+
+    /**
+     * 有BUG以后登录时间需要存在后台数据库中
+     */
+    this.userInfo.loginDate = dayjs(new Date()).format('YYYY-MM-DD')
+    this.userInfo.loginTime = timeString
   },
   computed: {},
   // created() {
@@ -140,6 +158,7 @@ export default {
         }/${date.getDate()}`
       })
     },
+
     // handleListener() {
     //     bus.$on('collapse', this.handleBus);
     //     // 调用renderChart方法对图表进行重新渲染
