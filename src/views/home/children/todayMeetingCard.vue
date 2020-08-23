@@ -1,6 +1,6 @@
 <template>
   <div>
-    <meeting-detail-dialog ref="dialog"></meeting-detail-dialog>
+    <meeting-detail-dialog ref="dialog" :selectedItem="currentItem"></meeting-detail-dialog>
     <el-card shadow="hover"
              style="height:267px;">
       <div slot="header"
@@ -23,7 +23,7 @@
           <template slot-scope="scope">
             <a href="#"
                class="list-item"
-               @click="showDetail(scope.row._id)">{{scope.row.title}}</a>
+               @click="showDetail(scope.$index)">{{scope.row.title}}</a>
           </template>
         </el-table-column>
       </el-table>
@@ -48,7 +48,9 @@ export default {
     meetingDetailDialog,
   },
   data() {
-    return {}
+    return {
+    
+    }
   },
   props: {
     meetingList: {
@@ -57,9 +59,17 @@ export default {
         return []
       },
     },
+    currentItem:{
+        type:Object,
+        default:function(){
+            return {}
+        }
+    }
   },
   methods: {
-    showDetail() {
+    showDetail(i) {
+        debugger;
+      this.currentItem = this.meetingList[i];
       this.$refs.dialog.openDialog()
     },
   },

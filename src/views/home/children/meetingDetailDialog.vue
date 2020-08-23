@@ -14,31 +14,31 @@
                  :label-position="labelPosition">
           <el-form-item label="会议主题:"
                         class="form-item">
-            {{form.title}}
+            {{selectedItem.title}}
           </el-form-item>
           <el-form-item label="会议日期:"
                         class="form-item">
-            {{form.meetingDate}}
+            {{selectedItem.meetingDate}}
           </el-form-item>
           <el-form-item label="会议时间段:"
                         class="form-item">
-            {{form.startTime}} ~ {{form.endTime}}
+            {{selectedItem.startTime}} ~ {{selectedItem.endTime}}
           </el-form-item>
           <el-form-item label="参会人员:"
                         class="form-item">
-            {{form.startTime}} ~ {{form.endTime}}
+            {{}}
           </el-form-item>
           <el-form-item label="会议室:"
                         class="form-item">
-            2-1103
+            {{selectedItem.meetingRoom}}
           </el-form-item>
           <el-form-item label="当前状态:"
                         class="form-item">
-            <span>已结束</span>
+            <span>{{selectedItem.status}}</span>
           </el-form-item>
           <el-form-item label="会议概述:"
                         class="form-item">
-            <span>This  meeting is about techonlogy meeting！</span>
+            <span>{{selectedItem.overview}}</span>
           </el-form-item>
         </el-form>
 
@@ -61,7 +61,15 @@ export default {
       },
     }
   },
-  props: {},
+  props: {
+    selectedItem: {
+      type: Object,
+      default: function () {
+        return {}
+      },
+    },
+  },
+  computed: {},
   methods: {
     openDialog() {
       this.dialogFormVisible = !this.dialogFormVisible

@@ -57,9 +57,8 @@ export default new Vuex.Store({
 						try {
                             setToken('')
 							reject('token authorization error')
-							//self.$router.push('/login')
 						} catch (error) {
-							console.log(error)
+							console.log(error) 
 						}
 					} else {
 						//每次路由跳转都会生成一个新的token
@@ -68,12 +67,10 @@ export default new Vuex.Store({
 						resolve()
 					}
 				})
-				// .cacth((e) => {
-				//     debugger;
-				// 	reject(e)
-				// })
 			})
 		},
 	},
-	modules: {},
+	modules: {
+
+    },
 })
