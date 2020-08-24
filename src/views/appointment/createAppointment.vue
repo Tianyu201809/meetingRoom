@@ -4,7 +4,8 @@
       <el-breadcrumb separator="/">
         <el-breadcrumb-item style=""
                             class="pageTitle">
-        <i class="el-icon-pie-chart" style="margin-right:10px"></i>
+          <i class="el-icon-pie-chart"
+             style="margin-right:10px"></i>
           <strong>创建预约</strong>
         </el-breadcrumb-item>
       </el-breadcrumb>
@@ -112,6 +113,8 @@
 </template>
 <script>
 import AppointmentInfo from '@/class/AppointmentInfo'
+import { getMeetingRoomItems } from '@/api/meetingRoom'
+import { getToken, setToken } from '@/api/token'
 export default {
   name: 'createAppointment',
   components: {},
@@ -211,6 +214,10 @@ export default {
   mounted() {
     //1.获取所有下拉框中的数据
     //2.初始化信息
+    const token = getToken()
+    getMeetingRoomItems(token).then((result) => {
+      this.meetingRoomList = result.data.data
+    })
   },
   methods: {
     onSubmitForm() {},
@@ -241,8 +248,8 @@ body {
 }
 
 .pageTitle {
-  margin:20px 0 20px 20px;
-  font-family:Arial, Helvetica, sans-serif;
-  font-size:18px;
+  margin: 20px 0 20px 20px;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 18px;
 }
 </style>

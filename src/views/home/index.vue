@@ -20,6 +20,7 @@
           <notification :notification="notification"></notification>
           <today-meeting-card :meetingList="meetingList"
                               :userInfo="userInfo"
+                              :total="totalCount"
                               style="margin-top:10px"></today-meeting-card>
         </el-row>
       </el-col>
@@ -38,7 +39,11 @@ import myCalendar from './children/myCalendar'
 import todoList from './children/todoList'
 import { getUserInfo } from '@/api/user'
 import { setToken, getToken } from '@/api/token'
-import { getUserJoinedMeetingCount, userJoinedMeeting } from '@/api/appointment'
+import {
+  getUserJoinedMeetingCount,
+  userJoinedMeeting,
+  
+} from '@/api/appointment'
 
 import store from '../../store'
 import { getLocalProp, setLocalProp } from '../../api/localMethods'
@@ -72,6 +77,14 @@ export default {
   },
   data() {
     return {
+      userInfo: {
+        userName: '',
+        email: '',
+        loginDate: '',
+        loginTime: '',
+      },
+      totalCount: 0, //index页面中的当日会议的总数
+      meetingDate: '',
       todoList: [],
       meetingList: [
         {
@@ -114,40 +127,33 @@ export default {
           date: '2020-07-09',
         },
       ],
-      userInfo: {
-        userName: '',
-        email: '',
-        loginDate: '',
-        loginTime: '',
-      },
     }
   },
   mounted() {
-    debugger
+    /**
+     * 获取用户数据部分email username
+     */
     this.userInfo.userName = getLocalProp('userName')
     this.userInfo.email = getLocalProp('email')
-
     let dateString = dayjs(new Date()).format('YYYY-MM-DD HH:mm:ss')
     let timeString = dateString.split(' ')[1]
+    this.userInfo.loginDate = dayjs(new Date()).format('YYYY-MM-DD')
+    this.userInfo.loginTime = timeString //登录时间以后需要修改
 
     /**
-     * 有BUG以后登录时间需要存在后台数据库中
+     * today meeting部分
      */
-    this.userInfo.loginDate = dayjs(new Date()).format('YYYY-MM-DD')
-    this.userInfo.loginTime = timeString
+    const obj = {
+      email: this.userInfo.email,
+      meetingDate: this.meetingDate || Date.now(),
+    }
+    getUserJoinedMeetingCount(obj).then((result) => {
+      debugger
+      this.totalCount = result.data.count || 10
+      console.log(result)
+    })
   },
   computed: {},
-  // created() {
-  //     this.handleListener();
-  //     this.changeDate();
-  // },
-  // activated() {
-  //     this.handleListener();
-  // },
-  // deactivated() {
-  //     window.removeEventListener('resize', this.renderChart);
-  //     bus.$off('collapse', this.handleBus);
-  // },
   methods: {
     changeDate() {
       const now = new Date().getTime()
@@ -156,6 +162,19 @@ export default {
         item.name = `${date.getFullYear()}/${
           date.getMonth() + 1
         }/${date.getDate()}`
+      })
+    },
+
+    //获取登陆人当日会议数量
+    getUserJoinedMeetingCount(obj) {
+      return new Promise((resolve, reject) => {
+        getUserJoinedMeetingCount(obj)
+          .then((res) => {
+            resolve(res)
+          })
+          .catch((e) => {
+            console.log(e)
+          })
       })
     },
 

@@ -1,7 +1,7 @@
 //import axios from './index'
 //import { fetchData } from './index'
 import axios from 'axios'
-import { getToken } from './token'
+// import { getToken } from './token'
 
 // export const getUserInfo = ({ userName }) => {
 // 	return axios.request({

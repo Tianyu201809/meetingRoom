@@ -33,6 +33,7 @@
           <el-pagination small
                          layout="prev, pager, next"
                          :page-size="3"
+                         @current-change="changePage()"
                          :total="total">
           </el-pagination>
         </div>
@@ -44,7 +45,8 @@
 <script>
 import meetingDetailDialog from './meetingDetailDialog'
 import store from '../../../store'
-import {getUserJoinedMeetingCount, userJoinedMeeting} from '@/api/appointment'
+import { getUserJoinedMeetingCount, userJoinedMeeting } from '@/api/appointment'
+
 export default {
   name: 'todayMeetingCard',
   components: {
@@ -54,9 +56,7 @@ export default {
     meetingDate: String,
   },
   data() {
-    return {
-      total: '',
-    }
+    return {}
   },
   props: {
     meetingList: {
@@ -65,18 +65,29 @@ export default {
         return []
       },
     },
-    userInfo:{
-        type:Object,
-        default:function(){
-            return {}
-        }
-    },
-    currentItem: {
+    userInfo: {
       type: Object,
       default: function () {
         return {}
       },
     },
+    total: {
+      type: Number,
+      default: function () {
+        return 0
+      },
+    },
+    // currentItem: {
+    //   type: Object,
+    //   default: function () {
+    //     return {}
+    //   },
+    // },
+  },
+  data() {
+    return {
+      currentItem: {},
+    }
   },
   mounted() {
     // const obj = {
@@ -94,12 +105,16 @@ export default {
       this.$refs.dialog.openDialog()
     },
 
-    //获取当日会议数量
-    getUserJoinedMeetingCount(obj) {
-      return new Promise((resolve, reject) => {
-        getUserJoinedMeetingCount(obj).then((res) => {
-          resolve(res)
-        })
+    //当变更当前页的时候
+    changePage(page) {
+      //调用查询显示条目接口，修改显示内容
+      userJoinedMeeting(this.userInfo).then((result) => {
+        console.log(result)
+        if (parseInt(result.data.code) === 200)
+          this.meetingList = result.data.data
+        else {
+          this.meetingList = []
+        }
       })
     },
   },
