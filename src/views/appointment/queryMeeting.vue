@@ -14,17 +14,20 @@
 
     </div>
     <div style="margin-left:17px">
-<my-search></my-search>
-    <meeting-room-table :tableData="tableData"></meeting-room-table>
-    <paging></paging>
+      <my-search></my-search>
+      <meeting-room-table :tableData="tableData"></meeting-room-table>
+      <paging :total="total"></paging>
     </div>
-    
+
   </div>
 </template>
 <script>
 import mySearch from './children/mySearch.vue'
 import meetingRoomTable from './children/meetingRoomTable'
 import paging from '@/components/common/Paging'
+
+//获取会议查询页面的全部数据的数量
+import { getQueryAppointCount, queryAppointment } from '@/api/appointment'
 export default {
   name: 'queryMeeting',
   components: {
@@ -34,36 +37,41 @@ export default {
   },
   data() {
     return {
-      tableData: [
-        {
-          date: '2016-05-02',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄',
-        },
-        {
-          date: '2016-05-04',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1517 弄',
-        },
-        {
-          date: '2016-05-01',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1519 弄',
-        },
-        {
-          date: '2016-05-03',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1516 弄',
-        },
-      ],
+      total: 0,
+      limit: 10,
+      skip: 0,
+      tableData: [],
     }
+  },
+  methods: {
+    queryMeetingRoomByFilter(filter) {
+      //1.首先根据过滤条件，查询数据总数
+      // title, date, meetingRoomNumber
+      let that = this
+      //查询条目总数
+      getQueryAppointCount(filter).then((count) => {
+        return new Promise((resolve, reject) => {
+          that.total = count.count
+          resolve(true)
+        }).then(() => {
+          //查询数据
+          let limit = that.limit
+          let skip = that.skip
+          queryAppointment(filter, limit, skip).then((result) => {
+            debugger
+            that.tableData = result.data
+          })
+        })
+      })
+    },
+    queryMeetingRoomCount() {},
   },
 }
 </script>
 <style scoped>
 .pageTitle {
-  margin:20px 0 20px 20px;
-  font-family:Arial, Helvetica, sans-serif;
-  font-size:18px;
+  margin: 20px 0 20px 20px;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 18px;
 }
 </style>

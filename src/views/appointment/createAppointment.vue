@@ -20,7 +20,7 @@
                style="width:90%"
                name='form'>
         <el-form-item label="会议室">
-          <el-select v-model="form.meetingRoom.meetingRoomID"
+          <el-select v-model="form.meetingRoomNumber"
                      placeholder="请选择会议室"
                      style="width:100%">
             <el-option v-for="(item, index) in meetingRoomList"
@@ -38,7 +38,7 @@
                      placeholder="请选择"
                      filterable
                      style="width:100%">
-            <el-option v-for="item in form.departmentList"
+            <el-option v-for="item in departmentList"
                        :key="item.value"
                        :label="item.value"
                        :value="item.key">
@@ -80,7 +80,7 @@
                      filterable
                      multiple
                      style="width:100%"
-                     @change="checkDept(event)">
+                     @change="checkMembers(event)">
             <el-option-group v-for="group in options"
                              :key="group.label"
                              :label="group.label">
@@ -115,6 +115,7 @@
 import AppointmentInfo from '@/class/AppointmentInfo'
 import { getMeetingRoomItems } from '@/api/meetingRoom'
 import { getToken, setToken } from '@/api/token'
+import { createAppointment } from '@/api/appointment'
 export default {
   name: 'createAppointment',
   components: {},
@@ -122,22 +123,18 @@ export default {
     return {
       meetingRoomList: [
         {
-          meetingRoomID: '1234',
-          meetingRoomNumber: '123232312',
-          meetingRoomFloor: '',
-          meetingRoomLocation: '',
-          meetingRoomSize: '',
-          meetingRoomVolume: '',
-          status: 0,
+          meetingRoomNumber: '1-1102',
+          createdBy: {},
+          hasMedia: true,
+          meetingRoomSize: '4',
+          meetingRoomStatus: 0,
         },
         {
-          meetingRoomID: 'qwer',
-          meetingRoomNumber: '2321321321321',
-          meetingRoomFloor: '',
-          meetingRoomLocation: '',
-          meetingRoomSize: '',
-          meetingRoomVolume: '',
-          status: 1,
+          meetingRoomNumber: '1-1103',
+          createdBy: {},
+          hasMedia: false,
+          meetingRoomSize: '5',
+          meetingRoomStatus: 1,
         },
       ],
       appointmentTimeArea: {
@@ -149,40 +146,24 @@ export default {
         title: '',
         desc: '',
         department: '',
-        departmentList: [
-          {
-            value: '开发技术部',
-            key: '00010',
-          },
-          {
-            value: '产品销售部',
-            key: '00020',
-          },
-        ],
-        meetingRoom: {
-          meetingRoomID: '',
-          meetingRoomNumber: '',
-          meetingRoomFloor: '',
-          meetingRoomLocation: '',
-          meetingRoomSize: '',
-          meetingRoomVolume: '',
-        },
-        createUser: {
-          email: '',
-          userid: '',
-          photo: '',
-          department: '',
-          level: '',
-        },
+        meetingRoomNumber: '',
         createdDate: '',
         content: '',
         startTime: '',
         endTime: '',
-        appointDate: '',
         members: '',
-        appointData: new Date(),
+        appointData: '',
       },
-
+      departmentList: [
+        {
+          value: '开发技术部',
+          key: '00010',
+        },
+        {
+          value: '产品销售部',
+          key: '00020',
+        },
+      ],
       //select测试数据
       options: [
         {
@@ -216,11 +197,38 @@ export default {
     //2.初始化信息
     const token = getToken()
     getMeetingRoomItems(token).then((result) => {
+      if (result.data.data.length === 0) {
+        mockMeetingRoomList = [
+          {
+            meetingRoomID: '',
+            meetingRoomNumber: '1-1102',
+            createdBy: {},
+            hasMedia: true,
+            meetingRoomSize: '4',
+            meetingRoomVolume: '',
+            meetingRoomStatus: 0,
+          },
+          {
+            meetingRoomID: '',
+            meetingRoomNumber: '1-1103',
+            createdBy: {},
+            hasMedia: false,
+            meetingRoomSize: '5',
+            meetingRoomStatus: 1,
+          },
+        ]
+        this.meetingRoomList = mockMeetingRoomList
+      }
       this.meetingRoomList = result.data.data
     })
   },
   methods: {
-    onSubmitForm() {},
+    //创建预约
+    onSubmitForm() {
+      createAppointment(this.form).then((result) => {
+        console.log(result.data)
+      })
+    },
     onClearFormData() {},
     getMeetingRoomList() {
       axios.get('/getMeetingRoomList').then((data) => {

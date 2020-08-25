@@ -4,7 +4,7 @@
       <el-row justify="left">
         <el-col :span="5">
           <div class="item">
-            <el-input v-model="forma.name"
+            <el-input v-model="forma.title"
                       placeholder="请输入会议主题">
             </el-input>
           </div>
@@ -14,7 +14,7 @@
           <div class="item">
             <el-date-picker type="date"
                             placeholder="选择日期"
-                            v-model="forma.id"
+                            v-model="forma.date"
                             style="width: 100%;"
                             format="yyyy 年 MM 月 dd 日"
                             value-format="yyyy-MM-dd"></el-date-picker>
@@ -22,7 +22,7 @@
 
         </el-col>
         <el-col :span="5">
-          <el-select v-model="forma.meetingRoom"
+          <el-select v-model="forma.meetingRoomNumber"
                      placeholder="请选择会议室"
                      class="item">
             <el-option v-for="(item, index) in meetingRoomList"
@@ -34,7 +34,7 @@
         </el-col>
         <el-col :span="5">
           <el-button type="primary"
-                     @click="searchCon(forma)"
+                     @click="searchData()"
                      icon="el-icon-search">查询</el-button>
         </el-col>
 
@@ -46,7 +46,6 @@
   </div>
 </template>
 <script>
-
 export default {
   name: 'mySearch',
   data() {
@@ -54,7 +53,8 @@ export default {
       search: '',
       forma: {
         id: '',
-        name: '',
+        title: '',
+        date: '',
         meetingRoom: '',
       },
       list: [],
@@ -63,28 +63,21 @@ export default {
     }
   },
   methods: {
-    searchCon({ id, name }) {
-      this.listSearch = this.list.filter((text) => {
-        //使用过滤方法
-        let matchid = true
-        let matchname = true
-        if (id) {
-          matchid = text.id == id
-        }
-        if (name) {
-          // debugger
-          const keys = name.toUpperCase().replace('', '').split('')
-          // console.log(keys)
-          matchname = keys.every((key) => text.tag.toUpperCase().includes(key))
-
-          // console.log(matchname)
-        }
-
-        return matchid && matchname
-      })
-
-      // console.log( this.listSearch)
+    searchData() {
+      //将检索条件整理成一个对象
+      //执行查询方法，获取数据
+      debugger;
+      const filter = {
+        title: this.forma.title,
+        date: this.forma.date,
+        meetingRoomNumber: this.forma.meetingRoom,
+      }
+      console.log(1);
+      this.$parent.queryMeetingRoomByFilter(filter)
     },
+
+    //将所选择的过滤条件传递给父组件
+    //通过父组件，影响其子组件
   },
   created() {
     this.$axios
@@ -96,9 +89,7 @@ export default {
         this.meetingRoomList = [{ key: '00010', value: '会议室00010' }]
       })
   },
-  mounted() {
-      
-  },
+  mounted() {},
 }
 </script>
 <style scope>

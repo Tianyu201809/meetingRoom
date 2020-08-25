@@ -8,11 +8,31 @@ import { getToken } from './token'
 //作用于查询预约记录页面的接口
 
 //1.用于分页查询的数量查询接口
-export const getQueryAppointCount = () => {}
+export const getQueryAppointCount = (filter) => {
+	axios.defaults.headers['Authorization'] = getToken()
+	return axios.get('/appointment/getQueryListCount', {
+		params: filter,
+	})
+}
 
 //2.数据查询接口
-export const queryAppointment = (limit = 10, skip = 0) => {
-	//limit代表查询几条数据, 设置迷人值 10， skip代表跳过几条数据，默认值为0
+export const queryAppointment = (
+	{ title, meetingDate, meetingRoomNumber },
+	limit = 10,
+	skip = 0
+) => {
+	//limit代表查询几条数据, 设置默认值 10， skip代表跳过几条数据，默认值为0
+	axios.defaults.headers['Authorization'] = getToken()
+
+	return axios.get('/appointment/getAppoList', {
+		params: {
+            title,
+			meetingDate,
+			meetingRoomNumber,
+			limit,
+			skip,
+		},
+	})
 }
 
 /**
@@ -66,5 +86,18 @@ export const userJoinedMeeting = ({
 				console.log(e)
 				reject('调用queryUserJoinedeetingCount接口失败')
 			})
+	})
+}
+
+/**
+ * 创建预约
+ */
+export const createAppointment = (data) => {
+	axios.defaults.headers['Authorization'] = getToken()
+
+	return axios({
+		url: '/appointment/createAppointment',
+		method: 'POST',
+		data: data,
 	})
 }
