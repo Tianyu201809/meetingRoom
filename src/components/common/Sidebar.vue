@@ -76,6 +76,12 @@ export default {
           ],
         },
         {
+          icon: 'el-icon-s-management',
+          index: 'manageMeetingRoom',
+          title: '会议室管理',
+          
+        },
+        {
           icon: 'el-icon-user-solid',
           index: 'charts',
           title: '与我相关',

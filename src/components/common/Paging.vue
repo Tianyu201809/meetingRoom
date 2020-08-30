@@ -2,8 +2,8 @@
   <div class="block">
     <el-pagination @size-change="handleSizeChange"
                    @current-change="handleCurrentChange"
-                   :current-page="currentPage4"
-                   :page-sizes="[100, 200, 300, 400]"
+                   :current-page="currentPage"
+                   :page-sizes="[10]"
                    :page-size="10"
                    layout="total, sizes, prev, pager, next, jumper"
                    :total="total">
@@ -23,10 +23,7 @@ export default {
   },
   data() {
     return {
-      currentPage1: 5,
-      currentPage2: 5,
-      currentPage3: 5,
-      currentPage4: 4,
+      currentPage1: 1,
     }
   },
   props: {
@@ -35,6 +32,11 @@ export default {
       default: function () {
         return 0
       },
+    },
+  },
+  methods: {
+    currentPage(count) {
+      console.log(count)
     },
   },
 }

@@ -58,7 +58,13 @@ const router = new Router({
 				// {
 				// 	path: '*',
 				// 	component: () => import('../views/404.vue'),
-				// },
+                // },
+                {
+					path: '/manageMeetingRoom',
+					name: 'manageMeetingRoom',
+					component: () =>
+						import('../views/meetingRoom/manageMeetingRoom.vue'),
+				},
 			],
 		},
 		{
@@ -78,7 +84,11 @@ const router = new Router({
 	],
 })
 
+//全局导航守卫
+//当进行路由跳转时，进行token验证
+//将token作为请求header
 router.beforeEach((to, from, next) => {
+
 	const token = getToken()
 	debugger
 	if (token) {

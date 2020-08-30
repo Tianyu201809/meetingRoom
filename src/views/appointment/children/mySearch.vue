@@ -22,13 +22,13 @@
 
         </el-col>
         <el-col :span="5">
-          <el-select v-model="forma.meetingRoomNumber"
+          <el-select v-model="forma.meetingRoom"
                      placeholder="请选择会议室"
                      class="item">
             <el-option v-for="(item, index) in meetingRoomList"
                        :key="index"
-                       :label="item.value"
-                       :value="item.value"></el-option>
+                       :label="item"
+                       :value="item"></el-option>
 
           </el-select>
         </el-col>
@@ -36,6 +36,9 @@
           <el-button type="primary"
                      @click="searchData()"
                      icon="el-icon-search">查询</el-button>
+          <el-button type="danger"
+                     @click="resetData()"
+                     icon="el-icon-search">重置</el-button>
         </el-col>
 
       </el-row>
@@ -46,6 +49,7 @@
   </div>
 </template>
 <script>
+import { getMeetingRoomItems } from '@/api/meetingRoom'
 export default {
   name: 'mySearch',
   data() {
@@ -66,30 +70,53 @@ export default {
     searchData() {
       //将检索条件整理成一个对象
       //执行查询方法，获取数据
-      debugger;
+      debugger
       const filter = {
         title: this.forma.title,
-        date: this.forma.date,
+        meetingDate: this.forma.date,
         meetingRoomNumber: this.forma.meetingRoom,
       }
-      console.log(1);
+      console.log(1)
       this.$parent.queryMeetingRoomByFilter(filter)
+    },
+    resetData() {
+      this.forma.title = ''
+      this.forma.date = ''
+      this.forma.meetingRoom = ''
     },
 
     //将所选择的过滤条件传递给父组件
     //通过父组件，影响其子组件
   },
   created() {
-    this.$axios
-      .get('/getMeetingRoomDropList')
-      .then((res) => {
-        this.meetingRoomList = res.data
-      })
-      .catch(() => {
-        this.meetingRoomList = [{ key: '00010', value: '会议室00010' }]
-      })
+    // this.$axios
+    //   .get('/meetingRoom/getMeetingRoomDropList')
+    //   .then((res) => {
+    //     this.meetingRoomList = res.data
+    //   })
+    //   .catch(() => {
+    //     this.meetingRoomList = [{ key: '00010', value: '会议室00010' }]
+    //   })
   },
-  mounted() {},
+  mounted() {
+    // this.$axios
+    //   .get('/meetingRoom/getMeetingRoomDropList')
+    //   .then((res) => {
+    //     this.meetingRoomList = res.data
+    //   })
+    //   .catch(() => {
+    //     this.meetingRoomList = [{ key: '00010', value: '会议室00010' }]
+    //   })
+
+    getMeetingRoomItems().then((result) => {
+      debugger
+      console.log(result)
+      let meetingRoomArrayList = result.data.data.map((item) => {
+        return item.meetingRoomNumber
+      })
+      this.meetingRoomList = meetingRoomArrayList
+    })
+  },
 }
 </script>
 <style scope>

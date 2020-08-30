@@ -66,6 +66,9 @@ export default {
     },
     queryMeetingRoomCount() {},
   },
+  mounted() {
+    this.queryMeetingRoomByFilter({})
+  },
 }
 </script>
 <style scoped>
