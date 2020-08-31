@@ -46,7 +46,7 @@ import {
 } from '@/api/appointment'
 
 import store from '../../store'
-import { getLocalProp, setLocalProp } from '../../api/localMethods'
+import { getLocalProp, setLocalProp } from '@/api/localMethods'
 import dayjs from 'dayjs'
 
 export default {

@@ -10,32 +10,55 @@
           <strong>会议室信息维护</strong>
         </el-breadcrumb-item>
       </el-breadcrumb>
-      <hr style="width:97%; margin:0 auto" />
+      <hr style="width:100%; margin:0 auto" />
       <br>
     </div>
 
     <!-- 表格显示部分 -->
     <el-table :data="tableData"
               border
-              style="margin:0 auto; width:95%">
+              v-loading="loading"
+              style="margin:0 auto; width:95%; height:480px">
       <el-table-column prop="meetingRoomID"
                        label="会议室ID"
-                       width="180">
+                       width="220">
         <template slot-scope="scope">
           <span style="margin-left: 5px">{{ scope.row._id }}</span>
         </template>
       </el-table-column>
       <el-table-column prop="meetingRoomNumber"
-                       label="会议室编号"
+                       label="会议室名称"
                        width="180">
+        <template slot-scope="scope">
+          <span style="margin-left: 5px">{{ scope.row.meetingRoomName }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column prop="meetingRoomNumber"
+                       label="会议室编号"
+                       width="120">
         <template slot-scope="scope">
           <span style="margin-left: 5px">{{ scope.row.meetingRoomNumber }}</span>
         </template>
       </el-table-column>
+      <el-table-column prop="meetingRoomStatus"
+                       label="会议室状态"
+                       width="100">
+        <template slot-scope="scope">
+          <span style="margin-left: 5px">{{ scope.row.meetingRoomStatus == 1 ? '可用':'不可用' }}</span>
+        </template>
+      </el-table-column>
       <el-table-column prop="createdDate"
-                       label="创建时间">
+                       label="创建日期"
+                       width="220">
         <template slot-scope="scope">
           <span style="margin-left: 5px">{{ scope.row.created }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column prop="createdBy"
+                       label="创建人"
+                       width="150">
+        <template slot-scope="scope">
+          <span style="margin-left: 5px">{{ scope.row.createdBy.userName }}</span>
         </template>
       </el-table-column>
       <el-table-column prop="description"
@@ -45,35 +68,49 @@
         </template>
       </el-table-column>
       <el-table-column prop="operation"
-                       label="操作">
+                       label="操作"
+                       width="160">
         <template slot-scope="scope">
           <el-button size="mini"
-                     @click="handleEdit(scope.$index, scope.row)">Edit</el-button>
+                     @click="handleEdit(scope.$index, scope.row)"
+                     class="el-icon-edit"></el-button>
           <el-button size="mini"
                      type="danger"
-                     @click.native.prevent="deleteMeetingRoomItem(scope.row._id)">Delete</el-button>
+                     @click.native.prevent="deleteMeetingRoomItem(scope.row._id)"
+                     class="el-icon-delete"></el-button>
         </template>
       </el-table-column>
-    </el-table>
 
+    </el-table>
     <!-- 分页部分 -->
+    <paging class="paging"
+            :total="total"></paging>
   </div>
 </template>
 <script>
-import { getMeetingRoomItems, deleteMeetingRoomItem } from '@/api/meetingRoom'
+import paging from '../../components/common/Paging'
+import {
+  getMeetingRoomItems,
+  deleteMeetingRoomItem,
+  getMeetingRoomCount,
+} from '@/api/meetingRoom'
 export default {
   name: 'queryMeetingRoom',
   props: {},
   data() {
     return {
       tableData: [],
+      loading: true,
+      total: 0,
     }
+  },
+  components: {
+    paging,
   },
   methods: {
     handleEdit() {},
     open() {},
     deleteMeetingRoomItem(id) {
-        
       let that = this
       deleteMeetingRoomItem(id)
         .then(({ data }) => {
@@ -95,18 +132,54 @@ export default {
           })
         })
         .then(() => {
-          getMeetingRoomItems().then((res) => {
-            that.tableData = res.data.data
-          })
+          const filter = {
+            limit: 10,
+            skip: 0,
+            filter: {
+              //设置filter条件
+            },
+          }
+
+          //当删除成功之后，需要重新调用查询方法，更新条目数量和table显示数据
+          getMeetingRoomItems(filter)
+            .then((res) => {
+              that.tableData = res.data.data
+              that.loading = false
+            })
+            .then(() => {
+              getMeetingRoomCount(filter.filter).then((data) => {
+                that.total = data.data.count
+              })
+            })
         })
     },
   },
   mounted() {},
   computed: {},
   created() {
-    getMeetingRoomItems().then((res) => {
+    const filter = {
+      limit: 10,
+      skip: 0,
+      filter: {
+        //设置filter条件
+      },
+    }
+    getMeetingRoomItems(filter).then((res) => {
+      debugger
       this.tableData = res.data.data
+      this.loading = false
     })
+
+    /**
+     * 获取总数
+     */
+    getMeetingRoomCount(filter.filter)
+      .then((data) => {
+        this.total = data.data.count
+      })
+      .catch((e) => {
+        console.log(e)
+      })
   },
 
   watch: {},
@@ -117,5 +190,9 @@ export default {
   margin: 20px 0 20px 20px;
   font-family: Arial, Helvetica, sans-serif;
   font-size: 18px;
+}
+.paging {
+  margin-left: 26px;
+  margin-top: 20px;
 }
 </style>

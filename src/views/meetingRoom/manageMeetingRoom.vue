@@ -20,6 +20,10 @@
         <el-input v-model="mrForm.meetingRoomNumber"
                   style="width:40%"></el-input>
       </el-form-item>
+      <el-form-item label="会议室名称">
+        <el-input v-model="mrForm.meetingRoomName"
+                  style="width:40%"></el-input>
+      </el-form-item>
       <el-form-item label="会议室状态:">
         <!-- <el-select v-model="meetingRoomStatus">
           <el-option value="1">可用</el-option>
@@ -80,6 +84,7 @@
 </template>
 
 <script>
+import { getLocalProp } from '@/api/localMethods'
 import { createMeetingRoom } from '@/api/meetingRoom'
 export default {
   name: 'manageMeetingRoom',
@@ -123,11 +128,15 @@ export default {
       ],
       mrForm: {
         meetingRoomNumber: '',
+        meetingRoomName: '',
         meetingRoomStatus: '',
         meetingRoomSize: '',
         hasMedia: '',
         created: '',
-        createdBy: '',
+        createdBy: {
+          userName: getLocalProp('userName'),
+          emial: getLocalProp('email'),
+        },
         lastModify: '',
         lastModifyBy: '',
         description: '',
@@ -151,9 +160,7 @@ export default {
           this.$message.error('创建会议室数据失败')
         })
     },
-    cancel(){
-
-    }
+    cancel() {},
   },
   mounted() {},
 }

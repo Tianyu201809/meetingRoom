@@ -8,9 +8,11 @@ import { getToken } from './token'
 /**
  * 获取全部的会议室条目
  */
-export const getMeetingRoomItems = () => {
+export const getMeetingRoomItems = (filter) => {
 	axios.defaults.headers['Authorization'] = getToken()
-	return axios.get('/meetingRoom/queryMeetingRoomsList')
+	return axios.post('/meetingRoom/queryMeetingRoomsList', {
+		data: filter,
+	})
 }
 
 /**
@@ -23,25 +25,26 @@ export const querySelectMeetingRoomDetail = () => {
 }
 
 export const createMeetingRoom = ({
+	meetingRoomName,
 	meetingRoomNumber,
 	meetingRoomStatus,
 	meetingRoomSize,
 	hasMedia,
+	createdBy,
 	description,
 }) => {
 	axios.defaults.headers['Authorization'] = getToken()
+	debugger
 	return axios({
 		url: '/meetingRoom/addMeetingRoom',
 		method: 'POST',
 		data: {
+			meetingRoomName,
 			meetingRoomNumber,
 			meetingRoomStatus,
 			meetingRoomSize,
 			hasMedia,
-			createdBy: {
-				userName: store.state.userInfo.userName,
-				emial: store.state.userInfo.email,
-			},
+			createdBy,
 			description,
 		},
 	})
@@ -50,10 +53,19 @@ export const createMeetingRoom = ({
 export const deleteMeetingRoomItem = (meetingRoomId) => {
 	axios.defaults.headers['Authorization'] = getToken()
 	return axios({
-        url: '/meetingRoom/deleteMeetingRoomInfo',
-        method:'post',
+		url: '/meetingRoom/deleteMeetingRoomInfo',
+		method: 'post',
 		data: {
 			meetingRoomId,
 		},
+	})
+}
+
+export const getMeetingRoomCount = (filter) => {
+	axios.defaults.headers['Authorization'] = getToken()
+	return axios({
+		url: '/meetingRoom/queryMeetingRoomsCount',
+		method: 'post',
+		data: filter,
 	})
 }
