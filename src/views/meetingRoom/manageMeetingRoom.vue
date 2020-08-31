@@ -1,6 +1,18 @@
 <template>
   <div>
-    <el-form :label-position="labelPosition"
+    <div>
+      <el-breadcrumb separator="/">
+        <el-breadcrumb-item style=""
+                            class="pageTitle">
+          <i class="el-icon-pie-chart"
+             style="margin-right:10px"></i>
+          <strong>创建会议室信息</strong>
+        </el-breadcrumb-item>
+      </el-breadcrumb>
+      <hr style="width:97%; margin:0 auto" />
+      <br>
+    </div>
+    <el-form label-position="right"
              label-width="180px"
              style="margin-top:4px"
              :model="mrForm">
@@ -50,7 +62,7 @@
                      label="没有"></el-option>
         </el-select> -->
         <el-input type="textarea"
-                  :rows="6"
+                  :rows="10"
                   style="width:90%"
                   placeholder="请输入内容"
                   v-model="mrForm.description">
@@ -131,12 +143,17 @@ export default {
             message: '新的会议室数据创建成功',
             type: 'success',
           })
+          //创建成功之后，跳转到会议室信息查询页面
+          //this.$router.replace();
         })
         .catch((e) => {
           console.log(e)
           this.$message.error('创建会议室数据失败')
         })
     },
+    cancel(){
+
+    }
   },
   mounted() {},
 }
@@ -145,5 +162,10 @@ export default {
 .center {
   display: flex;
   justify-content: center;
+}
+.pageTitle {
+  margin: 20px 0 20px 20px;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 18px;
 }
 </style>

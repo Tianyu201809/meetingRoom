@@ -77,8 +77,15 @@ export default {
         },
         {
           icon: 'el-icon-s-management',
-          index: 'manageMeetingRoom',
+          index: '0',
           title: '会议室管理',
+          subs:[{
+              index:'maintainMeetingRoom',
+              title:'维护会议室信息'
+          },{
+              index:'manageMeetingRoom',
+              title:'创建会议室'
+          }]
           
         },
         {

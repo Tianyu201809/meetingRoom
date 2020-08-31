@@ -74,8 +74,11 @@ export default {
     queryMeetingRoomCount() {},
   },
   mounted() {
-    this.queryMeetingRoomByFilter({})
+    
   },
+  created(){
+      this.queryMeetingRoomByFilter({})
+  }
 }
 </script>
 <style scoped>

@@ -46,3 +46,14 @@ export const createMeetingRoom = ({
 		},
 	})
 }
+
+export const deleteMeetingRoomItem = (meetingRoomId) => {
+	axios.defaults.headers['Authorization'] = getToken()
+	return axios({
+        url: '/meetingRoom/deleteMeetingRoomInfo',
+        method:'post',
+		data: {
+			meetingRoomId,
+		},
+	})
+}
