@@ -4,7 +4,7 @@
       <el-breadcrumb separator="/">
         <el-breadcrumb-item style=""
                             class="pageTitle">
-          <i class="el-icon-pie-chart"
+          <i class="el-icon-search"
              style="margin-right:10px"></i>
           <strong>会议查询</strong>
         </el-breadcrumb-item>
@@ -14,9 +14,10 @@
 
     </div>
     <div style="margin-left:17px">
-      <my-search></my-search>
+      <my-search @filterCondition='getFilter'></my-search>
       <meeting-room-table :tableData="tableData"></meeting-room-table>
-      <paging :total="total"></paging>
+      <paging :total="total"
+              :filter="filter"></paging>
     </div>
 
   </div>
@@ -41,9 +42,14 @@ export default {
       limit: 10,
       skip: 0,
       tableData: [],
+      filter: {},
     }
   },
   methods: {
+    getFilter(filter) {
+      console.log(filter)
+      this.filter = filter
+    },
     queryMeetingRoomByFilter(filter) {
       //1.首先根据过滤条件，查询数据总数
       // title, date, meetingRoomNumber
@@ -51,7 +57,8 @@ export default {
       //查询条目总数
       getQueryAppointCount(filter).then((count) => {
         return new Promise((resolve, reject) => {
-          that.total = count.count
+            //获取总数
+          that.total = count.data.count
           resolve(true)
         }).then(() => {
           //查询数据

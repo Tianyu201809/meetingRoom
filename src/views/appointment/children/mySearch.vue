@@ -77,6 +77,10 @@ export default {
         meetingRoomNumber: this.forma.meetingRoom,
       }
       console.log(1)
+      /**
+       * 要将过滤条件传递给父组件，父组件拿到这个对象之后，还要传递给他的子组件
+       */
+      this.$emit('filterCondition', filter)
       this.$parent.queryMeetingRoomByFilter(filter)
     },
     resetData() {

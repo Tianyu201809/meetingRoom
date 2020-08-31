@@ -6,7 +6,8 @@
                    :page-sizes="[10]"
                    :page-size="10"
                    layout="total, sizes, prev, pager, next, jumper"
-                   :total="total">
+                   :total="total"
+                   :filter="filter">
     </el-pagination>
   </div>
 </template>
@@ -17,13 +18,19 @@ export default {
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`)
     },
-    handleCurrentChange(val) {
-      console.log(`当前页: ${val}`)
+    // handleCurrentChange(val) {
+    //   console.log(`当前页: ${val}`)
+    // },
+    handleCurrentChange(currentPage) {
+      console.log(this.filter)
+      const limit = 10
+      const skip = parseInt((currentPage - 1) * limit)
+      this.$parent.queryAppointment(this.filter, limit, skip)
     },
   },
   data() {
     return {
-      currentPage1: 1,
+      currentPage: 1,
     }
   },
   props: {
@@ -33,10 +40,11 @@ export default {
         return 0
       },
     },
-  },
-  methods: {
-    currentPage(count) {
-      console.log(count)
+    filter: {
+      type: Object,
+      default: function () {
+        return {}
+      },
     },
   },
 }
