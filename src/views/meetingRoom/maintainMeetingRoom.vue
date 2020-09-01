@@ -46,7 +46,8 @@
                        label="会议室状态"
                        width="100">
         <template slot-scope="scope">
-          <span style="margin-left: 5px">{{ scope.row.meetingRoomStatus == 1 ? '可用':'不可用' }}</span>
+          <span style="margin-left: 5px"
+                :class="{ suc : scope.row.meetingRoomStatus == 1, err:scope.row.meetingRoomStatus == 0 }">{{ scope.row.meetingRoomStatus == 1 ? '可用':'不可用' }}</span>
         </template>
       </el-table-column>
       <el-table-column prop="createdDate"
@@ -198,5 +199,11 @@ export default {
 .paging {
   margin-left: 26px;
   margin-top: 20px;
+}
+.suc {
+  color: green;
+}
+.err {
+  color: red;
 }
 </style>

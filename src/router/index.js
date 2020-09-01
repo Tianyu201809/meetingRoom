@@ -91,6 +91,7 @@ const router = new Router({
 					name: 'meetingRoomDetail',
 					component: () =>
 						import('../views/meetingRoom/meetingRoomDetail.vue'),
+					meta: { title: '修改会议室信息' },
 				},
 			],
 		},

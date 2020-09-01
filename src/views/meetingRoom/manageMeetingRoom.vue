@@ -134,8 +134,8 @@ export default {
         hasMedia: '',
         created: '',
         createdBy: {
-          userName: getLocalProp('userName'),
-          emial: getLocalProp('email'),
+          userName: getLocalProp('userName'), //当前登陆人
+          emial: getLocalProp('email'), //登陆人的email
         },
         lastModify: '',
         lastModifyBy: '',

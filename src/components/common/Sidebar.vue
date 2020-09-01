@@ -52,12 +52,12 @@ export default {
       items: [
         {
           icon: 'el-icon-s-home',
-          index: 'index',
+          index: '/index', //这里一定要注意加上 / 
           title: '系统首页',
         },
         {
           icon: 'el-icon-chat-dot-round',
-          index: 'releaseNotices',
+          index: '/releaseNotices',
           title: '发布通知',
         },
         {
@@ -66,11 +66,11 @@ export default {
           title: '会议预约',
           subs: [
             {
-              index: 'queryMeeting',
+              index: '/queryMeeting',
               title: '会议查询',
             },
             {
-              index: 'createAppointment',
+              index: '/createAppointment',
               title: '创建预约',
             }
           ],
@@ -80,33 +80,33 @@ export default {
           index: '0',
           title: '会议室管理',
           subs:[{
-              index:'maintainMeetingRoom',
+              index:'/maintainMeetingRoom',
               title:'维护会议室信息'
           },{
-              index:'manageMeetingRoom',
+              index:'/manageMeetingRoom',
               title:'创建会议室'
           }]
           
         },
         {
           icon: 'el-icon-user-solid',
-          index: 'charts',
+          index: '/charts',
           title: '与我相关',
           subs: [
             {
-              index: 'createAppoint',
+              index: '/createAppoint',
               title: '我的预约',
             },
             {
-                index:'myMeeting',
+                index:'/myMeeting',
                 title:'我的参加的会议'
             },
             {
-              index: 'myMessage',
+              index: '/myMessage',
               title: '我的基本信息',
             },
             {
-              index: 'message',
+              index: '/message',
               title: '收到的通知',
             },
           ],
@@ -116,7 +116,7 @@ export default {
   },
   computed: {
     onRoutes() {
-      return this.$route.path.replace('/', '')
+      return this.$route.path.replace('/')
     },
   },
   created() {
