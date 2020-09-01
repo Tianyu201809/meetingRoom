@@ -24,13 +24,15 @@ export const queryAppointment = (
 	//limit代表查询几条数据, 设置默认值 10， skip代表跳过几条数据，默认值为0
 	axios.defaults.headers['Authorization'] = getToken()
 
-	return axios.get('/appointment/getAppoList', {
-		params: {
-            title,
-			meetingDate,
-			meetingRoomNumber,
-			limit,
-			skip,
+	return axios.post('/appointment/getAppoList', {
+		data: {
+			filter: {
+				title,
+				meetingDate,
+				meetingRoomNumber,
+			},
+			limit: limit,
+			skip: skip,
 		},
 	})
 }

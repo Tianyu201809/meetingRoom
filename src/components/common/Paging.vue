@@ -25,11 +25,7 @@ export default {
       console.log(this.filter)
       const limit = 10
       const skip = parseInt((currentPage - 1) * limit)
-      this.$parent.queryAppointment(
-        this.filter ? this.filter : null,
-        limit,
-        skip
-      )
+      this.$parent.queryMeetingRoomByFilter(this.filter, limit, skip)
     },
   },
   data() {

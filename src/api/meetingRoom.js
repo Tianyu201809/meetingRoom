@@ -10,8 +10,13 @@ import { getToken } from './token'
  */
 export const getMeetingRoomItems = (filter) => {
 	axios.defaults.headers['Authorization'] = getToken()
+	debugger
 	return axios.post('/meetingRoom/queryMeetingRoomsList', {
-		data: filter,
+		data: {
+			skip: filter.skip,
+			limit: filter.limit,
+			filter: filter.filter,
+		},
 	})
 }
 
@@ -67,5 +72,28 @@ export const getMeetingRoomCount = (filter) => {
 		url: '/meetingRoom/queryMeetingRoomsCount',
 		method: 'post',
 		data: filter,
+	})
+}
+
+export const queryMeetingRoomDetail = (id) => {
+	axios.defaults.headers['Authorization'] = getToken()
+	return axios({
+		url: '/meetingRoom/queryMeetingRoomDetail',
+		method: 'get',
+		params: {
+			id: id,
+		},
+	})
+}
+
+export const updateMeetingRoomDetail = (id, obj) => {
+	axios.defaults.headers['Authorization'] = getToken()
+	return axios({
+		url: '/meetingRoom/updateMeetingRoomDetail',
+		method: 'post',
+		data: {
+			id: id,
+			modify: obj,
+		},
 	})
 }

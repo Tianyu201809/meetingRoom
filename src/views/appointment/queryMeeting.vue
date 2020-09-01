@@ -50,20 +50,20 @@ export default {
       console.log(filter)
       this.filter = filter
     },
-    queryMeetingRoomByFilter(filter) {
+    queryMeetingRoomByFilter(filter, limit = 10, skip = 0) {
       //1.首先根据过滤条件，查询数据总数
       // title, date, meetingRoomNumber
       let that = this
       //查询条目总数
       getQueryAppointCount(filter).then((count) => {
         return new Promise((resolve, reject) => {
-            //获取总数
+          //获取总数
           that.total = count.data.count
           resolve(true)
         }).then(() => {
           //查询数据
-          let limit = that.limit
-          let skip = that.skip
+          //   let limit = that.limit
+          //   let skip = that.skip
           queryAppointment(filter, limit, skip).then((result) => {
             debugger
             that.tableData = result.data
@@ -73,12 +73,10 @@ export default {
     },
     queryMeetingRoomCount() {},
   },
-  mounted() {
-    
+  mounted() {},
+  created() {
+    this.queryMeetingRoomByFilter({})
   },
-  created(){
-      this.queryMeetingRoomByFilter({})
-  }
 }
 </script>
 <style scoped>

@@ -95,7 +95,7 @@
 
         <el-form-item label="备注">
           <el-input type="textarea"
-                    v-model="form.desc"
+                    v-model="form.description"
                     maxlength="150"
                     show-word-limit
                     :rows="6"></el-input>
@@ -121,22 +121,7 @@ export default {
   components: {},
   data() {
     return {
-      meetingRoomList: [
-        {
-          meetingRoomNumber: '1-1102',
-          createdBy: {},
-          hasMedia: true,
-          meetingRoomSize: '4',
-          meetingRoomStatus: 0,
-        },
-        {
-          meetingRoomNumber: '1-1103',
-          createdBy: {},
-          hasMedia: false,
-          meetingRoomSize: '5',
-          meetingRoomStatus: 1,
-        },
-      ],
+      meetingRoomList: [],
       appointmentTimeArea: {
         start: '09:00',
         step: '00:30',
@@ -144,7 +129,7 @@ export default {
       },
       form: {
         title: '',
-        desc: '',
+        description: '',
         department: '',
         meetingRoomNumber: '',
         createdDate: '',

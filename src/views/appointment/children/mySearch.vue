@@ -25,10 +25,13 @@
           <el-select v-model="forma.meetingRoom"
                      placeholder="请选择会议室"
                      class="item">
-            <el-option v-for="(item, index) in meetingRoomList"
-                       :key="index"
-                       :label="item"
-                       :value="item"></el-option>
+            <el-option v-for="(item) in meetingRoomList"
+                       :key="item._id"
+                       :label="item.meeringRoomName"
+                       :value="item.meetingRoomNumber">
+              <span style="float: left">{{ item.meetingRoomNumber }}</span>
+              <span style="float: right; color: #8492a6; font-size: 13px">{{ item.meetingRoomName }}</span>
+            </el-option>
 
           </el-select>
         </el-col>
@@ -93,34 +96,25 @@ export default {
     //通过父组件，影响其子组件
   },
   created() {
-    // this.$axios
-    //   .get('/meetingRoom/getMeetingRoomDropList')
-    //   .then((res) => {
-    //     this.meetingRoomList = res.data
-    //   })
-    //   .catch(() => {
-    //     this.meetingRoomList = [{ key: '00010', value: '会议室00010' }]
-    //   })
-  },
-  mounted() {
-    // this.$axios
-    //   .get('/meetingRoom/getMeetingRoomDropList')
-    //   .then((res) => {
-    //     this.meetingRoomList = res.data
-    //   })
-    //   .catch(() => {
-    //     this.meetingRoomList = [{ key: '00010', value: '会议室00010' }]
-    //   })
-
-    getMeetingRoomItems().then((result) => {
+    const filter = {
+      skip: 0,
+      limit: 0,
+      filter: {},
+    }
+    getMeetingRoomItems(filter).then((result) => {
       debugger
       console.log(result)
       let meetingRoomArrayList = result.data.data.map((item) => {
-        return item.meetingRoomNumber
+        const meetingRoomItem = {}
+        meetingRoomItem['id'] = item._id
+        meetingRoomItem['meetingRoomNumber'] = item.meetingRoomNumber
+        meetingRoomItem['meetingRoomName'] = item.meetingRoomName
+        return meetingRoomItem
       })
       this.meetingRoomList = meetingRoomArrayList
     })
   },
+  mounted() {},
 }
 </script>
 <style scope>
