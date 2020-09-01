@@ -71,9 +71,9 @@ export default {
       name: 'linxin',
       message: 2,
       userInfo: {
-          userName:'',
-          email:'',
-          password:''
+        userName: '',
+        email: '',
+        password: '',
       },
     }
   },

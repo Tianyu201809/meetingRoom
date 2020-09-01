@@ -60,19 +60,37 @@ const router = new Router({
 				// 	component: () => import('../views/404.vue'),
 				// },
 				{
-                    //创建会议室
+					//创建会议室
 					path: '/manageMeetingRoom',
-                    name: 'manageMeetingRoom',
-                    
+					name: 'manageMeetingRoom',
+
 					component: () =>
 						import('../views/meetingRoom/manageMeetingRoom.vue'),
-                },
-                {
-                    //查询，修改，删除会议室
+				},
+				{
+					//查询，修改，删除会议室
 					path: '/maintainMeetingRoom',
 					name: 'maintainMeetingRoom',
 					component: () =>
 						import('../views/meetingRoom/maintainMeetingRoom.vue'),
+					children: [
+						// {
+						// 	//会议室详情页
+						// 	path: '/maintainMeetingRoom/meetingRoomDetail:id',
+						// 	name: 'meetingRoomDetail',
+						// 	component: () =>
+						// 		import(
+						// 			'../views/meetingRoom/meetingRoomDetail.vue'
+						// 		),
+						// },
+					],
+				},
+				{
+					//会议室详情页
+					path: '/meetingRoomDetail/:id',
+					name: 'meetingRoomDetail',
+					component: () =>
+						import('../views/meetingRoom/meetingRoomDetail.vue'),
 				},
 			],
 		},

@@ -23,7 +23,9 @@
                        label="会议室ID"
                        width="220">
         <template slot-scope="scope">
-          <span style="margin-left: 5px">{{ scope.row._id }}</span>
+          <span style="margin-left: 5px">
+            {{ scope.row._id }}
+          </span>
         </template>
       </el-table-column>
       <el-table-column prop="meetingRoomNumber"
@@ -72,7 +74,7 @@
                        width="160">
         <template slot-scope="scope">
           <el-button size="mini"
-                     @click="handleEdit(scope.$index, scope.row)"
+                     @click.prevent="navToDetail(scope.row._id)"
                      class="el-icon-edit"></el-button>
           <el-button size="mini"
                      type="danger"
@@ -88,7 +90,7 @@
   </div>
 </template>
 <script>
-import paging from '../../components/common/Paging'
+import paging from './children/paging'
 import {
   getMeetingRoomItems,
   deleteMeetingRoomItem,
@@ -153,6 +155,10 @@ export default {
             })
         })
     },
+    navToDetail(id) {
+      debugger
+      this.$router.push({ name: 'meetingRoomDetail', params: { id: id } })
+    },
   },
   mounted() {},
   computed: {},
@@ -181,8 +187,6 @@ export default {
         console.log(e)
       })
   },
-
-  watch: {},
 }
 </script>
 <style scoped>
