@@ -4,6 +4,7 @@
 
 import axios from 'axios'
 import { getToken } from './token'
+import { getLocalProp } from './localMethods'
 
 //作用于查询预约记录页面的接口
 
@@ -97,6 +98,12 @@ export const userJoinedMeeting = ({
 export const createAppointment = (data) => {
 	axios.defaults.headers['Authorization'] = getToken()
 
+	//加入预定人信息
+	let subscriber = {
+		userName: getLocalProp('userName'),
+		email: getLocalProp('email'),
+	}
+	data['subscriber'] = subscriber
 	return axios({
 		url: '/appointment/createAppointment',
 		method: 'POST',
@@ -138,7 +145,7 @@ export const queryAppointmentDetail = (id) => {
 		url: '/appointment/queryAppointmentDetail',
 		method: 'get',
 		params: {
-			id: id
+			id: id,
 		},
 	})
 }

@@ -160,7 +160,9 @@ export default {
           this.$message.error('创建会议室数据失败')
         })
     },
-    cancel() {},
+    cancel() {
+      this.$router.replace({ name: 'maintainMeetingRoom' })
+    },
   },
   mounted() {},
 }

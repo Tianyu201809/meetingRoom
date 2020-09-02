@@ -5,6 +5,7 @@
         <el-col :span="5">
           <div class="item">
             <el-input v-model="forma.title"
+                      @keypress.native.enter="searchData()"
                       placeholder="请输入会议主题">
             </el-input>
           </div>
@@ -41,7 +42,7 @@
                      icon="el-icon-search">查询</el-button>
           <el-button type="danger"
                      @click="resetData()"
-                     icon="el-icon-search">重置</el-button>
+                     icon="el-icon-refresh-right">重置</el-button>
         </el-col>
 
       </el-row>

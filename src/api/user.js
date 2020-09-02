@@ -79,3 +79,12 @@ export const authorization = (token) => {
 	axios.defaults.headers['Authorization'] = token
 	return axios.get('/users/authorization')
 }
+
+export const getUserRole = (userName) => {
+	axios.defaults.headers['Authorization'] = token
+	return axios.get('/users/queryUserRole', {
+		params: {
+			userName,
+		},
+	})
+}

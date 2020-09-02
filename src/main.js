@@ -6,11 +6,12 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import axios from 'axios'
+import dayjs from 'dayjs'
 
 Vue.config.productionTip = false
 Vue.use(ElementUI)
 Vue.use(axios)
-// Vue.prototype.$axios = axios
+Vue.prototype.dayjs = dayjs
 // axios.defaults.headers['Authorization'] = getToken() || ''
 new Vue({
 	router,

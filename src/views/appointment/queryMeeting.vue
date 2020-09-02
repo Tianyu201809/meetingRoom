@@ -14,10 +14,19 @@
 
     </div>
     <div style="margin-left:17px">
-      <my-search @filterCondition='getFilter'></my-search>
-      <meeting-room-table :tableData="tableData"></meeting-room-table>
-      <paging :total="total"
-              :filter="filter"></paging>
+      <keep-alive>
+        <my-search @filterCondition='getFilter'></my-search>
+
+      </keep-alive>
+      <keep-alive>
+        <meeting-room-table :tableData="tableData"
+                            :filter="filter"></meeting-room-table>
+      </keep-alive>
+      <keep-alive>
+        <paging :total="total"
+                :filter="filter"></paging>
+      </keep-alive>
+
     </div>
 
   </div>

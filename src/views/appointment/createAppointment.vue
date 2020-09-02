@@ -25,14 +25,14 @@
                      style="width:20%">
             <el-option v-for="(item, index) in meetingRoomList"
                        :key="index"
-                       :label="item.meetingRoomName"
+                       :label="item.meetingRoomNumber"
                        :value="item.meetingRoomNumber">
               <span style="float: left">{{ item.meetingRoomNumber }}</span>
               <span style="float: right; color: #8492a6; font-size: 13px">{{ item.meetingRoomName }}</span>
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="会议标题">
+        <el-form-item label="会议主题">
           <el-input v-model="form.title"></el-input>
         </el-form-item>
         <el-form-item label="所属部门">
@@ -51,7 +51,7 @@
         <el-form-item label="预约日期">
           <el-date-picker type="date"
                           placeholder="选择日期"
-                          v-model="form.appoDate"
+                          v-model="form.appointDate"
                           style="width: 100%;"
                           format="yyyy 年 MM 月 dd 日"
                           value-format="yyyy-MM-dd"></el-date-picker>
@@ -60,6 +60,7 @@
         <el-form-item label="会议时间">
           <el-col :span="11">
             <el-time-select placeholder="开始时间"
+                            @change="timeTransStartTime(form.startTime)"
                             :picker-options="appointmentTimeArea"
                             v-model="form.startTime"
                             :editable="false"
@@ -71,6 +72,7 @@
           <el-col :span="11">
             <el-time-select placeholder="结束时间"
                             v-model="form.endTime"
+                            @change="timeTransEndTime(form.endTime)"
                             :picker-options="appointmentTimeArea"
                             :editable="false"
                             style="width: 100%;"></el-time-select>
@@ -134,12 +136,12 @@ export default {
         description: '',
         department: '',
         meetingRoomNumber: '',
-        createdDate: '',
-        content: '',
+        //createdDate: '', //后端计算
         startTime: '',
         endTime: '',
         members: '',
-        appointData: '',
+        appointDate: '',
+        modifyDate: Date.now(),
       },
       departmentList: [
         {
@@ -212,11 +214,41 @@ export default {
   methods: {
     //创建预约
     onSubmitForm() {
-      createAppointment(this.form).then((result) => {
-        console.log(result.data)
+      this.$confirm('此操作将修改当前会议室信息, 是否继续?', '提示', {
+        cancelButtonText: '取消',
+        confirmButtonText: '确定',
+        type: 'warning',
       })
+        .then(() => {
+          //   let obj = JSON.parse(JSON.stringify(this.form)) //变更格式
+          //   obj.appointDate = this.dayjs(this.form.appointDate).format(
+          //     'YYYY-MM-DD HH:mm:ss'
+          //   )
+          createAppointment(this.form)
+            .then((result) => {
+              if (result.data.code == 200) {
+                this.$message({
+                  type: 'success',
+                  message: '创建预约信息成功',
+                })
+                this.$router.push({ name: 'queryMeeting' })
+                console.log(result.data)
+              } else {
+                this.$message({
+                  type: 'error',
+                  message: result.data.data,
+                })
+              }
+            })
+            .catch((e) => {})
+        })
+        .catch((e) => {
+          console.log()
+        })
     },
-    onClearFormData() {},
+    onClearFormData() {
+      this.$router.replace({ name: 'queryMeeting' })
+    },
     getMeetingRoomList() {
       axios.get('/getMeetingRoomList').then((data) => {
         const meetingRoomList = data.data.filter(() => {
@@ -224,6 +256,38 @@ export default {
         })
         this.meetingRoomList = meetingRoomList
       })
+    },
+    //时间存储与转化
+    timeTransStartTime(timeString) {
+      let Hour = timeString.split(':')[0]
+      let Minutes = timeString.split(':')[1]
+      let Second = timeString.split(':')[2] || '00'
+      let day = this.dayjs(this.form.appointDate)
+      //输出转化后的时间
+      const outPut = day
+        .hour(parseInt(Hour))
+        .minute(parseInt(Minutes))
+        .second(parseInt(Second))
+        .format('YYYY-MM-DD HH:mm:ss')
+      console.log(outPut)
+      this.form.startTime = outPut
+      return outPut
+    },
+    //时间存储与转化
+    timeTransEndTime(timeString) {
+      let Hour = timeString.split(':')[0]
+      let Minutes = timeString.split(':')[1]
+      let Second = timeString.split(':')[2] || '00'
+      let day = this.dayjs(this.form.appointDate)
+      //输出转化后的时间
+      const outPut = day
+        .hour(parseInt(Hour))
+        .minute(parseInt(Minutes))
+        .second(parseInt(Second))
+        .format('YYYY-MM-DD HH:mm:ss')
+      console.log(outPut)
+      this.form.endTime = outPut
+      return outPut
     },
   },
   computed: {},

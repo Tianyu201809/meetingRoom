@@ -15,56 +15,68 @@
       </template>
     </el-table-column>
     <el-table-column prop="meeting-room-number"
-                     label="会议室"
-                     width="180">
+                     label="会议室编号"
+                     width="100">
       <template slot-scope="scope">
-        <span style="margin-left: 5px">{{ scope.row.meetingRoomNumber }}</span>
+        <span>{{ scope.row.meetingRoomNumber }}</span>
       </template>
     </el-table-column>
     <el-table-column prop='meeting-date'
-                     label="会议日期"
+                     label="创建日期"
                      width="180">
       <template slot-scope="scope">
-        <i class="el-icon-time"></i>
-        <span style="margin-left: 5px">{{ scope.row.modifyDate }}</span>
+        <!-- <i class="el-icon-time"></i> -->
+        <span>{{TransFormDateTime(scope.row.createdDate)}}</span>
       </template>
     </el-table-column>
-    <el-table-column prop='meetingArea'
+    <el-table-column prop=''
                      label="会议时段"
-                     width="180">
+                     width="170">
+      <template slot-scope="scope">
+        <span>{{TransFormDateTime(scope.row.startTime)}} ~ {{TransFormDateTime(scope.row.endTime)}}</span>
+      </template>
     </el-table-column>
+
     <el-table-column prop='appointmentPerson'
                      label="预约人"
                      width="180">
       <template slot-scope="scope">
-        <span style="margin-left: 5px">{{ scope.row.subscriber }}</span>
+        <span>{{ scope.row.subscriber }}</span>
       </template>
     </el-table-column>
-    <el-table-column prop='currentStatus'
+    <!-- <el-table-column prop='currentStatus'
                      label="当前状态"
                      width="100">
       <template slot-scope="scope">
-        <span style="margin-left: 5px">{{ scope.row.status }}</span>
+        <span>{{ scope.row.status }}</span>
       </template>
-    </el-table-column>
+    </el-table-column> -->
     <el-table-column prop='department'
-                     label="部门"
+                     label="所属部门"
                      width="100">
     </el-table-column>
     <el-table-column prop='createdDate'
-                     label="预约创建日期"
+                     label="最后修改日期"
                      width="180">
       <template slot-scope="scope">
-        <span style="margin-left: 5px">{{ scope.row.createdDate }}</span>
+        <span>{{ TransFormDateTime(scope.row.modifyDate) }}</span>
+      </template>
+    </el-table-column>
+    <el-table-column prop='description'
+                     label="备注信息"
+                     width="auto">
+      <template slot-scope="scope">
+        <span>{{ scope.row.description }}</span>
       </template>
     </el-table-column>
     <el-table-column prop="operation"
                      label="操作"
-                     width="120">
+                     width="120"
+                     v-if="isAdmin">
       <template slot-scope="scope">
         <el-button size="mini"
                    type="success"
-                   @click.prevent="navToAppointDetail(scope.row._id)"
+                   @click.native.prevent="navToAppointDetail(scope.row._id)"
                    class="el-icon-edit"></el-button>
         <el-button size="mini"
                    type="danger"
@@ -82,6 +94,8 @@ import {
   getQueryAppointCount,
   queryAppointment,
 } from '@/api/appointment'
+import { getUserRole } from '@/api/user' //用于以后的权限管理
+import { getLocalProp } from '@/api/localMethods'
 export default {
   name: 'meetingRoomTable',
   props: {
@@ -91,11 +105,28 @@ export default {
         return []
       },
     },
+    filter: {
+      type: Object,
+      default: function () {
+        return {}
+      },
+    },
   },
   data() {
     return {
       loading: true,
+      isAdmin: true,
     }
+  },
+  computed: {
+    //时间格式化
+    TransFormDateTime(data) {
+      return function (data) {
+        return this.dayjs(data).format('YYYY-MM-DD HH:mm:ss') != 'Invalid Date'
+          ? this.dayjs(data).format('YYYY-MM-DD HH:mm:ss')
+          : ''
+      }
+    },
   },
   methods: {
     navToAppointDetail(id) {
@@ -103,7 +134,7 @@ export default {
     },
     deleteAppointItem(id) {
       //根据id删除appointment
-
+      let that = this
       this.$confirm('此操作将永久删除当前会议室信息, 是否继续?', '提示', {
         cancelButtonText: '取消',
         confirmButtonText: '确定',
@@ -112,7 +143,8 @@ export default {
         .then(() => {
           deleteAppointmentItem(id).then(() => {
             //重置数量和分页查询
-            getQueryAppointCount().then(() => {})
+            //getQueryAppointCount().then(() => {})
+            that.$parent.queryMeetingRoomByFilter(that.filter)
           })
         })
         .catch((e) => {
@@ -123,7 +155,18 @@ export default {
   mounted() {
     setTimeout(() => {
       this.loading = false
-    }, 1000)
+    }, 1400)
+  },
+  created() {
+    const userName = getLocalProp('userName')
+    const that = this
+    getUserRole(userName).then((role) => {
+      if (!role || parseInt(role) === 1) {
+        return
+      } else {
+        //that.isAdmin = true
+      }
+    })
   },
 }
 </script>

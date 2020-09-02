@@ -51,7 +51,7 @@
         <el-form-item label="预约日期">
           <el-date-picker type="date"
                           placeholder="选择日期"
-                          v-model="form.appoDate"
+                          v-model="form.appointDate"
                           style="width: 100%;"
                           format="yyyy 年 MM 月 dd 日"
                           value-format="yyyy-MM-dd"></el-date-picker>
@@ -61,6 +61,7 @@
           <el-col :span="11">
             <el-time-select placeholder="开始时间"
                             :picker-options="appointmentTimeArea"
+                            @change="timeTransTool(form.startTime)"
                             v-model="form.startTime"
                             :editable="false"
                             style="width: 100%;"></el-time-select>
@@ -71,6 +72,7 @@
           <el-col :span="11">
             <el-time-select placeholder="结束时间"
                             v-model="form.endTime"
+                            @change="timeTransTool(form.startTime)"
                             :picker-options="appointmentTimeArea"
                             :editable="false"
                             style="width: 100%;"></el-time-select>
@@ -142,7 +144,7 @@ export default {
         startTime: '',
         endTime: '',
         members: '',
-        appointData: '',
+        appointDate: '',
       },
       departmentList: [
         {
@@ -212,6 +214,21 @@ export default {
         .catch((e) => {
           that.form = e.data.data
         })
+    },
+    //时间存储与转化
+    timeTransTool(timeString) {
+      let Hour = timeString.split(':')[0]
+      let Minutes = timeString.split(':')[1]
+      let Second = timeString.split(':')[2] || '00'
+      let day = this.dayjs(this.form.appointDate)
+      //输出转化后的时间
+      const outPut = day
+        .hour(parseInt(Hour))
+        .minute(parseInt(Minutes))
+        .second(parseInt(Second))
+        .format('YYYY-MM-DD HH:mm:ss')
+      console.log(outPut)
+      return outPut
     },
   },
   computed: {},
