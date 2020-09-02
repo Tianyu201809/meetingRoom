@@ -6,7 +6,7 @@
                             class="pageTitle">
           <i class="el-icon-pie-chart"
              style="margin-right:10px"></i>
-          <strong>创建预约</strong>
+          <strong>修改预约信息</strong>
         </el-breadcrumb-item>
       </el-breadcrumb>
       <hr style="width:97%; margin:0 auto" />
@@ -25,7 +25,7 @@
                      style="width:20%">
             <el-option v-for="(item, index) in meetingRoomList"
                        :key="index"
-                       :label="item.meetingRoomName"
+                       :label="item.meetingRoomNumber"
                        :value="item.meetingRoomNumber">
               <span style="float: left">{{ item.meetingRoomNumber }}</span>
               <span style="float: right; color: #8492a6; font-size: 13px">{{ item.meetingRoomName }}</span>
@@ -104,9 +104,9 @@
         </el-form-item>
         <el-form-item class="center">
           <el-button type="primary"
-                     @click="onSubmitForm()">创建预约</el-button>
+                     @click="updateAppointmentItem()">保存</el-button>
           <el-button type="danger"
-                     @click="onClearFormData()">取消</el-button>
+                     @click="backLastPage()">取消</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -114,10 +114,13 @@
 
 </template>
 <script>
-import AppointmentInfo from '@/class/AppointmentInfo'
+// import AppointmentInfo from '@/class/AppointmentInfo'
 import { getMeetingRoomItems } from '@/api/meetingRoom'
 import { getToken, setToken } from '@/api/token'
-import { createAppointment } from '@/api/appointment'
+import {
+  queryAppointmentDetail,
+  updateAppointmentItem,
+} from '@/api/appointment'
 export default {
   name: 'createAppointment',
   components: {},
@@ -151,83 +154,93 @@ export default {
           key: '00020',
         },
       ],
-      //select测试数据
-      options: [
-        {
-          value: '选项1',
-          label: '黄金糕',
-        },
-        {
-          value: '选项2',
-          label: '双皮奶',
-        },
-        {
-          value: '选项3',
-          label: '蚵仔煎',
-        },
-        {
-          value: '选项4',
-          label: '龙须面',
-        },
-        {
-          value: '选项5',
-          label: '北京烤鸭',
-        },
-      ],
-      value1: [],
-      value2: [],
-      value: '',
     }
   },
-  mounted() {
-    //1.获取所有下拉框中的数据
-    //2.初始化信息
-    const token = getToken()
-    getMeetingRoomItems(token).then((result) => {
-      if (result.data.data.length === 0) {
-        mockMeetingRoomList = [
-          {
-            meetingRoomID: '',
-            meetingRoomNumber: '1-1102',
-            createdBy: {},
-            hasMedia: true,
-            meetingRoomSize: '4',
-            meetingRoomVolume: '',
-            meetingRoomStatus: 0,
-          },
-          {
-            meetingRoomID: '',
-            meetingRoomNumber: '1-1103',
-            createdBy: {},
-            hasMedia: false,
-            meetingRoomSize: '5',
-            meetingRoomStatus: 1,
-          },
-        ]
-        this.meetingRoomList = mockMeetingRoomList
-      }
-      this.meetingRoomList = result.data.data
-    })
-  },
+  mounted() {},
   methods: {
     //创建预约
-    onSubmitForm() {
-      createAppointment(this.form).then((result) => {
-        console.log(result.data)
-      })
+    backLastPage() {
+      this.$router.push({ name: 'queryMeeting' })
     },
-    onClearFormData() {},
+    //获取会议室下拉菜单列表
     getMeetingRoomList() {
       axios.get('/getMeetingRoomList').then((data) => {
-        const meetingRoomList = data.data.filter(() => {
+        const meetingRoomList = data.data.filter((item) => {
           return item.status !== 0
         })
         this.meetingRoomList = meetingRoomList
       })
     },
+    //更新预约信息
+    updateAppointmentItem() {
+      const id = this.$route.params.id
+      const obj = this.form
+      let that = this
+      this.$confirm('此操作将修改当前预约信息, 是否继续?', '提示', {
+        cancelButtonText: '取消',
+        confirmButtonText: '确定',
+        type: 'warning',
+      })
+        .then(() => {
+          updateAppointmentItem(id, obj)
+            .then((data) => {
+              that.$message({
+                type: 'success',
+                message: '预约信息修改成功',
+              })
+              that.$router.push({ name: 'queryMeeting' })
+            })
+            .catch((e) => {
+              console.log(e)
+            })
+        })
+        .catch((e) => {
+          that.$message({
+            type: 'error',
+            message: '未提交修改',
+          })
+        })
+    },
+    //查询预约信息
+    queryAppointmentDetail(id) {
+      let that = this
+      queryAppointmentDetail(id)
+        .then((data) => {
+          that.form = data.data.data
+          console.log(that.form.title)
+        })
+        .catch((e) => {
+          that.form = e.data.data
+        })
+    },
   },
   computed: {},
-  created() {},
+  created() {
+    //查询单条预约
+    debugger
+    const id = this.$route.params.id
+    //执行查询方法
+    //首先初始化下拉列表
+    const filter = {
+      filter: {},
+      limit: 0,
+      skip: 0,
+    }
+    let that = this
+    getMeetingRoomItems(filter)
+      .then((result) => {
+        return new Promise((resolve, reject) => {
+          that.meetingRoomList = result.data.data
+          resolve(true)
+        })
+      })
+      .then(() => {
+        that.queryAppointmentDetail(id)
+      })
+      .catch((e) => {
+        console.log(e)
+      })
+  },
 }
 </script>
 <style scope>

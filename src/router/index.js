@@ -73,17 +73,6 @@ const router = new Router({
 					name: 'maintainMeetingRoom',
 					component: () =>
 						import('../views/meetingRoom/maintainMeetingRoom.vue'),
-					children: [
-						// {
-						// 	//会议室详情页
-						// 	path: '/maintainMeetingRoom/meetingRoomDetail:id',
-						// 	name: 'meetingRoomDetail',
-						// 	component: () =>
-						// 		import(
-						// 			'../views/meetingRoom/meetingRoomDetail.vue'
-						// 		),
-						// },
-					],
 				},
 				{
 					//会议室详情页
@@ -92,6 +81,14 @@ const router = new Router({
 					component: () =>
 						import('../views/meetingRoom/meetingRoomDetail.vue'),
 					meta: { title: '修改会议室信息' },
+				},
+				{
+					//预约编辑页
+					path: '/editAppointment/:id',
+					name: 'editAppointment',
+					component: () =>
+						import('../views/appointment/editAppointment.vue'),
+					meta: { title: '修改预约信息' },
 				},
 			],
 		},

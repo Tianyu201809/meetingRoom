@@ -103,3 +103,42 @@ export const createAppointment = (data) => {
 		data: data,
 	})
 }
+
+/**
+ * 删除预约
+ */
+export const deleteAppointmentItem = (id) => {
+	axios.defaults.headers['Authorization'] = getToken()
+	return axios.post('/appointment/deleteAppointmentItem', {
+		id,
+	})
+}
+
+/**
+ * 修改预约
+ */
+export const updateAppointmentItem = (id, obj) => {
+	axios.defaults.headers['Authorization'] = getToken()
+	return axios({
+		url: '/appointment/updateAppointmentItem',
+		method: 'post',
+		data: {
+			id: id,
+			obj: obj,
+		},
+	})
+}
+
+/**
+ * 查询单条预约信息
+ */
+export const queryAppointmentDetail = (id) => {
+	axios.defaults.headers['Authorization'] = getToken()
+	return axios({
+		url: '/appointment/queryAppointmentDetail',
+		method: 'get',
+		params: {
+			id: id
+		},
+	})
+}

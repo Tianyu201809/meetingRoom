@@ -58,11 +58,30 @@
         <span style="margin-left: 5px">{{ scope.row.createdDate }}</span>
       </template>
     </el-table-column>
+    <el-table-column prop="operation"
+                     label="操作"
+                     width="120">
+      <template slot-scope="scope">
+        <el-button size="mini"
+                   type="success"
+                   @click.prevent="navToAppointDetail(scope.row._id)"
+                   class="el-icon-edit"></el-button>
+        <el-button size="mini"
+                   type="danger"
+                   @click.native.prevent="deleteAppointItem(scope.row._id)"
+                   class="el-icon-delete"></el-button>
+      </template>
+    </el-table-column>
 
   </el-table>
 
 </template>
 <script>
+import {
+  deleteAppointmentItem,
+  getQueryAppointCount,
+  queryAppointment,
+} from '@/api/appointment'
 export default {
   name: 'meetingRoomTable',
   props: {
@@ -78,7 +97,29 @@ export default {
       loading: true,
     }
   },
-  methods: {},
+  methods: {
+    navToAppointDetail(id) {
+      this.$router.push({ name: 'editAppointment', params: { id: id } })
+    },
+    deleteAppointItem(id) {
+      //根据id删除appointment
+
+      this.$confirm('此操作将永久删除当前会议室信息, 是否继续?', '提示', {
+        cancelButtonText: '取消',
+        confirmButtonText: '确定',
+        type: 'warning',
+      })
+        .then(() => {
+          deleteAppointmentItem(id).then(() => {
+            //重置数量和分页查询
+            getQueryAppointCount().then(() => {})
+          })
+        })
+        .catch((e) => {
+          console.log(e)
+        })
+    },
+  },
   mounted() {
     setTimeout(() => {
       this.loading = false

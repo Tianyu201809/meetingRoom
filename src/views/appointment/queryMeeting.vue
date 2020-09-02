@@ -71,7 +71,7 @@ export default {
         })
       })
     },
-    queryMeetingRoomCount() {},
+    // queryMeetingRoomCount() {},
   },
   mounted() {},
   created() {
