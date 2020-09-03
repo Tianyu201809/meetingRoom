@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="wrapper">
     <div>
       <el-breadcrumb separator="/">
         <el-breadcrumb-item style=""
@@ -79,21 +79,19 @@
           </el-col>
         </el-form-item>
         <el-form-item label="参会人员">
-          <el-select v-model="value"
+          <el-select v-model="form.members"
                      placeholder="请选择"
                      filterable
                      multiple
                      style="width:100%"
                      @change="checkMembers(event)">
-            <el-option-group v-for="group in options"
-                             :key="group.label"
-                             :label="group.label">
-              <el-option v-for="item in group.options"
-                         :key="item.value"
-                         :label="item.label"
-                         :value="item.value">
-              </el-option>
-            </el-option-group>
+            <el-option v-for="item in userList"
+                       :key="item._id"
+                       :label="item.userName"
+                       :value="item.userName">
+              <span style="float: left">{{ item.userName }}</span>
+              <span style="float: right; color: #8492a6; font-size: 13px; margin-right:20px">{{ item.email }}</span>
+            </el-option>
           </el-select>
         </el-form-item>
 
@@ -123,11 +121,13 @@ import {
   queryAppointmentDetail,
   updateAppointmentItem,
 } from '@/api/appointment'
+import { getUserList } from '@/api/user'
 export default {
   name: 'createAppointment',
   components: {},
   data() {
     return {
+      userList: [],
       meetingRoomList: [],
       appointmentTimeArea: {
         start: '09:00',
@@ -139,7 +139,7 @@ export default {
         description: '',
         department: '',
         meetingRoomNumber: '',
-        createdDate: '',
+        //createdDate: '',
         content: '',
         startTime: '',
         endTime: '',
@@ -251,7 +251,6 @@ export default {
   computed: {},
   created() {
     //查询单条预约
-    debugger
     const id = this.$route.params.id
     //执行查询方法
     //首先初始化下拉列表
@@ -270,6 +269,17 @@ export default {
       })
       .then(() => {
         that.queryAppointmentDetail(id)
+      })
+      .catch((e) => {
+        console.log(e)
+      })
+
+    //初始化人员列表
+    const group = null
+    getUserList(group)
+      .then((res) => {
+        console.log(res)
+        that.userList = res.data.data
       })
       .catch((e) => {
         console.log(e)
@@ -293,5 +303,10 @@ body {
   margin: 20px 0 20px 20px;
   font-family: Arial, Helvetica, sans-serif;
   font-size: 18px;
+}
+.wrapper >>> .el-tag.el-tag--info {
+  color: #fff;
+  background-color: #409eff;
+  border-color: #ccc;
 }
 </style>
