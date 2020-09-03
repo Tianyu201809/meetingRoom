@@ -61,7 +61,7 @@
           <el-col :span="11">
             <el-time-select placeholder="开始时间"
                             :picker-options="appointmentTimeArea"
-                            @change="timeTransTool(form.startTime)"
+                            @change="timeTransStartTime(form.startTime)"
                             v-model="form.startTime"
                             :editable="false"
                             style="width: 100%;"></el-time-select>
@@ -72,7 +72,7 @@
           <el-col :span="11">
             <el-time-select placeholder="结束时间"
                             v-model="form.endTime"
-                            @change="timeTransTool(form.startTime)"
+                            @change="timeTransEndTime(form.endTime)"
                             :picker-options="appointmentTimeArea"
                             :editable="false"
                             style="width: 100%;"></el-time-select>
@@ -216,7 +216,7 @@ export default {
         })
     },
     //时间存储与转化
-    timeTransTool(timeString) {
+    timeTransStartTime(timeString) {
       let Hour = timeString.split(':')[0]
       let Minutes = timeString.split(':')[1]
       let Second = timeString.split(':')[2] || '00'
@@ -228,6 +228,23 @@ export default {
         .second(parseInt(Second))
         .format('YYYY-MM-DD HH:mm:ss')
       console.log(outPut)
+      this.form.startTime = outPut
+      return outPut
+    },
+    //时间存储与转化
+    timeTransEndTime(timeString) {
+      let Hour = timeString.split(':')[0]
+      let Minutes = timeString.split(':')[1]
+      let Second = timeString.split(':')[2] || '00'
+      let day = this.dayjs(this.form.appointDate)
+      //输出转化后的时间
+      const outPut = day
+        .hour(parseInt(Hour))
+        .minute(parseInt(Minutes))
+        .second(parseInt(Second))
+        .format('YYYY-MM-DD HH:mm:ss')
+      console.log(outPut)
+      this.form.endTime = outPut
       return outPut
     },
   },

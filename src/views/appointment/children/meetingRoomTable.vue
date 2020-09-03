@@ -37,11 +37,14 @@
       </template>
     </el-table-column>
 
-    <el-table-column prop='appointmentPerson'
+    <el-table-column prop='subscriber'
                      label="预约人"
                      width="180">
       <template slot-scope="scope">
-        <span>{{ scope.row.subscriber }}</span>
+        <span>
+          <!-- <a :href="scope.row.subscriber ? 'mailto:' + scope.row.subscriber.email:null">{{ scope.row.subscriber ? scope.row.subscriber.userName : ''}}</a> -->
+          {{scope.row.subscriber ? scope.row.subscriber.userName : ''}}
+        </span>
       </template>
     </el-table-column>
     <!-- <el-table-column prop='currentStatus'
@@ -127,6 +130,14 @@ export default {
           : ''
       }
     },
+
+    //显示名称
+    subscriberUserName(obj) {
+      return function (obj) {
+        debugger
+        return obj.userName
+      }
+    },
   },
   methods: {
     navToAppointDetail(id) {
@@ -151,13 +162,19 @@ export default {
           console.log(e)
         })
     },
+    emailToUser(e, email) {
+      console.log(e)
+      console.log(email)
+    },
   },
   mounted() {
     setTimeout(() => {
       this.loading = false
     }, 1400)
   },
+
   created() {
+    //转移
     const userName = getLocalProp('userName')
     const that = this
     getUserRole(userName).then((role) => {
