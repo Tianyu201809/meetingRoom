@@ -9,7 +9,7 @@
         <el-divider></el-divider>
       </div>
       <div class="dialog-container">
-        <el-form label-width="90px"
+        <el-form label-width="120px"
                  style=""
                  :label-position="labelPosition">
           <el-form-item label="会议主题:"
@@ -18,27 +18,36 @@
           </el-form-item>
           <el-form-item label="会议日期:"
                         class="form-item">
-            {{selectedItem.meetingDate}}
+            {{formatDate()}}
           </el-form-item>
-          <el-form-item label="会议时间段:"
+          <el-form-item label="会议开始时间:"
                         class="form-item">
-            {{selectedItem.startTime}} ~ {{selectedItem.endTime}}
+            <div class="startTime"> {{formatStartTime()}}</div>
+
+          </el-form-item>
+          <el-form-item label="会议结束时间:"
+                        class="form-item">
+            <div class="endTime">{{formatEndTime()}}</div>
           </el-form-item>
           <el-form-item label="参会人员:"
                         class="form-item">
-            {{}}
+            <span v-for="(item, index) in selectedItem.members"
+                  :key="index"
+                  style="display:inline">
+              {{item.trim()}},
+            </span>
           </el-form-item>
           <el-form-item label="会议室:"
                         class="form-item">
-            {{selectedItem.meetingRoom}}
+            {{selectedItem.meetingRoomNumber}}
           </el-form-item>
-          <el-form-item label="当前状态:"
+          <!-- <el-form-item label="当前状态:"
                         class="form-item">
             <span>{{selectedItem.status}}</span>
-          </el-form-item>
+          </el-form-item> -->
           <el-form-item label="会议概述:"
                         class="form-item">
-            <span>{{selectedItem.overview}}</span>
+            <span>{{selectedItem.description}}</span>
           </el-form-item>
         </el-form>
 
@@ -53,13 +62,20 @@ export default {
       labelPosition: 'left',
       dialogFormVisible: false,
       formLabelWidth: 180,
-      form: {
-        title: '技术讨论会议',
-        meetingDate: '2020-8-20',
-        startTime: '9:30',
-        endTime: '11:30',
-      },
     }
+  },
+  computed: {
+    //格式化时间
+    // formatStartTime: function () {
+    //   return this.dayjs(this.selectedItem.startTime).format('HH:MM:SS')
+    // },
+    // formatEndTime: function () {
+    //   return this.dayjs(this.selectedItem.endTime).format('HH:MM:SS')
+    // },
+    // //格式化日期
+    // formatDate: function () {
+    //   return this.dayjs(this.selectedItem.appointDate).format('YYYY-MM-DD')
+    // },
   },
   props: {
     selectedItem: {
@@ -71,6 +87,16 @@ export default {
   },
   computed: {},
   methods: {
+    formatStartTime: function () {
+      return this.dayjs(this.selectedItem.startTime).format('HH:mm:ss')
+    },
+    formatEndTime: function () {
+      return this.dayjs(this.selectedItem.endTime).format('HH:mm:ss')
+    },
+    //格式化日期
+    formatDate: function () {
+      return this.dayjs(this.selectedItem.appointDate).format('YYYY-MM-DD')
+    },
     openDialog() {
       this.dialogFormVisible = !this.dialogFormVisible
     },
@@ -83,5 +109,12 @@ export default {
 }
 .form-item {
   height: 20px;
+}
+
+.startTime {
+  color: green;
+}
+.endTime {
+  color: brown;
 }
 </style>

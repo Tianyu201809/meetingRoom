@@ -4,21 +4,27 @@
       <div class="title">用户注册</div>
       <el-form ref="form"
                :model="form"
+               :rules="rules"
+               status-icon
                label-width="80px">
-        <el-form-item label="用户名">
+        <el-form-item label="用户名"
+                      prop="userName">
           <el-input v-model="form.userName"></el-input>
         </el-form-item>
-        <el-form-item label="邮箱">
+        <el-form-item label="邮箱"
+                      prop="email">
           <el-input v-model="form.email"></el-input>
         </el-form-item>
-        <el-form-item label="密码">
+        <el-form-item label="密码"
+                      prop="password">
           <el-input v-model="form.password"
                     type="password"></el-input>
         </el-form-item>
         <div class="btn">
           <el-button type="success"
                      @click="onSubmit">立即创建</el-button>
-          <el-button type="danger">取消</el-button>
+          <el-button type="danger"
+                     @click="backToLogin()">取消</el-button>
         </div>
       </el-form>
 
@@ -37,18 +43,52 @@ export default {
         email: '',
         password: '',
       },
+      rules: [],
     }
   },
   methods: {
     onSubmit() {
       debugger
-      registerUser(this.form)
-        .then((res) => {
-          console.log(res)
+      this.$confirm('此操作将提交表单信息进行用户创建, 是否继续?', '提示', {
+        cancelButtonText: '取消',
+        confirmButtonText: '确定',
+        type: 'warning',
+      })
+        .then(() => {
+          let status
+          registerUser(this.form)
+            .then((res) => {
+              console.log(res)
+              if (res.data.code == 200) {
+                status = 'success'
+              } else {
+                status = 'error'
+              }
+
+              this.$message({
+                type: status,
+                message: res.data.msg,
+              })
+            })
+            .catch((e) => {
+              this.$message({
+                type: 'error',
+                message: e,
+                time: 5000,
+              })
+            })
         })
-        .catch((e) => {
-          console.log(e)
+        .catch(() => {
+          this.$message({
+            type: 'error',
+            message: '已取消注册',
+          })
         })
+    },
+    backToLogin() {
+      this.$router.replace({
+        name: 'login',
+      })
     },
   },
 }

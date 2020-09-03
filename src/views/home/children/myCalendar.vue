@@ -5,13 +5,14 @@
       <template slot="dateCell"
                 slot-scope="{data}"
                 :class="data.isSelected">
-        <div :class="data.isSelected ? 'is-selected' : ''">
+        <div :class="data.isSelected ? 'is-selected' : ''"
+             @click="currentSelectDate(data.day)"
+             style="height:100%;width:100%">
           {{ data.day.split('-').slice(2).join('') }}
           <div class="selectCell"
                ref="selectCell">
-            <!-- {{ data.isSelected ? '✔' : ''}} -->
+            {{ data.isSelected ? '✔' : ''}}
           </div>
-
         </div>
       </template>
     </el-calendar>
@@ -25,21 +26,25 @@ export default {
       value: new Date(),
     }
   },
-  mounted() {
-
+  mounted() {},
+  methods: {
+    currentSelectDate(day) {
+      console.log(this.value)
+      const val = this.dayjs(this.value).format('YYYY-MM-DD')
+      this.$emit('currentSelectDate', day)
+    },
   },
-  methods: {},
 }
 </script>
 <style>
 .is-selected {
-  color:white;
-  background-color: rgb(45, 134, 185)  !important;
+  color: white;
+  background-color: rgb(45, 134, 185) !important;
   padding: 0;
   margin: 0;
   cursor: pointer;
 }
-.is-selected :hover{
+.is-selected :hover {
   color: white;
   background-color: rgb(45, 134, 185) !important;
   cursor: pointer;
@@ -48,8 +53,8 @@ export default {
   margin-top: 12px;
   margin-left: 4px;
 }
-.is-today{
-    color: rgb(45, 134, 185) !important;
-    font-weight: 700;
+.is-today {
+  color: rgb(45, 134, 185) !important;
+  font-weight: 700;
 }
 </style>

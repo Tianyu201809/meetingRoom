@@ -4,7 +4,7 @@
       <!-- <router-link to="/">Home</router-link> |
       <router-link to="/about">About</router-link> -->
     </div>
-    <router-view style="overflow:auto"/>
+    <router-view style="overflow-y:auto; overflow-x:auto" />
   </div>
 </template>
 

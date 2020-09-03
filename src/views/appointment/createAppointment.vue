@@ -83,8 +83,7 @@
                      placeholder="请选择"
                      filterable
                      multiple
-                     style="width:100%"
-                     @change="checkMembers(event)">
+                     style="width:100%">
             <!-- <el-option-group v-for="group in options"
                              :key="group.label"
                              :label="group.label">
@@ -107,13 +106,14 @@
                     show-word-limit
                     :rows="6"></el-input>
         </el-form-item>
-        <el-form-item class="center">
+        <div class="center">
           <el-button type="primary"
                      @click="onSubmitForm()">创建预约</el-button>
           <el-button type="danger"
                      @click="onClearFormData()">取消</el-button>
-        </el-form-item>
+        </div>
       </el-form>
+
     </div>
   </div>
 
@@ -326,7 +326,10 @@ body {
   font-family: Arial, Helvetica, sans-serif;
   font-size: 18px;
 }
-
+.wrapper {
+  height: 100vh;
+  overflow: auto;
+}
 .wrapper >>> .el-tag.el-tag--info {
   color: #fff;
   background-color: #409eff;

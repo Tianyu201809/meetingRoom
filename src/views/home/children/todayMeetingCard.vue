@@ -3,24 +3,17 @@
     <meeting-detail-dialog ref="dialog"
                            :selectedItem="currentItem"></meeting-detail-dialog>
     <el-card shadow="hover"
-             style="height:267px;">
+             style="height:267px;"
+             ref="todayMeetingCard">
       <div slot="header"
            class="clearfix">
         <span>当日会议</span>
       </div>
+      <transition name="fade">
       <el-table :show-header="false"
                 :data="meetingList"
                 style="width:100%;">
-        <!-- <el-table-column width="40">
-          <template slot-scope="scope">
-            <el-checkbox v-model="scope.row.status"></el-checkbox>
-          </template>
-        </el-table-column> -->
         <el-table-column>
-          <!-- <template slot-scope="scope">
-            <div class="today-meeting-item"
-                 :class="{'today-todo-item-del': scope.row.status}">{{scope.row.title}}</div>
-          </template> -->
           <template slot-scope="scope">
             <a href="#"
                class="list-item"
@@ -28,12 +21,14 @@
           </template>
         </el-table-column>
       </el-table>
+      </transition>
       <div class="block">
         <div class="pagingItem">
           <el-pagination small
                          layout="prev, pager, next"
                          :page-size="3"
-                         @current-change="changePage()"
+                         :current-page="currentPage"
+                         @current-change="handleCurrentChange"
                          :total="total">
           </el-pagination>
         </div>
@@ -56,7 +51,9 @@ export default {
     meetingDate: String,
   },
   data() {
-    return {}
+    return {
+      limit: 3,
+    }
   },
   props: {
     meetingList: {
@@ -64,6 +61,9 @@ export default {
       default: function () {
         return []
       },
+    },
+    appointDate: {
+      type: String,
     },
     userInfo: {
       type: Object,
@@ -87,16 +87,11 @@ export default {
   data() {
     return {
       currentItem: {},
+      currentPage: 1,
     }
   },
   mounted() {
-    // const obj = {
-    //   email,
-    //   meetingDate
-    // }
-    // getUserJoinedMeetingCount(obj).then((count) => {
-    //   this.total = count
-    // })
+
   },
   methods: {
     showDetail(i) {
@@ -106,15 +101,19 @@ export default {
     },
 
     //当变更当前页的时候
-    changePage(page) {
-      //调用查询显示条目接口，修改显示内容
-      userJoinedMeeting(this.userInfo).then((result) => {
-        console.log(result)
-        if (parseInt(result.data.code) === 200)
-          this.meetingList = result.data.data
-        else {
-          this.meetingList = []
-        }
+    handleCurrentChange(page) {
+      const limit = this.limit || 3
+      const skip = (page - 1) * limit
+      const userName = this.userInfo.userName
+      const meetingDate = this.appointDate
+      const filterObj = {
+        limit,
+        skip,
+        userName,
+        meetingDate,
+      }
+      userJoinedMeeting(filterObj).then((res) => {
+        this.$emit('paingUserMeetingItems', res.data.data)
       })
     },
   },

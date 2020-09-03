@@ -83,8 +83,7 @@
                      placeholder="请选择"
                      filterable
                      multiple
-                     style="width:100%"
-                     @change="checkMembers(event)">
+                     style="width:100%">
             <el-option v-for="item in userList"
                        :key="item._id"
                        :label="item.userName"
@@ -102,12 +101,12 @@
                     show-word-limit
                     :rows="6"></el-input>
         </el-form-item>
-        <el-form-item class="center">
+        <div class="center">
           <el-button type="primary"
                      @click="updateAppointmentItem()">保存</el-button>
           <el-button type="danger"
                      @click="backLastPage()">取消</el-button>
-        </el-form-item>
+        </div>
       </el-form>
     </div>
   </div>
@@ -287,7 +286,7 @@ export default {
   },
 }
 </script>
-<style scope>
+<style scoped>
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
@@ -303,6 +302,11 @@ body {
   margin: 20px 0 20px 20px;
   font-family: Arial, Helvetica, sans-serif;
   font-size: 18px;
+}
+/* 解决不出现滚动条的问题 */
+.wrapper {
+  height: 100vh;
+  overflow: auto;
 }
 .wrapper >>> .el-tag.el-tag--info {
   color: #fff;

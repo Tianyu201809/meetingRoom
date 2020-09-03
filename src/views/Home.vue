@@ -1,6 +1,7 @@
 <template>
   <div class="wrapper">
-    <v-head title="会议室预定系统" :userInfo="userInfo"></v-head>
+    <v-head title="会议室预定系统"
+            :userInfo="userInfo"></v-head>
     <v-sidebar></v-sidebar>
 
     <div class="content-box"
@@ -39,7 +40,7 @@ export default {
   components: {
     vHead,
     vSidebar,
-    meetingDetailDialog
+    meetingDetailDialog,
     // vTags
   },
   //   beforeRouteUpdate(to, from, next) {
@@ -91,11 +92,7 @@ export default {
     //   this.tagsList = arr
     // })
   },
-  mounted() {
-
-  },
-  mothods: {
- 
-  },
+  mounted() {},
+  mothods: {},
 }
 </script>
