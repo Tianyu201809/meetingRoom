@@ -7,20 +7,20 @@
              ref="todayMeetingCard">
       <div slot="header"
            class="clearfix">
-        <span>当日会议</span>
+        <span>与您相关的会议</span>
       </div>
       <transition name="fade">
-      <el-table :show-header="false"
-                :data="meetingList"
-                style="width:100%;">
-        <el-table-column>
-          <template slot-scope="scope">
-            <a href="#"
-               class="list-item"
-               @click="showDetail(scope.$index)">{{scope.row.title}}</a>
-          </template>
-        </el-table-column>
-      </el-table>
+        <el-table :show-header="false"
+                  :data="meetingList"
+                  style="width:100%;">
+          <el-table-column>
+            <template slot-scope="scope">
+              <a href="#"
+                 class="list-item"
+                 @click="showDetail(scope.$index)">{{scope.row.title}}</a>
+            </template>
+          </el-table-column>
+        </el-table>
       </transition>
       <div class="block">
         <div class="pagingItem">
@@ -88,11 +88,10 @@ export default {
     return {
       currentItem: {},
       currentPage: 1,
+      pageSize: 3,
     }
   },
-  mounted() {
-
-  },
+  mounted() {},
   methods: {
     showDetail(i) {
       debugger

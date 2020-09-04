@@ -37,6 +37,12 @@ const router = new Router({
 						import('../views/releaseNotices/releaseNotices.vue'),
 				},
 				{
+					path: '/queryNotices',
+					name: 'queryNotices',
+					component: () =>
+						import('../views/releaseNotices/queryNotices.vue'),
+				},
+				{
 					path: '/createAppointment',
 					name: 'createAppointment',
 					component: () =>
@@ -90,6 +96,15 @@ const router = new Router({
 						import('../views/appointment/editAppointment.vue'),
 					meta: { title: '修改预约信息' },
 				},
+				// {
+				// 	path: '*',
+				// 	redirect: '/404',
+				// },
+				{
+					path: '*',
+					component: () => import('../views/404.vue'),
+					//redirect: '/404',
+				},
 			],
 		},
 		{
@@ -104,7 +119,8 @@ const router = new Router({
 		},
 		{
 			path: '*',
-			redirect: '/404',
+			component: () => import('../views/404.vue'),
+			//redirect: '/404',
 		},
 	],
 })

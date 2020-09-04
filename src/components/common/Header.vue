@@ -29,8 +29,8 @@
               <i class="el-icon-bell"></i>
             </router-link>
           </el-tooltip>
-          <span class="el-icon-bell"
-                v-if="message"></span>
+          <!-- <span class="el-icon-bell"
+                v-if="message"></span> -->
         </div>
         <!-- 用户头像 -->
         <div class="user-avator">
