@@ -17,7 +17,7 @@
       <el-col :span="8">
         <el-row :gutter="0"
                 class="mgb20">
-          <notification :notification="notification"></notification>
+          <notification></notification>
           <transition name="fade">
             <today-meeting-card :meetingList="meetingList"
                                 :userInfo="userInfo"
@@ -47,7 +47,7 @@ import { setToken, getToken } from '@/api/token'
 import { getUserJoinedMeetingCount, userJoinedMeeting } from '@/api/appointment'
 
 import store from '../../store'
-import { getLocalProp, setLocalProp } from '@/api/localMethods'
+import { getLocalProp, setLocalProp, _debounce } from '@/api/localMethods'
 import dayjs from 'dayjs'
 
 export default {
@@ -62,7 +62,6 @@ export default {
   beforeRouteEnter(to, from, next) {
     //设置组件导航首位，如果cookit中没有页面，不进行跳转
     //并将提示信息返回给前端
-    debugger
     const path = to.path
     const token = getToken()
     console.log(this)
@@ -81,6 +80,7 @@ export default {
       userInfo: {
         userName: '',
         email: '',
+        role: 1,
         loginDate: '',
         loginTime: '',
       },
@@ -88,33 +88,6 @@ export default {
       meetingDate: '',
       todoList: [],
       meetingList: [],
-      notification: [
-        {
-          index: 1,
-          msg: '今天晚上开会',
-          date: '2020-07-09',
-        },
-        {
-          index: 1,
-          msg: '今天晚上开会',
-          date: '2020-07-09',
-        },
-        {
-          index: 1,
-          msg: '今天晚上开会',
-          date: '2020-07-09',
-        },
-        {
-          index: 1,
-          msg: '今天晚上开会',
-          date: '2020-07-09',
-        },
-        {
-          index: 1,
-          msg: '今天晚上开会',
-          date: '2020-07-09',
-        },
-      ],
     }
   },
   mounted() {},

@@ -13,8 +13,7 @@
     </div>
 
     <notices-table :tableData="tableData"></notices-table>
-    <el-pagination @size-change="handleSizeChange"
-                   @current-change="handleCurrentChange"
+    <el-pagination @current-change="handleCurrentChange"
                    :current-page="currentPage"
                    :page-sizes="[10]"
                    :page-size="10"
@@ -26,7 +25,7 @@
 </template>
 
 <script>
-import { queryNotification } from '@/api/notification'
+import { queryNotification, queryNotificationCount } from '@/api/notification'
 import noticesTable from './children/noticesTable'
 export default {
   components: {
@@ -40,15 +39,23 @@ export default {
     }
   },
   created() {
-    const obj = {
-      department: null,
+    const obj1 = {
+      department: this.department || null,
       limit: 10,
       skip: 0,
     }
-    this.queryNotification(obj).then((data) => {
-        debugger
-      this.tableData = data.data.data
-      console.log(data)
+    const obj2 = {
+      department: this.department || null,
+    }
+
+    Promise.all([
+      this.queryNotification(obj1),
+      this.queryNotificationCount(obj2),
+    ]).then((result) => {
+      const noticesList = result[0].data.data //显示数据
+      const count = result[1].data.data //总数量
+      this.tableData = noticesList
+      this.total = count
     })
   },
   methods: {
@@ -67,9 +74,27 @@ export default {
         })
       })
     },
-    handleSizeChange() {},
+    queryNotificationCount(obj) {
+      return new Promise((resolve, reject) => {
+        if (!obj) {
+          obj = {
+            department: null,
+          }
+        }
+        queryNotificationCount(obj).then((d) => {
+          resolve(d)
+        })
+      })
+    },
     handleCurrentChange(page) {
       console.log(page)
+      const obj = {}
+      obj['department'] = null
+      obj['limit'] = 10
+      obj['skip'] = (page - 1) * obj['limit']
+      this.queryNotification(obj).then((result) => {
+        this.tableData = result.data.data
+      })
     },
   },
 }

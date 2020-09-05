@@ -7,7 +7,7 @@
              ref="todayMeetingCard">
       <div slot="header"
            class="clearfix">
-        <span>与您相关的会议</span>
+        <span>今日相关会议</span>
       </div>
       <transition name="fade">
         <el-table :show-header="false"
@@ -15,9 +15,11 @@
                   style="width:100%;">
           <el-table-column>
             <template slot-scope="scope">
-              <a href="#"
+              <a href="javascript::void(0)"
                  class="list-item"
-                 @click="showDetail(scope.$index)">{{scope.row.title}}</a>
+                 @click="showDetail(scope.$index)">
+                {{scope.row.title}}
+              </a>
             </template>
           </el-table-column>
         </el-table>
@@ -134,10 +136,10 @@ export default {
 }
 .list-item {
   color: #606266;
+  cursor: pointer;
 }
 .list-item:hover {
-  color: green;
+  color: rgb(0, 70, 128);
   text-decoration: underline !important;
-  cursor: pointer !important;
 }
 </style>

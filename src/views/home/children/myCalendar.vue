@@ -19,6 +19,7 @@
   </div>
 </template>
 <script>
+import { getLocalProp, setLocalProp, _debounce } from '@/api/localMethods'
 export default {
   name: 'myCalendar',
   data() {
@@ -30,8 +31,10 @@ export default {
   methods: {
     currentSelectDate(day) {
       console.log(this.value)
+      debugger
       const val = this.dayjs(this.value).format('YYYY-MM-DD')
       this.$emit('currentSelectDate', day)
+     
     },
   },
 }

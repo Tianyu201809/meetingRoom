@@ -58,3 +58,17 @@ export const queryNotification = ({
 		},
 	})
 }
+
+/**
+ * 获取通知数量
+ */
+export const queryNotificationCount = ({ department }) => {
+	axios.defaults.headers['Authorization'] = getToken()
+	return axios({
+		url: '/notification/queryNotificationCount',
+		method: 'get',
+		params: {
+			department: department,
+		},
+	})
+}

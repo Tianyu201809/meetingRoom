@@ -17,7 +17,7 @@
           <div class="user-info-cont">
             <div class="user-info-name">{{userInfo.userName}}</div>
             <div>{{userInfo.email}}</div>
-            <div class="edit-info"><a href="#">修改</a></div>
+            <div class="edit-info"><a href="#">信息修改</a></div>
           </div>
         </div>
         <div class="user-info-list">

@@ -48,7 +48,7 @@
           <span style="margin-left: 5px">{{ scope.row.description }}</span>
         </template>
       </el-table-column>
-      <!-- <el-table-column prop="operation"
+      <el-table-column prop="operation"
                        label="操作"
                        width="120">
         <template slot-scope="scope">
@@ -58,10 +58,10 @@
                      class="el-icon-edit"></el-button>
           <el-button size="mini"
                      type="danger"
-                     @click.native.prevent="deleteMeetingRoomItem(scope.row._id)"
+                     @click.native.prevent="deleteItem(scope.row._id)"
                      class="el-icon-delete"></el-button>
         </template>
-      </el-table-column> -->
+      </el-table-column>
 
     </el-table>
   </div>
@@ -79,6 +79,10 @@ export default {
   },
   data() {
     return {}
+  },
+  methods: {
+    navToDetail() {},
+    deleteItem() {},
   },
 }
 </script>
