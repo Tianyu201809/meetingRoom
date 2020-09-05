@@ -44,7 +44,7 @@
 
           <el-form-item label="通知正文"
                         prop="desc">
-            <vue-editor></vue-editor>
+            <vue-editor :content="getContent"></vue-editor>
           </el-form-item>
 
         </el-form>
@@ -93,6 +93,9 @@ export default {
     }
   },
   methods: {
+    getContent(content) {
+      this.form.content = content
+    },
     sendReleaseNotices() {
       this.createInfo(1)
     },

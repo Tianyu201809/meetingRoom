@@ -219,7 +219,7 @@ export default {
   methods: {
     //创建预约
     onSubmitForm() {
-      this.$confirm('此操作将修改当前会议室信息, 是否继续?', '提示', {
+      this.$confirm('此操作将创建会议室信息, 是否继续?', '提示', {
         cancelButtonText: '取消',
         confirmButtonText: '确定',
         type: 'warning',

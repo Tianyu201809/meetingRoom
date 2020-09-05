@@ -25,27 +25,27 @@
                        width="100">
         <template slot-scope="scope">
           <span style="margin-left: 5px"
-                :class="{ suc : scope.row.status == 1, err:scope.row.status == 0 }">{{ scope.row.meetingRoomStatus == 1 ? '已发布':'未发布' }}</span>
+                :class="{ suc : scope.row.status == 1, err:scope.row.status == 0 }">{{ scope.row.status == 1 ? '已发布':'未发布' }}</span>
         </template>
       </el-table-column>
       <el-table-column prop="createdDate"
                        label="创建日期"
-                       width="220">
+                       width="130">
         <template slot-scope="scope">
-          <span style="margin-left: 5px">{{ scope.row.created }}</span>
+          <span style="margin-left: 5px">{{ dateFormat(scope.row.createdDate) }}</span>
         </template>
       </el-table-column>
       <el-table-column prop="createdBy"
                        label="创建人"
                        width="100">
         <template slot-scope="scope">
-          <span style="margin-left: 5px">{{ scope.row.createdBy }}</span>
+          <span style="margin-left: 5px">{{ scope.row.createdBy ? scope.row.createdBy.userName:'' }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop=""
+      <el-table-column prop="content"
                        label="备注信息">
         <template slot-scope="scope">
-          <span style="margin-left: 5px">{{ scope.row.description }}</span>
+          <span style="margin-left: 5px">{{ scope.row.content }}</span>
         </template>
       </el-table-column>
       <el-table-column prop="operation"
@@ -80,11 +80,28 @@ export default {
   data() {
     return {}
   },
+  computed: {
+    dateFormat(date) {
+      return function (date) {
+        return this.dayjs(date).format('YYYY-MM-DD')
+      }
+    },
+  },
   methods: {
-    navToDetail() {},
+    //进入编辑页
+    navToDetail(id) {
+      this.$router.push({ name: 'editNotices', params: { id: id } })
+    },
+    //删除条目
     deleteItem() {},
   },
 }
 </script>
-<style>
+<style scoped>
+.suc {
+  color: green;
+}
+.err {
+  color: red;
+}
 </style>

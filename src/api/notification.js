@@ -2,7 +2,6 @@
  * 通知信息相关接口
  */
 import axios from 'axios'
-import store from '../store'
 import { getToken } from './token'
 import { getLocalProp } from './localMethods'
 
@@ -72,3 +71,7 @@ export const queryNotificationCount = ({ department }) => {
 		},
 	})
 }
+
+/**
+ * 删除通知
+ */

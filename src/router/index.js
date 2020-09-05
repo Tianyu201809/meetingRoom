@@ -105,8 +105,16 @@ const router = new Router({
 				},
 				// {
 				// 	path: '*',
-				// 	redirect: '/404',
+				// 	redirect: '/404',  editNotices
 				// },
+				{
+					//通知编辑页
+					path: '/editNotices/:id',
+					name: 'editNotices',
+					component: () =>
+						import('../views/releaseNotices/editNotices.vue'),
+					meta: { title: '修改通知信息' },
+				},
 				{
 					path: '*',
 					component: () => import('../views/404.vue'),

@@ -16,7 +16,7 @@
         </el-table-column>
         <el-table-column>
           <template slot-scope="scope">
-            <div class="item-date">{{showStartDate(scope.row.startDate)}}</div>
+            <div class="item-date">{{dateFormat(scope.row.startDate)}}</div>
           </template>
         </el-table-column>
       </el-table>
@@ -64,7 +64,7 @@ export default {
     // },
   },
   computed: {
-    showStartDate(date) {
+    dateFormat(date) {
       return function (date) {
         return this.dayjs(date).format('YYYY-MM-DD')
       }

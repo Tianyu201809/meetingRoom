@@ -3,7 +3,8 @@
     <div class="container">
       <quill-editor ref="myTextEditor"
                     v-model="content"
-                    :options="editorOption"></quill-editor>
+                    :options="editorOption"
+                    @change="onEditorChange"></quill-editor>
     </div>
   </div>
 </template>
@@ -33,11 +34,13 @@ export default {
   methods: {
     onEditorChange({ editor, html, text }) {
       this.content = html
+      console.log(html)
+      this.$emit('content', this.content)
     },
-    submit() {
-      console.log(this.content)
-      this.$message.success('提交成功！')
-    },
+    // submit() {
+    //   console.log(this.content)
+    //   this.$message.success('提交成功！')
+    // },
   },
 }
 </script>
