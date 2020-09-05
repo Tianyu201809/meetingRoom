@@ -15,7 +15,7 @@
           <el-form-item label="会议主题:"
                         class="form-item">
             {{selectedItem.title}}
-           
+
           </el-form-item>
           <el-form-item label="会议日期:"
                         class="form-item">
@@ -63,22 +63,21 @@ export default {
       labelPosition: 'left',
       dialogFormVisible: false,
       formLabelWidth: 180,
-      _selectedItem:selectedItem
+      _selectedItem: this.selectedItem,
     }
-    
   },
   computed: {
     //格式化时间
-    formatStartTime: function () {
-      return this.dayjs(this._selectedItem.startTime).format('HH:MM:SS')
-    },
-    formatEndTime: function () {
-      return this.dayjs(this._selectedItem.endTime).format('HH:MM:SS')
-    },
-    //格式化日期
-    formatDate: function () {
-      return this.dayjs(this._selectedItem.appointDate).format('YYYY-MM-DD')
-    },
+    // formatStartTime: function () {
+    //   return this.dayjs(this._selectedItem.startTime).format('HH:MM:SS')
+    // },
+    // formatEndTime: function () {
+    //   return this.dayjs(this._selectedItem.endTime).format('HH:MM:SS')
+    // },
+    // //格式化日期
+    // formatDate: function () {
+    //   return this.dayjs(this._selectedItem.appointDate).format('YYYY-MM-DD')
+    // },
   },
   props: {
     selectedItem: {
@@ -90,16 +89,16 @@ export default {
   },
   computed: {},
   methods: {
-    // formatStartTime: function () {
-    //   return this.dayjs(this.selectedItem.startTime).format('HH:mm:ss')
-    // },
-    // formatEndTime: function () {
-    //   return this.dayjs(this.selectedItem.endTime).format('HH:mm:ss')
-    // },
-    // //格式化日期
-    // formatDate: function () {
-    //   return this.dayjs(this.selectedItem.appointDate).format('YYYY-MM-DD')
-    // },
+    formatStartTime: function () {
+      return this.dayjs(this.selectedItem.startTime).format('HH:mm:ss')
+    },
+    formatEndTime: function () {
+      return this.dayjs(this.selectedItem.endTime).format('HH:mm:ss')
+    },
+    //格式化日期
+    formatDate: function () {
+      return this.dayjs(this.selectedItem.appointDate).format('YYYY-MM-DD')
+    },
     openDialog() {
       this.dialogFormVisible = !this.dialogFormVisible
     },
