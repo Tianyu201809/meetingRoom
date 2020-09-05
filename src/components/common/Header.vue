@@ -68,7 +68,7 @@ export default {
     return {
       collapse: false,
       fullscreen: false,
-      name: 'linxin',
+      name: '',
       message: 2,
       userInfo: {
         userName: '',
@@ -96,7 +96,7 @@ export default {
       if (command == 'loginout') {
         //localStorage.removeItem('ms_username')
         setToken('')
-        this.$router.push('/login')
+        this.$router.push({ name: 'login' })
       }
     },
     // 侧边栏折叠

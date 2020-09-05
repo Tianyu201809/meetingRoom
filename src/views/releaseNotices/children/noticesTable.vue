@@ -2,7 +2,7 @@
   <div>
     <el-table :data="tableData"
               border
-              v-loading="loading"
+              v-loading="false"
               height="535"
               style="margin:0 auto; width:95%">
       <el-table-column prop="title"
@@ -39,7 +39,7 @@
                        label="创建人"
                        width="100">
         <template slot-scope="scope">
-          <span style="margin-left: 5px">{{ scope.row.createdBy.userName }}</span>
+          <span style="margin-left: 5px">{{ scope.row.createdBy }}</span>
         </template>
       </el-table-column>
       <el-table-column prop=""
@@ -48,7 +48,7 @@
           <span style="margin-left: 5px">{{ scope.row.description }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="operation"
+      <!-- <el-table-column prop="operation"
                        label="操作"
                        width="120">
         <template slot-scope="scope">
@@ -61,7 +61,7 @@
                      @click.native.prevent="deleteMeetingRoomItem(scope.row._id)"
                      class="el-icon-delete"></el-button>
         </template>
-      </el-table-column>
+      </el-table-column> -->
 
     </el-table>
   </div>
@@ -78,9 +78,7 @@ export default {
     },
   },
   data() {
-    return {
-      tableData: [],
-    }
+    return {}
   },
 }
 </script>

@@ -12,7 +12,7 @@
       <br>
     </div>
 
-    <notices-table :tableData="[]"></notices-table>
+    <notices-table :tableData="tableData"></notices-table>
     <el-pagination @size-change="handleSizeChange"
                    @current-change="handleCurrentChange"
                    :current-page="currentPage"
@@ -26,6 +26,7 @@
 </template>
 
 <script>
+import { queryNotification } from '@/api/notification'
 import noticesTable from './children/noticesTable'
 export default {
   components: {
@@ -35,7 +36,41 @@ export default {
     return {
       currentPage: 1,
       total: 0,
+      tableData: [],
     }
+  },
+  created() {
+    const obj = {
+      department: null,
+      limit: 10,
+      skip: 0,
+    }
+    this.queryNotification(obj).then((data) => {
+        debugger
+      this.tableData = data.data.data
+      console.log(data)
+    })
+  },
+  methods: {
+    //{ department, limit, skip }
+    queryNotification(obj) {
+      return new Promise((resolve, reject) => {
+        if (!obj) {
+          obj = {
+            department: null,
+            limit: 10,
+            skip: 0,
+          }
+        }
+        queryNotification(obj).then((d) => {
+          resolve(d)
+        })
+      })
+    },
+    handleSizeChange() {},
+    handleCurrentChange(page) {
+      console.log(page)
+    },
   },
 }
 </script>

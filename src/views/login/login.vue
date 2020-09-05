@@ -38,7 +38,8 @@
                              class="login-tips">忘了密码？</router-link>
               </span>
               <span>
-                <router-link to='/register'
+                <router-link @click="toRegister()"
+                             :to="{name:'register'}"
                              class="login-tips"> 注册账户</router-link>
               </span>
             </span>
@@ -54,7 +55,7 @@
 <script>
 import { loginUser, getUserEmail } from '@/api/user'
 import { getToken, setToken } from '@/api/token'
-import {setLocalProp, getLocalProp} from '@/api/localMethods'
+import { setLocalProp, getLocalProp } from '@/api/localMethods'
 export default {
   data: function () {
     return {
@@ -73,6 +74,9 @@ export default {
     }
   },
   methods: {
+    toRegister() {
+      this.$router.push({ name: 'register' })
+    },
     login() {
       let self = this
       this.$refs.login.validate((valid) => {

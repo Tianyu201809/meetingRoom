@@ -48,7 +48,6 @@ export default {
   },
   methods: {
     onSubmit() {
-      debugger
       this.$confirm('此操作将提交表单信息进行用户创建, 是否继续?', '提示', {
         cancelButtonText: '取消',
         confirmButtonText: '确定',

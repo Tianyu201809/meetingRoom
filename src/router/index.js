@@ -21,6 +21,13 @@ const router = new Router({
 			redirect: '/index',
 		},
 		{
+			path: '/login',
+			name: 'login',
+			//redirect: '/login',
+			component: () => import('../views/login/login.vue'),
+			meta: { title: '登录' },
+		},
+		{
 			path: '/',
 			component: () =>
 				import(/* webpackChunkName: "home" */ '../views/Home.vue'),
@@ -110,17 +117,19 @@ const router = new Router({
 		{
 			path: '/login',
 			name: 'login',
+			//redirect: '/login',
 			component: () => import('../views/login/login.vue'),
 			meta: { title: '登录' },
 		},
 		{
 			path: '/register',
+			name: 'register',
 			component: () => import('../views/register/register.vue'),
 		},
 		{
 			path: '*',
 			component: () => import('../views/404.vue'),
-			//redirect: '/404',
+			redirect: '/login',
 		},
 	],
 })
