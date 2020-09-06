@@ -8,6 +8,8 @@ import store from './store'
 import axios from 'axios'
 import dayjs from 'dayjs'
 
+Vue.prototype.$bus = new Vue()
+
 Vue.config.productionTip = false
 Vue.use(ElementUI)
 Vue.use(axios)

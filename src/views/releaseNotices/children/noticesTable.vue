@@ -45,7 +45,8 @@
       <el-table-column prop="content"
                        label="备注信息">
         <template slot-scope="scope">
-          <span style="margin-left: 5px">{{ scope.row.content }}</span>
+          <!-- <span style="margin-left: 5px">{{ scope.row.content }}</span> -->
+          <span v-html="scope.row.content"></span>
         </template>
       </el-table-column>
       <el-table-column prop="operation"
@@ -58,7 +59,7 @@
                      class="el-icon-edit"></el-button>
           <el-button size="mini"
                      type="danger"
-                     @click.native.prevent="deleteItem(scope.row._id)"
+                     @click.native.prevent="deleteNotices(scope.row._id)"
                      class="el-icon-delete"></el-button>
         </template>
       </el-table-column>
@@ -67,6 +68,7 @@
   </div>
 </template>
 <script>
+import { deleteNotices } from '@/api/notification'
 export default {
   name: 'noticesTable',
   props: {
@@ -93,7 +95,48 @@ export default {
       this.$router.push({ name: 'editNotices', params: { id: id } })
     },
     //删除条目
-    deleteItem() {},
+    deleteNotices(id) {
+      debugger
+      let that = this
+      this.$confirm('此操作将会删除通知信息, 是否继续?', '提示', {
+        cancelButtonText: '取消',
+        confirmButtonText: '确定',
+        type: 'warning',
+      })
+        .then(() => {
+          deleteNotices(id)
+            .then((d) => {
+              if (d.data.code == 200) {
+                that.$message({
+                  type: 'success',
+                  message: d.data.mes,
+                })
+                // that.$router.replace({
+                //   name: 'queryNotices',
+                // })
+                //获取数量和显示条目
+                this.$parent.initialPage()
+              } else {
+                that.$message({
+                  type: 'error',
+                  message: d.data.mes,
+                })
+              }
+            })
+            .catch((e) => {
+              that.$message({
+                type: 'error',
+                message: e,
+              })
+            })
+        })
+        .catch((e) => {
+          that.$message({
+            type: 'error',
+            message: '已取消删除操作',
+          })
+        })
+    },
   },
 }
 </script>

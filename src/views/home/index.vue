@@ -95,7 +95,6 @@ export default {
   methods: {
     //获取用户
     getPagingUserMeeting(data) {
-      debugger
       this.meetingList = data
     },
     getSelectDate(selectDate) {
@@ -187,7 +186,6 @@ export default {
     //   }).then(() => {
     //     //该用户获取当日会议（需要显示的数据）
     //     userJoinedMeeting(obj).then((result) => {
-    //       debugger
     //       console.log(result)
     //       that.meetingList = result.data.data
     //     })

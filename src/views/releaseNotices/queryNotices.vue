@@ -13,14 +13,17 @@
     </div>
 
     <notices-table :tableData="tableData"></notices-table>
-    <el-pagination @current-change="handleCurrentChange"
-                   :current-page="currentPage"
-                   :page-sizes="[10]"
-                   :page-size="10"
-                   layout="total, sizes, prev, pager, next, jumper"
-                   :total="total"
-                   style="margin-left:31px;margin-top:17px">
-    </el-pagination>
+    <keep-alive>
+      <el-pagination @current-change="handleCurrentChange"
+                     :current-page="currentPage"
+                     :page-sizes="[10]"
+                     :page-size="10"
+                     layout="total, sizes, prev, pager, next, jumper"
+                     :total="total"
+                     style="margin-left:31px;margin-top:17px">
+      </el-pagination>
+    </keep-alive>
+
   </div>
 </template>
 
@@ -39,27 +42,32 @@ export default {
     }
   },
   created() {
-    const obj1 = {
-      department: this.department || null,
-      limit: 10,
-      skip: 0,
-    }
-    const obj2 = {
-      department: this.department || null,
-    }
-
-    Promise.all([
-      this.queryNotification(obj1),
-      this.queryNotificationCount(obj2),
-    ]).then((result) => {
-      const noticesList = result[0].data.data //显示数据
-      const count = result[1].data.data //总数量
-      this.tableData = noticesList
-      this.total = count
-    })
+    this.initialPage()
   },
   methods: {
     //{ department, limit, skip }
+    initialPage() {
+      const obj1 = {
+        department: this.department || null,
+        limit: 10,
+        skip: 0,
+      }
+      const obj2 = {
+        department: this.department || null,
+      }
+
+      Promise.all([
+        this.queryNotification(obj1),
+        this.queryNotificationCount(obj2),
+      ]).then((result) => {
+        const noticesList = result[0].data.data //显示数据
+        const count = result[1].data.data //总数量
+        this.tableData = noticesList
+        this.total = count
+        debugger
+        this.currentPage = 1
+      })
+    },
     queryNotification(obj) {
       return new Promise((resolve, reject) => {
         if (!obj) {

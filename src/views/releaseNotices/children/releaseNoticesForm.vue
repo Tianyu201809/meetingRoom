@@ -44,7 +44,7 @@
 
           <el-form-item label="通知正文"
                         prop="desc">
-            <vue-editor :content="getContent"></vue-editor>
+            <vue-editor @content="getContent"></vue-editor>
           </el-form-item>
 
         </el-form>
@@ -52,7 +52,6 @@
     </el-row>
 
     <div class="btn">
-
       <el-button type="success"
                  @click="saveDraft()">保存草稿</el-button>
       <el-button type="primary"
@@ -79,9 +78,6 @@ export default {
         department: '',
         startDate: '',
         endDate: '',
-        // delivery: false,
-        // type: [],
-        // resource: '',
         content: '',
         status: '',
       },
@@ -92,17 +88,63 @@ export default {
       ],
     }
   },
+  mounted() {},
+  props: {
+    noticesForm: {
+      type: Object,
+      default: function () {
+        return {
+          title: '',
+          department: '',
+          startDate: '',
+          endDate: '',
+          content: '',
+          status: '',
+        }
+      },
+    },
+  },
+  mounted() {
+    console.log(this.form)
+  },
   methods: {
     getContent(content) {
       this.form.content = content
     },
     sendReleaseNotices() {
-      this.createInfo(1)
+      this.$confirm('此操作将会发布通知信息, 是否继续?', '提示', {
+        cancelButtonText: '取消',
+        confirmButtonText: '确定',
+        type: 'warning',
+      })
+        .then(() => {
+          this.createInfo(1)
+        })
+        .catch((e) => {
+          this.$message({
+            type: 'success',
+            message: '未发布通知信息',
+          })
+        })
     },
     saveDraft() {
-      this.createInfo(0)
+      this.$confirm('此操作将会保存通知信息, 是否继续?', '提示', {
+        cancelButtonText: '取消',
+        confirmButtonText: '确定',
+        type: 'warning',
+      })
+        .then(() => {
+          this.createInfo(0)
+        })
+        .catch(() => {
+          this.$message({
+            type: 'success',
+            message: '未保存通知信息',
+          })
+        })
     },
     createInfo(status) {
+      console.log(this.form)
       return new Promise((resolve, reject) => {
         switch (status) {
           case 0:

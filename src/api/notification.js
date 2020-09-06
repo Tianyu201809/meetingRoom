@@ -73,5 +73,29 @@ export const queryNotificationCount = ({ department }) => {
 }
 
 /**
+ * 查询详细通知
+ */
+export const queryNoticesDetail = (id) => {
+	axios.defaults.headers['Authorization'] = getToken()
+	return axios({
+		url: '/notification/queryNoticesDetail',
+		method: 'get',
+		params: {
+			id,
+		},
+	})
+}
+
+/**
  * 删除通知
  */
+export const deleteNotices = (id) => {
+	axios.defaults.headers['Authorization'] = getToken()
+	return axios({
+		url: '/notification/deleteNotices',
+		method: 'post',
+		data: {
+			id,
+		},
+	})
+}

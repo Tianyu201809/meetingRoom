@@ -14,23 +14,45 @@
       <br>
     </template>
     <!-- 表单部分 -->
-    <release-notices-form :noticeItem="form"></release-notices-form>
+    <modify-notices-form></modify-notices-form>
 
   </div>
 </template>
 <script>
+import { queryNoticesDetail, editNotification } from '@/api/notification'
+import modifyNoticesForm from './children/modifyNoticesForm.vue'
 export default {
   name: 'editNotices',
+  components: {
+    modifyNoticesForm,
+  },
   data() {
     return {
-        form:{}
+      form: {},
     }
   },
-  methods: {},
-  created(){
-      //首先获取id,然后执行查询
-  }
+  methods: {
+    // queryNoticesDetail(id) {
+    //   return new Promise((resolve, reject) => {
+    //     queryNoticesDetail(id).then((result) => {
+    //       resolve(result)
+    //     })
+    //   })
+    // },
+  },
+  created() {
+    //首先获取id,然后执行查询
+    // const id = this.$route.params.id
+    // this.queryNoticesDetail(id).then((d) => {
+    //   this.form = d.data.data[0]
+    // })
+  },
 }
 </script>
-<style>
+<style scoped>
+.pageTitle {
+  margin: 20px 0 20px 20px;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 18px;
+}
 </style>

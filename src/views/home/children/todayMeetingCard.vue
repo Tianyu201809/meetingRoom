@@ -15,7 +15,7 @@
                   style="width:100%;">
           <el-table-column>
             <template slot-scope="scope">
-              <a href="javascript::void(0)"
+              <a href="javascript:void(0)"
                  class="list-item"
                  @click="showDetail(scope.$index)">
                 {{scope.row.title}}

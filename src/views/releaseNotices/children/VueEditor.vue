@@ -2,8 +2,9 @@
   <div>
     <div class="container">
       <quill-editor ref="myTextEditor"
-                    v-model="content"
+                    :model="content"
                     :options="editorOption"
+                    class="editor"
                     @change="onEditorChange"></quill-editor>
     </div>
   </div>
@@ -19,12 +20,13 @@ export default {
   name: 'editor',
   data: function () {
     return {
-      content: '',
+      content2: this.content || '',
       editorOption: {
-        placeholder: 'Hello World',
+        placeholder: '请输入通知正文',
       },
     }
   },
+  props: ['content'],
   components: {
     quillEditor,
   },
@@ -33,9 +35,11 @@ export default {
   },
   methods: {
     onEditorChange({ editor, html, text }) {
-      this.content = html
+      // this.content = html
       console.log(html)
-      this.$emit('content', this.content)
+      this.content2 = html
+      debugger
+      this.$emit('content', this.content2)
     },
     // submit() {
     //   console.log(this.content)
@@ -44,12 +48,16 @@ export default {
   },
 }
 </script>
-<style>
+<style scoped>
 .container {
   width: 90%;
   margin: 9px 0 0 0;
 }
 .ql-picker {
   height: auto !important;
+}
+.editor {
+  font-size: 14px;
+  font-family: Arial, Helvetica, sans-serif;
 }
 </style>
