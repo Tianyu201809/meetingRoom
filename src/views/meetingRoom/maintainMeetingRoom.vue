@@ -77,7 +77,7 @@
                        width="120">
         <template slot-scope="scope">
           <el-button size="mini"
-                     type="success"
+                     type="warning"
                      @click.prevent="navToDetail(scope.row._id)"
                      class="el-icon-edit"></el-button>
           <el-button size="mini"
@@ -89,8 +89,16 @@
 
     </el-table>
     <!-- 分页部分 -->
-    <paging class="paging"
-            :total="total"></paging>
+    <el-pagination @size-change="handleSizeChange"
+                   @current-change="handleCurrentChange"
+                   :current-page.sync="currentPage"
+                   :page-sizes="pageSizeArray"
+                   :page-size="pageSize"
+                   layout="total, sizes, prev, pager, next, jumper"
+                   :total.sync="total"
+                   class="block"
+                   :filter="filter">
+    </el-pagination>
   </div>
 </template>
 <script>
@@ -108,14 +116,40 @@ export default {
       tableData: [],
       loading: true,
       total: 0,
+      currentPage: 1,
+      pageSize: 10,
+      pageSizeArray: [10],
+      filter: {},
+      totalPage: 0,
     }
   },
   components: {
     paging,
   },
   methods: {
-    handleEdit() {},
-    open() {},
+    /**
+     * 暂未使用
+     */
+    handleSizeChange() {},
+    /**
+     * 计算总页码数
+     * 用于解决删除当页最后一条数据之后，显示暂无数据的bug
+     */
+    calculateTotal() {
+      return (this.totalPage = Math.ceil(this.total / this.pageSize))
+    },
+    handleCurrentChange(currentPage) {
+      console.log(this.filter)
+      this.loading = true
+      const limit = 10
+      const skip = parseInt((currentPage - 1) * limit)
+      const f = {
+        filter: {}, //暂未设置的过滤条件
+        limit: limit,
+        skip: skip,
+      }
+      this.getMeetingRoomItemsList(f)
+    },
     deleteMeetingRoomItem(id) {
       let that = this
       this.$confirm('此操作将永久删除当前会议室信息, 是否继续?', '提示', {
@@ -152,16 +186,22 @@ export default {
             }
 
             //当删除成功之后，需要重新调用查询方法，更新条目数量和table显示数据
-            getMeetingRoomItems(filter)
-              .then((res) => {
-                that.tableData = res.data.data
-                that.loading = false
-              })
-              .then(() => {
-                getMeetingRoomCount(filter.filter).then((data) => {
-                  that.total = data.data.count
-                })
-              })
+            getMeetingRoomCount(filter.filter).then((data) => {
+              that.total = data.data.count
+              let totalPage = that.calculateTotal()
+              const currentPage =
+                that.currentPage > totalPage ? totalPage : that.currentPage
+              debugger
+              that.handleCurrentChange(currentPage)
+            })
+            // getMeetingRoomItems(filter)
+            //   .then((res) => {
+            //     that.tableData = res.data.data
+            //     that.loading = false
+            //   })
+            //   .then(() => {
+
+            //   })
           })
       })
     },
@@ -179,6 +219,7 @@ export default {
         })
         .catch((e) => {
           console.log(e)
+          this.loading = false
         })
     },
   },
@@ -226,5 +267,9 @@ export default {
 }
 .err {
   color: red;
+}
+.block {
+  margin-left: 30px;
+  margin-top: 10px;
 }
 </style>

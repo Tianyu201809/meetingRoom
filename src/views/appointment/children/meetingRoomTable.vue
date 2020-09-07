@@ -11,7 +11,7 @@
                      width="180">
 
       <template slot-scope="scope">
-        <span style="margin-left: 5px">{{ scope.row.title }}</span>
+        <span>{{ scope.row.title }}</span>
       </template>
     </el-table-column>
     <el-table-column prop="meeting-room-number"
@@ -23,9 +23,8 @@
     </el-table-column>
     <el-table-column prop='meeting-date'
                      label="创建日期"
-                     width="180">
+                     width="160">
       <template slot-scope="scope">
-        <!-- <i class="el-icon-time"></i> -->
         <span>{{TransFormDateTime(scope.row.createdDate)}}</span>
       </template>
     </el-table-column>
@@ -39,7 +38,7 @@
 
     <el-table-column prop='subscriber'
                      label="预约人"
-                     width="180">
+                     width="100">
       <template slot-scope="scope">
         <span>
           <!-- <a :href="scope.row.subscriber ? 'mailto:' + scope.row.subscriber.email:null">{{ scope.row.subscriber ? scope.row.subscriber.userName : ''}}</a> -->
@@ -78,7 +77,7 @@
                      v-if="isAdmin">
       <template slot-scope="scope">
         <el-button size="mini"
-                   type="success"
+                   type="warning"
                    @click.native.prevent="navToAppointDetail(scope.row._id)"
                    class="el-icon-edit"></el-button>
         <el-button size="mini"
@@ -102,6 +101,9 @@ import { getLocalProp } from '@/api/localMethods'
 export default {
   name: 'meetingRoomTable',
   props: {
+    loading: {
+      type: Boolean,
+    },
     tableData: {
       type: Array,
       default: function () {
@@ -114,10 +116,17 @@ export default {
         return {}
       },
     },
+    currentPage: {
+      type: Number,
+      default: 1,
+    },
+    totalPage: {
+      type: Number,
+      default: 1,
+    },
   },
   data() {
     return {
-      loading: true,
       isAdmin: true,
     }
   },
@@ -154,8 +163,17 @@ export default {
         .then(() => {
           deleteAppointmentItem(id).then(() => {
             //重置数量和分页查询
-            //getQueryAppointCount().then(() => {})
-            that.$parent.queryMeetingRoomByFilter(that.filter)
+            getQueryAppointCount().then((count) => {
+              debugger
+              //条目数
+              let total = count.data.count
+              that.$emit('itemTotal', total)
+              let totalPage = Math.ceil(total / 10)
+              //计算总页数
+              const curPage =
+                that.currentPage > totalPage ? totalPage : that.currentPage
+              that.$parent.handleCurrentChange(curPage)
+            })
           })
         })
         .catch((e) => {

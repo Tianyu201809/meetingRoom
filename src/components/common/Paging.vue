@@ -21,12 +21,7 @@ export default {
     // handleCurrentChange(val) {
     //   console.log(`当前页: ${val}`)
     // },
-    handleCurrentChange(currentPage) {
-      console.log(this.filter)
-      const limit = 10
-      const skip = parseInt((currentPage - 1) * limit)
-      this.$parent.queryMeetingRoomByFilter(this.filter, limit, skip)
-    },
+ 
   },
   data() {
     return {
