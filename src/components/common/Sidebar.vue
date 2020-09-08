@@ -96,7 +96,7 @@ export default {
               title: '维护会议室信息',
             },
             {
-              index: '/manageMeetingRoom',
+              index: '/createMeetingRoom',
               title: '创建会议室',
             },
           ],
