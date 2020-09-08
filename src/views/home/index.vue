@@ -24,6 +24,7 @@
                                 :total="totalCount"
                                 :appointDate='meetingDate'
                                 @paingUserMeetingItems="getPagingUserMeeting"
+                                :loading.sync='loading'
                                 style="margin-top:10px"></today-meeting-card>
           </transition>
 
@@ -88,6 +89,7 @@ export default {
       meetingDate: '',
       todoList: [],
       meetingList: [],
+      loading: true,
     }
   },
   mounted() {},
@@ -98,6 +100,7 @@ export default {
       this.meetingList = data
     },
     getSelectDate(selectDate) {
+        this.loading = true
       this.meetingDate = selectDate
       const filterObj = {
         userName: this.userInfo.userName,
@@ -119,6 +122,7 @@ export default {
         console.log(result[1])
         this.totalCount = result[0].data.count || 0
         this.meetingList = result[1].data.data
+        this.loading = false
       })
     },
 
@@ -127,9 +131,11 @@ export default {
       return new Promise((resolve, reject) => {
         getUserJoinedMeetingCount(obj)
           .then((res) => {
+            this.loading = false
             resolve(res)
           })
           .catch((e) => {
+            this.loading = false
             console.log(e)
           })
       })
@@ -192,14 +198,17 @@ export default {
     //   })
     // })
 
-    Promise.all([getUserJoinedMeetingCount(obj), userJoinedMeeting(obj)]).then(
-      (result) => {
+    Promise.all([getUserJoinedMeetingCount(obj), userJoinedMeeting(obj)])
+      .then((result) => {
         console.log(result[0])
         console.log(result[1])
         this.totalCount = result[0].data.count || 0
-        that.meetingList = result[1].data.data
-      }
-    )
+        this.meetingList = result[1].data.data
+        this.loading = false
+      })
+      .catch((e) => {
+        this.loading = false
+      })
   },
 }
 </script>

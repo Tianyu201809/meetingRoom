@@ -12,6 +12,7 @@
       <transition name="fade">
         <el-table :show-header="false"
                   :data="meetingList"
+                  v-loading="loading"
                   style="width:100%;">
           <el-table-column>
             <template slot-scope="scope">
@@ -55,6 +56,7 @@ export default {
   data() {
     return {
       limit: 3,
+     
     }
   },
   props: {
@@ -63,6 +65,9 @@ export default {
       default: function () {
         return []
       },
+    },
+    loading: {
+      type: Boolean
     },
     appointDate: {
       type: String,
@@ -91,6 +96,7 @@ export default {
       currentItem: {},
       currentPage: 1,
       pageSize: 3,
+      loading: true,
     }
   },
   mounted() {},
@@ -103,6 +109,7 @@ export default {
 
     //当变更当前页的时候
     handleCurrentChange(page) {
+      this.loading = true
       const limit = this.limit || 3
       const skip = (page - 1) * limit
       const userName = this.userInfo.userName
@@ -115,6 +122,7 @@ export default {
       }
       userJoinedMeeting(filterObj).then((res) => {
         this.$emit('paingUserMeetingItems', res.data.data)
+        this.loading = false
       })
     },
   },

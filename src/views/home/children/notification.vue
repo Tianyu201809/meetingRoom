@@ -8,6 +8,7 @@
       </div>
       <el-table :show-header="false"
                 :data="notification"
+                v-loading="loading"
                 style="width:100%; height:230px">
         <el-table-column>
           <template slot-scope="scope">
@@ -47,6 +48,7 @@ export default {
       total: 0,
       currentPage: 1,
       department: null,
+      loading: true,
     }
   },
   props: {
@@ -95,14 +97,20 @@ export default {
     },
     handleCurrentChange(page) {
       const limit = 5
+      this.loading = true
       const f1 = {
         department: this.department,
         limit: parseInt(limit),
         skip: parseInt((page - 1) * limit),
       }
-      this.queryNotification(f1).then((d) => {
-        this.notification = d.data.data
-      })
+      this.queryNotification(f1)
+        .then((d) => {
+          this.notification = d.data.data
+          this.loading = false
+        })
+        .catch(() => {
+          this.loading = false
+        })
     },
   },
   created() {
@@ -114,6 +122,7 @@ export default {
     const f2 = {
       department: this.department,
     }
+    this.loading = true
     Promise.all([
       this.queryNotification(f1),
       this.queryNotificationCount(f2),
@@ -123,6 +132,7 @@ export default {
         this.total = result[1].data.data
         this.notification = result[0].data.data
         console.log(result)
+        this.loading = false
       }.bind(this)
     )
   },

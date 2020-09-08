@@ -1,5 +1,4 @@
 <template>
-
   <div class="login-wrap">
     <transition>
       <div class="middleBox">
