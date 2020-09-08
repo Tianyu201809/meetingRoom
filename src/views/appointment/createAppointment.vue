@@ -38,14 +38,12 @@
         <el-form-item label="所属部门">
           <el-select v-model="form.department"
                      placeholder="请选择"
-                     filterable
                      style="width:100%">
             <el-option v-for="item in departmentList"
                        :key="item.value"
                        :label="item.value"
                        :value="item.key">
             </el-option>
-
           </el-select>
         </el-form-item>
         <el-form-item label="预约日期">
@@ -53,6 +51,7 @@
                           placeholder="选择日期"
                           v-model="form.appointDate"
                           style="width: 100%;"
+                          :editable="false"
                           format="yyyy 年 MM 月 dd 日"
                           value-format="yyyy-MM-dd"></el-date-picker>
         </el-form-item>

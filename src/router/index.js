@@ -74,11 +74,11 @@ const router = new Router({
 				// },
 				{
 					//创建会议室
-					path: '/manageMeetingRoom',
-					name: 'manageMeetingRoom',
+					path: '/createMeetingRoom',
+					name: 'createMeetingRoom',
 
 					component: () =>
-						import('../views/meetingRoom/manageMeetingRoom.vue'),
+						import('../views/meetingRoom/createMeetingRoom.vue'),
 				},
 				{
 					//查询，修改，删除会议室

@@ -108,6 +108,11 @@ export default {
     console.log(this.form)
   },
   methods: {
+    backTo() {
+        this.$router.replace({
+            name:'queryNotices'
+        })
+    },
     getContent(content) {
       this.form.content = content
     },

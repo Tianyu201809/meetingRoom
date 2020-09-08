@@ -2,7 +2,7 @@
   <div>
     <el-table :data="tableData"
               border
-              v-loading="false"
+              v-loading="loading"
               height="535"
               style="margin:0 auto; width:95%">
       <el-table-column prop="title"
@@ -54,7 +54,7 @@
                        width="120">
         <template slot-scope="scope">
           <el-button size="mini"
-                     type="success"
+                     type="warning"
                      @click.prevent="navToDetail(scope.row._id)"
                      class="el-icon-edit"></el-button>
           <el-button size="mini"
@@ -78,7 +78,26 @@ export default {
         return []
       },
     },
+    totalPage: {
+      type: Number,
+      default: 0,
+    },
+    currentPage: {
+      type: Number,
+      default: 0,
+    },
+    filter: {
+      type: Object,
+      default: function () {
+        return {}
+      },
+    },
+    loading: {
+      type: Boolean,
+      default: true,
+    },
   },
+
   data() {
     return {}
   },
@@ -115,7 +134,23 @@ export default {
                 //   name: 'queryNotices',
                 // })
                 //获取数量和显示条目
-                this.$parent.initialPage()
+                //首先获取删除后的数量，然后进行初始化
+                //this.$parent.initialPage()
+
+                that.$parent
+                  .queryNotificationCount(that.filter)
+                  .then((count) => {
+                    //n:查询到的全部数量
+                    const n = count.data.data
+                    that.totalPage = Math.ceil(n / 10)
+                    //将总数量回传给父组件，让父组件重新渲染分页插件
+                    that.$emit('totalItemsNum', n)
+                    const page =
+                      that.currentPage > that.totalPage
+                        ? that.totalPage
+                        : that.currentPage
+                    that.$parent.handleCurrentChange(page)
+                  })
               } else {
                 that.$message({
                   type: 'error',
