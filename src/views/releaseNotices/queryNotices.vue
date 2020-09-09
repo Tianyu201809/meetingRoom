@@ -59,6 +59,7 @@ export default {
 
     //{ department, limit, skip }
     initialPage() {
+      this.loading = true
       const obj1 = {
         department: this.department || null,
         limit: 10,

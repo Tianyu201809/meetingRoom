@@ -14,12 +14,14 @@
     </div>
 
     <div class="center">
-      <el-form ref="form"
+      <el-form ref="editAppointmentForm"
                :model="form"
                label-width="auto"
                style="width:90%"
+               :rules="rules"
                name='form'>
-        <el-form-item label="会议室">
+        <el-form-item label="会议室"
+                      prop="meetingRoomNumber">
           <el-select v-model="form.meetingRoomNumber"
                      placeholder="请选择会议室"
                      style="width:20%">
@@ -32,10 +34,12 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="会议标题">
+        <el-form-item label="会议标题"
+                      prop="title">
           <el-input v-model="form.title"></el-input>
         </el-form-item>
-        <el-form-item label="所属部门">
+        <el-form-item label="所属部门"
+                      prop="department">
           <el-select v-model="form.department"
                      placeholder="请选择"
                      filterable
@@ -48,7 +52,8 @@
 
           </el-select>
         </el-form-item>
-        <el-form-item label="预约日期">
+        <el-form-item label="预约日期"
+                      prop="appointDate">
           <el-date-picker type="date"
                           placeholder="选择日期"
                           v-model="form.appointDate"
@@ -57,7 +62,8 @@
                           value-format="yyyy-MM-dd"></el-date-picker>
         </el-form-item>
 
-        <el-form-item label="会议时间">
+        <el-form-item label="会议时间"
+                      prop="meetingTimeArea">
           <el-col :span="11">
             <el-time-select placeholder="开始时间"
                             :picker-options="appointmentTimeArea"
@@ -78,7 +84,8 @@
                             style="width: 100%;"></el-time-select>
           </el-col>
         </el-form-item>
-        <el-form-item label="参会人员">
+        <el-form-item label="参会人员"
+                      prop="members">
           <el-select v-model="form.members"
                      placeholder="请选择"
                      filterable
@@ -125,6 +132,26 @@ export default {
   name: 'createAppointment',
   components: {},
   data() {
+    var dateValid = (rule, value, callback) => {
+      const d = 10800000 //三个小时的毫秒数
+      if (!this.form.appointDate) {
+        callback(new Error('请首先选择预约日期'))
+      }
+      let startTime = new Date(this.form.startTime)
+      let endTime = new Date(this.form.endTime)
+      if (startTime >= endTime) {
+        callback(new Error('时间段选择错误，开始时间不能大于或等于结束时间'))
+      }
+      debugger
+      let numberStartTime = startTime.getTime()
+      let numberEndTime = endTime.getTime()
+      if (numberEndTime - numberStartTime > d) {
+        callback(new Error('所预约的会议时常不能超过3小时'))
+      }
+
+      //没有问题，执行正确回调
+      callback()
+    }
     return {
       userList: [],
       meetingRoomList: [],
@@ -142,7 +169,7 @@ export default {
         content: '',
         startTime: '',
         endTime: '',
-        members: '',
+        members: [],
         appointDate: '',
       },
       departmentList: [
@@ -155,6 +182,52 @@ export default {
           key: '00020',
         },
       ],
+      //验证
+      rules: {
+        meetingRoomNumber: [
+          {
+            required: true,
+            message: '会议室不能为空',
+            trigger: ['blur', 'change'],
+          },
+        ],
+        title: [
+          { required: true, message: '会议主题不能为空', trigger: 'blur' },
+          {
+            min: 6,
+            max: 50,
+            message: '长度在 6 到 50 个字符',
+            trigger: 'blur',
+          },
+        ],
+        department: [
+          {
+            required: true,
+            message: '部门不能为空',
+            trigger: ['blur', 'change'],
+          },
+        ],
+        appointDate: [
+          {
+            required: true,
+            message: '预约日期不能为空',
+            trigger: ['blur', 'change'],
+          },
+        ],
+        meetingTimeArea: [
+          {
+            validator: dateValid,
+            trigger: ['blur', 'change'],
+          },
+        ],
+        members: [
+          {
+            required: true,
+            message: '不能为空值',
+            trigger: ['blur', 'change'],
+          },
+        ],
+      },
     }
   },
   mounted() {},
@@ -177,23 +250,36 @@ export default {
       const id = this.$route.params.id
       const obj = this.form
       let that = this
-      this.$confirm('此操作将修改当前预约信息, 是否继续?', '提示', {
-        cancelButtonText: '取消',
-        confirmButtonText: '确定',
-        type: 'warning',
-      })
-        .then(() => {
-          updateAppointmentItem(id, obj)
-            .then((data) => {
-              that.$message({
-                type: 'success',
-                message: '预约信息修改成功',
+      this.$refs.editAppointmentForm
+        .validate((valid) => {
+          if (valid) {
+            this.$confirm('此操作将修改当前预约信息, 是否继续?', '提示', {
+              cancelButtonText: '取消',
+              confirmButtonText: '确定',
+              type: 'warning',
+            })
+              .then(() => {
+                updateAppointmentItem(id, obj)
+                  .then((data) => {
+                    that.$message({
+                      type: 'success',
+                      message: '预约信息修改成功',
+                    })
+                    that.$router.push({ name: 'queryMeeting' })
+                  })
+                  .catch((e) => {
+                    console.log(e)
+                  })
               })
-              that.$router.push({ name: 'queryMeeting' })
-            })
-            .catch((e) => {
-              console.log(e)
-            })
+              .catch((e) => {
+                that.$message({
+                  type: 'error',
+                  message: '未提交修改',
+                })
+              })
+          } else {
+            return false
+          }
         })
         .catch((e) => {
           that.$message({

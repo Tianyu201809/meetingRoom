@@ -2,16 +2,19 @@
   <div class="parentBox">
     <el-row :gutter="10">
       <el-col :span="24">
-        <el-form ref="form"
+        <el-form ref="createNoticeForm"
                  :model="form"
+                 :rules="rules"
                  label-width="80px"
                  class="noticeForm"
                  size="medium">
-          <el-form-item label="标题">
+          <el-form-item label="标题"
+                        prop="title">
             <el-input v-model="form.title"
                       style="width:40.4%"></el-input>
           </el-form-item>
-          <el-form-item label="通知部门">
+          <el-form-item label="通知部门"
+                        prop="department">
             <el-select v-model="form.department"
                        value-key="number"
                        placeholder="请选择通知部门">
@@ -26,7 +29,8 @@
                          :value="item"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="有效日期">
+          <el-form-item label="有效日期"
+                        prop="noticesDate">
             <el-col :span="4.1">
               <el-date-picker type="date"
                               placeholder="选择日期"
@@ -44,7 +48,7 @@
 
           <el-form-item label="通知正文"
                         prop="desc">
-            <vue-editor @content="getContent"></vue-editor>
+            <vue-editor @noticesContent="getContent"></vue-editor>
           </el-form-item>
 
         </el-form>
@@ -72,6 +76,15 @@ export default {
   },
   props: {},
   data() {
+    const noticeDateValid = (rule, value, callback) => {
+      const d1 = new Date(this.form.startDate).getTime()
+      const d2 = new Date(this.form.endDate).getTime()
+      debugger
+      if (d2 < d1) {
+        callback(Error('结束时间不能大于开始时间'))
+      }
+      callback()
+    }
     return {
       form: {
         title: '',
@@ -86,6 +99,28 @@ export default {
         { number: '00020', name: '产品销售部' },
         { number: 'all', name: '所有部门' },
       ],
+      rules: {
+        title: [
+          { required: true, message: '请输入通知标题', trigger: 'blur' },
+          {
+            min: 4,
+            max: 20,
+            message: '长度在 4 到 20 个字符',
+            trigger: 'blur',
+          },
+        ],
+        department: [
+          {
+            required: true,
+            message: '请选择通知部门',
+            trigger: ['blur', 'change'],
+          },
+        ],
+        noticesDate: {
+          validator: noticeDateValid,
+          trigger: ['blur', 'change'],
+        },
+      },
     }
   },
   mounted() {},
@@ -109,44 +144,56 @@ export default {
   },
   methods: {
     backTo() {
-        this.$router.replace({
-            name:'queryNotices'
-        })
+      this.$router.replace({
+        name: 'queryNotices',
+      })
     },
     getContent(content) {
       this.form.content = content
     },
     sendReleaseNotices() {
-      this.$confirm('此操作将会发布通知信息, 是否继续?', '提示', {
-        cancelButtonText: '取消',
-        confirmButtonText: '确定',
-        type: 'warning',
-      })
-        .then(() => {
-          this.createInfo(1)
-        })
-        .catch((e) => {
-          this.$message({
-            type: 'success',
-            message: '未发布通知信息',
+      this.$refs.createNoticeForm.validate((valid) => {
+        if (valid) {
+          this.$confirm('此操作将会发布通知信息, 是否继续?', '提示', {
+            cancelButtonText: '取消',
+            confirmButtonText: '确定',
+            type: 'warning',
           })
-        })
+            .then(() => {
+              this.createInfo(1)
+            })
+            .catch((e) => {
+              this.$message({
+                type: 'success',
+                message: '未发布通知信息',
+              })
+            })
+        } else {
+          return false
+        }
+      })
     },
     saveDraft() {
-      this.$confirm('此操作将会保存通知信息, 是否继续?', '提示', {
-        cancelButtonText: '取消',
-        confirmButtonText: '确定',
-        type: 'warning',
-      })
-        .then(() => {
-          this.createInfo(0)
-        })
-        .catch(() => {
-          this.$message({
-            type: 'success',
-            message: '未保存通知信息',
+      this.$refs.createNoticeForm.validate((valid) => {
+        if (valid) {
+          this.$confirm('此操作将会保存通知信息, 是否继续?', '提示', {
+            cancelButtonText: '取消',
+            confirmButtonText: '确定',
+            type: 'warning',
           })
-        })
+            .then(() => {
+              this.createInfo(0)
+            })
+            .catch(() => {
+              this.$message({
+                type: 'success',
+                message: '未保存通知信息',
+              })
+            })
+        } else {
+          return false
+        }
+      })
     },
     createInfo(status) {
       console.log(this.form)

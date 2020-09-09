@@ -27,7 +27,7 @@ export const createNotification = (obj) => {
 export const editNotification = (_id, obj) => {
 	axios.defaults.headers['Authorization'] = getToken()
 	return axios({
-		url: '/notification/createNotification',
+		url: '/notification/editNotification',
 		method: 'post',
 		data: {
 			_id,

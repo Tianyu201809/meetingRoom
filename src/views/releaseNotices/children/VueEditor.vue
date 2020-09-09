@@ -26,12 +26,19 @@ export default {
       },
     }
   },
-  props: ['content'],
+  props: {
+    content: {
+      type: String,
+    },
+  },
   components: {
     quillEditor,
   },
   mounted() {
     addQuillTitle()
+  },
+  created() {
+
   },
   methods: {
     onEditorChange({ editor, html, text }) {
@@ -39,7 +46,7 @@ export default {
       console.log(html)
       this.content2 = html
       debugger
-      this.$emit('content', this.content2)
+      this.$emit('noticesContent', this.content2)
     },
     // submit() {
     //   console.log(this.content)

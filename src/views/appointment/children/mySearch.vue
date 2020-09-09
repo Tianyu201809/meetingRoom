@@ -56,6 +56,11 @@
 import { getMeetingRoomItems } from '@/api/meetingRoom'
 export default {
   name: 'mySearch',
+  props: {
+    loading: {
+      type: Boolean,
+    },
+  },
   data() {
     return {
       search: '',
@@ -75,6 +80,7 @@ export default {
       //将检索条件整理成一个对象
       //执行查询方法，获取数据
       debugger
+      this.loading = true
       const filter = {
         title: this.forma.title,
         meetingDate: this.forma.date,

@@ -23,16 +23,21 @@
     <el-form label-position="right"
              label-width="180px"
              style="margin-top:4px"
+             ref="modifyMeetingRoom"
+             :rules="rules"
              :model="mrForm">
-      <el-form-item label="会议室编号:">
+      <el-form-item label="会议室编号:"
+                    prop="meetingRoomNumber">
         <el-input v-model="mrForm.meetingRoomNumber"
                   style="width:40%"></el-input>
       </el-form-item>
-      <el-form-item label="会议室名称">
+      <el-form-item label="会议室名称"
+                    prop="meetingRoomName">
         <el-input v-model="mrForm.meetingRoomName"
                   style="width:40%"></el-input>
       </el-form-item>
-      <el-form-item label="会议室状态:">
+      <el-form-item label="会议室状态:"
+                    prop="">
         <!-- <el-select v-model="mrForm.meetingRoomStatus">
           <el-option value="1">可用</el-option>
           <el-option value="0">不可用</el-option>
@@ -48,7 +53,8 @@
         </el-select>
 
       </el-form-item>
-      <el-form-item label="会议室容量:">
+      <el-form-item label="会议室容量:"
+                    prop="meetingRoomSize">
         <el-select v-model="mrForm.meetingRoomSize"
                    placeholder="请选择">
           <el-option v-for="item in meetingRoomSize"
@@ -58,7 +64,8 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="是否有多媒体设备:">
+      <el-form-item label="是否有多媒体设备:"
+                    prop="hasMedia">
         <el-select v-model="mrForm.hasMedia">
           <el-option :value="true"
                      label="有"></el-option>
@@ -105,32 +112,41 @@ export default {
       this.$router.replace('/maintainMeetingRoom')
     },
     updateItem() {
-      this.$confirm('此操作将修改当前会议室信息, 是否继续?', '提示', {
-        cancelButtonText: '取消',
-        confirmButtonText: '确定',
-        type: 'warning',
-      })
-        .then(() => {
-          const id = this.$route.params.id
-          const obj = this.mrForm
-          updateMeetingRoomDetail(id, obj)
-            .then((data) => {
-              console.log(data)
-              this.$message({
-                type: 'success',
-                message: '信息修改成功',
-              })
-              this.$router.push('/maintainMeetingRoom')
+      this.$refs.modifyMeetingRoom
+        .validate((valid) => {
+          if (valid) {
+            this.$confirm('此操作将修改当前会议室信息, 是否继续?', '提示', {
+              cancelButtonText: '取消',
+              confirmButtonText: '确定',
+              type: 'warning',
             })
-            .catch((e) => {
-              console.log(e)
-              this.$message({
-                type: 'error',
-                message: '信息修改失败，请检查当前数据是否存在',
+              .then(() => {
+                const id = this.$route.params.id
+                const obj = this.mrForm
+                updateMeetingRoomDetail(id, obj)
+                  .then((data) => {
+                    console.log(data)
+                    this.$message({
+                      type: 'success',
+                      message: '信息修改成功',
+                    })
+                    this.$router.push('/maintainMeetingRoom')
+                  })
+                  .catch((e) => {
+                    console.log(e)
+                    this.$message({
+                      type: 'error',
+                      message: '信息修改失败，请检查当前数据是否存在',
+                    })
+                  })
               })
-            })
+              .catch(() => {})
+          } else {
+          }
         })
-        .catch(() => {})
+        .catch(() => {
+          return false
+        })
     },
   },
   data() {
@@ -172,6 +188,47 @@ export default {
         },
       ],
       mrForm: {},
+      rules: {
+        meetingRoomName: [
+          { required: true, message: '请输入会议室名称', trigger: 'blur' },
+          {
+            min: 4,
+            max: 20,
+            message: '长度在 4 到 20 个字符',
+            trigger: 'blur',
+          },
+        ],
+        meetingRoomNumber: [
+          { required: true, message: '请输入会议室编号', trigger: 'blur' },
+          {
+            min: 4,
+            max: 20,
+            message: '长度在 4 到 20 个字符',
+            trigger: 'blur',
+          },
+        ],
+        meetingRoomStatus: [
+          {
+            required: true,
+            message: '不能为空值',
+            trigger: ['blur', 'change'],
+          },
+        ],
+        hasMedia: [
+          {
+            required: true,
+            message: '不能为空值',
+            trigger: ['blur', 'change'],
+          },
+        ],
+        meetingRoomSize: [
+          {
+            required: true,
+            message: '不能为空值',
+            trigger: ['blur', 'change'],
+          },
+        ],
+      },
     }
   },
   created() {

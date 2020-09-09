@@ -63,6 +63,9 @@ export default {
     }
   },
   methods: {
+    getLoading(loading) {
+      this.loading = loading
+    },
     getTotalItem(count) {
       this.total = count
     },
