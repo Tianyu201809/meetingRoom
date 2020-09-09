@@ -5,7 +5,7 @@
       <el-breadcrumb separator="/">
         <el-breadcrumb-item style=""
                             class="pageTitle">
-          <i class="el-icon-pie-chart"
+          <i class="el-icon-edit"
              style="margin-right:10px"></i>
           <strong>修改通知信息</strong>
         </el-breadcrumb-item>

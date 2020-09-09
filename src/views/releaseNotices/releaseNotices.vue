@@ -5,7 +5,7 @@
       <el-breadcrumb separator="/">
         <el-breadcrumb-item style=""
                             class="pageTitle">
-          <i class="el-icon-pie-chart"
+          <i class="el-icon-chat-round"
              style="margin-right:10px"></i>
           <strong>发布通知</strong>
         </el-breadcrumb-item>

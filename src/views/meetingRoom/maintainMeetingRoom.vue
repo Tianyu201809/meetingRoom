@@ -5,7 +5,7 @@
       <el-breadcrumb separator="/">
         <el-breadcrumb-item style=""
                             class="pageTitle">
-          <i class="el-icon-pie-chart"
+          <i class="el-icon-setting"
              style="margin-right:10px"></i>
           <strong>会议室信息维护</strong>
         </el-breadcrumb-item>
@@ -20,15 +20,6 @@
               v-loading="loading"
               height="535"
               style="margin:0 auto; width:95%">
-      <!-- <el-table-column prop="meetingRoomID"
-                       label="会议室ID"
-                       width="220">
-        <template slot-scope="scope">
-          <span style="margin-left: 5px">
-            {{ scope.row._id }}
-          </span>
-        </template>
-      </el-table-column> -->
       <el-table-column prop="meetingRoomNumber"
                        label="会议室编号"
                        width="120">
@@ -191,29 +182,19 @@ export default {
               let totalPage = that.calculateTotal()
               const currentPage =
                 that.currentPage > totalPage ? totalPage : that.currentPage
-              debugger
+
               that.handleCurrentChange(currentPage)
             })
-            // getMeetingRoomItems(filter)
-            //   .then((res) => {
-            //     that.tableData = res.data.data
-            //     that.loading = false
-            //   })
-            //   .then(() => {
-
-            //   })
           })
       })
     },
     navToDetail(id) {
-      debugger
       this.$router.push({ name: 'meetingRoomDetail', params: { id: id } })
     },
 
     getMeetingRoomItemsList(filter) {
       getMeetingRoomItems(filter)
         .then((res) => {
-          debugger
           this.tableData = res.data.data
           this.loading = false
         })
@@ -235,7 +216,6 @@ export default {
     }
     //获取显示的数据
     getMeetingRoomItems(filter).then((res) => {
-      debugger
       this.tableData = res.data.data
       this.loading = false
     })

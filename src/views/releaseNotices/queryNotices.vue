@@ -3,7 +3,7 @@
     <div>
       <el-breadcrumb separator="/">
         <el-breadcrumb-item class="pageTitle">
-          <i class="el-icon-pie-chart"
+          <i class="el-icon-search"
              style="margin-right:10px"></i>
           <strong>通知查询</strong>
         </el-breadcrumb-item>

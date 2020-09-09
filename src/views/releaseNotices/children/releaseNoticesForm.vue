@@ -52,7 +52,7 @@
     </el-row>
 
     <div class="btn">
-      <el-button type="success"
+      <el-button type="warning"
                  @click="saveDraft()">保存草稿</el-button>
       <el-button type="primary"
                  @click="sendReleaseNotices()">发布通知</el-button>

@@ -26,8 +26,23 @@
                          :value="item"></el-option>
             </el-select>
           </el-form-item>
+          <el-form-item label="发布状态">
+            <el-select v-model="noticesForm.status"
+                       value-key="status"
+                       placeholder="发布状态">
+              <!-- <el-option label="所有部门"
+                         value="All"></el-option>
+              <el-option label="技术开发部"
+                         value="development"></el-option> -->
+
+              <el-option v-for="item in status"
+                         :key="item.status"
+                         :label="item.status"
+                         :value="item.value"></el-option>
+            </el-select>
+          </el-form-item>
           <el-form-item label="有效日期">
-            <el-col :span="4.1">
+            <el-col :span="4">
               <el-date-picker type="date"
                               placeholder="选择日期"
                               v-model="noticesForm.startDate"
@@ -35,7 +50,7 @@
             </el-col>
             <el-col class="line"
                     :span="1">----</el-col>
-            <el-col :span="4.1">
+            <el-col :span="4">
               <el-date-picker placeholder="选择日期"
                               v-model="noticesForm.endDate"
                               style="width: 100%;"></el-date-picker>
@@ -79,12 +94,26 @@ export default {
   data() {
     return {
       //   form: {},
+      status: [
+        {
+          status: "未发布",
+          value: 0,
+        },
+        {
+          value: 1,
+          status: '已发布',
+        },
+         {
+          value: 2,
+          status: '已撤销',
+        },
+      ],
       noticesForm: {},
       noticesContent: '',
       department: [
         { number: '00010', name: '技术开发部门' },
         { number: '00020', name: '产品销售部' },
-        { number: 'all', name: '所有部门' },
+        { number: '00000', name: '所有部门' },
       ],
     }
   },
@@ -109,6 +138,7 @@ export default {
     const id = this.$route.params.id
     this.queryNoticesDetail(id).then((d) => {
       this.noticesForm = d.data.data[0]
+      debugger
       this.noticesContent = d.data.data[0].content
     })
   },
