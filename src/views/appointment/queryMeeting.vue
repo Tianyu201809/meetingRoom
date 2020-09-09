@@ -76,7 +76,7 @@ export default {
     resetPages(filter) {
       //首先获取数量
       let that = this
-      this.getQueryAppointCount(filter).then((count) => {
+      getQueryAppointCount(filter).then((count) => {
         that.total = count.data.count || 0
       })
     },
@@ -106,11 +106,11 @@ export default {
     queryMeetingRoomByFilter(filter, limit = 10, skip = 0) {
       //1.首先根据过滤条件，查询数据总数
       // title, date, meetingRoomNumber
+      this.loading = true
       let that = this
       //查询条目总数
       queryAppointment(filter, limit, skip)
         .then((result) => {
-          debugger
           that.tableData = result.data
           that.loading = false
         })
@@ -132,7 +132,6 @@ export default {
     // queryMeetingRoomCount() {},
     getQueryAppointCount(obj) {
       getQueryAppointCount(obj).then((count) => {
-        debugger
         this.total = count.data.count
         this.totalPage = Math.ceil(count / 10)
       })

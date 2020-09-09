@@ -78,7 +78,7 @@ export default {
           subs: [
             {
               index: '/queryMeeting',
-              title: '会议查询',
+              title: '会议预约查询',
             },
             {
               index: '/createAppointment',

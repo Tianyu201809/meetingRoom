@@ -100,6 +100,10 @@
             </el-option>
           </el-select>
         </el-form-item>
+        <el-form-item label="会议相关文件">
+        
+
+        </el-form-item>
 
         <el-form-item label="备注">
           <el-input type="textarea"
