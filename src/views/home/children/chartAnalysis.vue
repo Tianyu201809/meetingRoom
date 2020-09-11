@@ -3,7 +3,7 @@
     <el-card shadow="hover">
       <div slot="header"
            class="clearfix">
-        <span>会议预约饼状分析图</span>
+        <span>图表分析</span>
       </div>
       <div style="height:278px">
         <schart ref="line"
