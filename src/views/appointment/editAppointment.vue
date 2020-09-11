@@ -101,22 +101,6 @@
           </el-select>
         </el-form-item>
         <el-form-item label="会议相关文件">
-
-          <!-- <el-upload class=""
-                      style="height:auto"
-                     action="https://jsonplaceholder.typicode.com/posts/"
-                     :on-preview="handlePreview"
-                     :on-remove="handleRemove"
-                     :before-remove="beforeRemove"
-                     multiple
-                     :limit="10"
-                     :on-exceed="handleExceed"
-                     :file-list="fileList">
-            <el-button size="small"
-                       type="primary">点击上传</el-button>
-            <div slot="tip"
-                 class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
-          </el-upload> -->
           <el-upload class="upload-demo"
                      drag
                      action="http://localhost:3000/upload/uploadMeetingFile"
@@ -164,9 +148,13 @@ import {
   updateAppointmentItem,
 } from '@/api/appointment'
 import { getUserList } from '@/api/user'
-import { getUploadFileList, removeAppointmentFile } from '@/api/upload'
+import {
+  getUploadFileList,
+  removeAppointmentFile,
+  downloadFile,
+} from '@/api/upload'
 export default {
-  name: 'createAppointment',
+  name: 'editAppointment',
   components: {},
   data() {
     var dateValid = (rule, value, callback) => {
@@ -400,6 +388,15 @@ export default {
     handlePreview(file) {
       //下载文件方法
       console.log(file)
+      downloadFile(file.url, file.name).then((res) => {
+        const blobo = new Blob([res.data], { type: 'arraybuffer' })
+        const archor = document.createElement('a')
+        const href = window.URL.createObjectURL(blobo) //关键点3
+        archor.setAttribute('href', href)
+        // /* 关键之处：使用download属性必须要html5的页面才行 ，而且它不会刷新，文件名及扩展名均由这里控制*/
+        archor.setAttribute('download', file.name) //关键点4
+        archor.click()
+      })
     },
     handleExceed(files, fileList) {
       this.$message.warning(
