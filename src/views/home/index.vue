@@ -4,7 +4,7 @@
       <el-col :span="8">
         <!-- 传递用户信息email和name给子组件 -->
         <my-info-card :userInfo="userInfo"></my-info-card>
-        <todo-list :todoList="todoList"></todo-list>
+        <chart-analysis :todoList="todoList"></chart-analysis>
 
       </el-col>
       <el-col :span="8">
@@ -42,7 +42,7 @@ import notification from './children/notification'
 import myInfoCard from './children/myInfoCard'
 import todayMeetingCard from './children/todayMeetingCard'
 import myCalendar from './children/myCalendar'
-import todoList from './children/todoList'
+import chartAnalysis from './children/chartAnalysis'
 import { getUserInfo } from '@/api/user'
 import { setToken, getToken } from '@/api/token'
 import { getUserJoinedMeetingCount, userJoinedMeeting } from '@/api/appointment'
@@ -58,7 +58,7 @@ export default {
     todayMeetingCard,
     notification,
     myCalendar,
-    todoList,
+    chartAnalysis,
   },
   beforeRouteEnter(to, from, next) {
     //设置组件导航首位，如果cookit中没有页面，不进行跳转
@@ -100,7 +100,7 @@ export default {
       this.meetingList = data
     },
     getSelectDate(selectDate) {
-        this.loading = true
+      this.loading = true
       this.meetingDate = selectDate
       const filterObj = {
         userName: this.userInfo.userName,
@@ -184,7 +184,6 @@ export default {
       userName: this.userInfo.userName,
       meetingDate: this.meetingDate || dayjs(new Date()).format('YYYY-MM-DD'),
     }
-
 
     Promise.all([getUserJoinedMeetingCount(obj), userJoinedMeeting(obj)])
       .then((result) => {

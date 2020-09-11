@@ -18,14 +18,15 @@
             <div class="user-info-name">{{userInfo.userName}}</div>
             <div>{{userInfo.email}}</div>
             <div class="edit-info"><a href="#">信息修改</a></div>
+            <div class="role">{{userInfo.role ? "":""}}</div>
           </div>
         </div>
         <div class="user-info-list">
-          本次登录日期：
+          本次访问日期：
           <span>{{userInfo.loginDate}}</span>
         </div>
         <div class="user-info-list">
-          本次登录时间：
+          本次访问时间：
           <span>{{userInfo.loginTime}}</span>
         </div>
       </el-card>
@@ -49,7 +50,6 @@ export default {
   },
   methods: {
     errorHandler() {
-      
       this.refs.avatar.src =
         'https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png'
       return true
@@ -59,6 +59,11 @@ export default {
 }
 </script>
 <style scoped>
+.role {
+  font-size: 0.85rem;
+  color: darkred;
+  font-weight: 600;
+}
 .user-info {
   display: flex;
   align-items: center;

@@ -90,7 +90,6 @@ export default {
       currentItem: {},
       currentPage: 1,
       pageSize: 3,
-      //loading: true,
     }
   },
   mounted() {},

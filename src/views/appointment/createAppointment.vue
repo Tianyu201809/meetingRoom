@@ -170,12 +170,16 @@ export default {
       },
       departmentList: [
         {
-          value: '开发技术部',
+          value: '技术开发部',
           key: '00010',
         },
         {
           value: '产品销售部',
           key: '00020',
+        },
+        {
+          value: '人事部',
+          key: '00030',
         },
       ],
       //select测试数据

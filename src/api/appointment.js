@@ -75,7 +75,7 @@ export const userJoinedMeeting = ({
 	return axios.get('/appointment/queryUserJoinedMeetingItems', {
 		params: {
 			userName,
-			meetingDate:meetingDate,
+			meetingDate: meetingDate,
 			skip,
 			limit,
 		},
@@ -136,6 +136,17 @@ export const queryAppointmentDetail = (id) => {
 		method: 'get',
 		params: {
 			id: id,
+		},
+	})
+}
+
+export const getAppointmentNumberListByDept = (date) => {
+	axios.defaults.headers['Authorization'] = getToken()
+	return axios({
+		url: '/appointment/getAppointmentNumberListByDept',
+		method: 'get',
+		params: {
+			date,
 		},
 	})
 }
