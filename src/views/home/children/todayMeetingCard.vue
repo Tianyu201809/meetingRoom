@@ -53,12 +53,6 @@ export default {
   props: {
     meetingDate: String,
   },
-  data() {
-    return {
-      limit: 3,
-     
-    }
-  },
   props: {
     meetingList: {
       type: Array,
@@ -96,7 +90,7 @@ export default {
       currentItem: {},
       currentPage: 1,
       pageSize: 3,
-      loading: true,
+      //loading: true,
     }
   },
   mounted() {},

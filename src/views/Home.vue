@@ -64,7 +64,7 @@ export default {
   beforeRouteEnter(to, from, next) {
     //设置组件导航首位，如果cookit中没有页面，不进行跳转
     //并将提示信息返回给前端
-    debugger
+    
     const path = to.path
     const token = getToken()
     console.log(this)

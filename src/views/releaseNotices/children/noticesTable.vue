@@ -25,7 +25,8 @@
                        width="100">
         <template slot-scope="scope">
           <span style="margin-left: 5px"
-                :class="{ suc : scope.row.status == 1, err:scope.row.status == 0 }">{{ scope.row.status == 1 ? '已发布':'未发布' }}</span>
+                :class="{ suc : scope.row.status == 1, err:scope.row.status == 0 }">{{ scope.row.status == 1 ? '已发布' : scope.row.status == 2 ? '已撤销': scope.row.status == 0 ? '未发布':'其他' }}</span>
+          <!-- (scope.row.status == 1 ? '已发布':'未发布') || (scope.row.status == 2 ? '已发布':'未发布') -->
         </template>
       </el-table-column>
       <el-table-column prop="createdDate"
@@ -46,7 +47,8 @@
                        label="备注信息"
                        :show-overflow-tooltip="true"
                        max-width="100">
-        <template slot-scope="scope" :show-overflow-tooltip="true">
+        <template slot-scope="scope"
+                  :show-overflow-tooltip="true">
           <span style="margin-left: 5px">{{ scope.row.content }}</span>
           <!-- <span v-html="scope.row.content"></span> -->
         </template>

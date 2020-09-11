@@ -103,7 +103,7 @@ export default {
       filter: {},
     }
     getMeetingRoomItems(filter).then((result) => {
-      debugger
+      
       console.log(result)
       let meetingRoomArrayList = result.data.data.map((item) => {
         const meetingRoomItem = {}

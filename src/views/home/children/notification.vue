@@ -1,7 +1,7 @@
 <template>
   <div>
     <notices-dialog :noticesItem="noticesItem"
-    ref="noticesDialog"
+                    ref="noticesDialog"
                     :noticesDialogFlag.sync="noticesDialogFlag"></notices-dialog>
     <el-card shadow="hover"
              style="height:372px; overflow:auto">
@@ -131,7 +131,6 @@ export default {
       this.noticesDialogFlag = true
       queryNoticesDetail(id)
         .then((result) => {
-          debugger
           this.noticesItem = result.data.data[0]
           this.$refs.noticesDialog.showDialog()
         })
@@ -157,7 +156,6 @@ export default {
       this.queryNotificationCount(f2),
     ]).then(
       function (result) {
-        debugger
         this.total = result[1].data.data
         this.notification = result[0].data.data
         console.log(result)

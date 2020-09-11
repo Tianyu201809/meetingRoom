@@ -138,7 +138,7 @@ export default {
       if (startTime >= endTime) {
         callback(new Error('时间段选择错误，开始时间不能大于或等于结束时间'))
       }
-      debugger
+
       let numberStartTime = startTime.getTime()
       let numberEndTime = endTime.getTime()
       if (numberEndTime - numberStartTime > d) {
@@ -259,9 +259,7 @@ export default {
   methods: {
     //创建预约
     onSubmitForm() {
-      debugger
       this.$refs.createAppointmentForm1.validate((valid) => {
-        debugger
         if (valid) {
           this.$confirm('此操作将创建会议室信息, 是否继续?', '提示', {
             cancelButtonText: '取消',
@@ -295,7 +293,6 @@ export default {
               console.log()
             })
         } else {
-          debugger
           return false
         }
       })

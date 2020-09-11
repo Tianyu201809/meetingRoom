@@ -143,7 +143,7 @@ export default {
     //显示名称
     subscriberUserName(obj) {
       return function (obj) {
-        debugger
+        
         return obj.userName
       }
     },
@@ -164,7 +164,7 @@ export default {
           deleteAppointmentItem(id).then(() => {
             //重置数量和分页查询
             getQueryAppointCount().then((count) => {
-              debugger
+              
               //条目数
               let total = count.data.count
               that.$emit('itemTotal', total)

@@ -183,6 +183,21 @@ export default {
           })
             .then(() => {
               this.createInfo(0)
+                .then((d) => {
+                  this.$message({
+                    type: 'success',
+                    message: '通知保存成功',
+                  })
+                  this.$router.replace({
+                    name: 'queryNotices',
+                  })
+                })
+                .catch(() => {
+                  this.$message({
+                    type: 'error',
+                    message: '通知创建失败',
+                  })
+                })
             })
             .catch(() => {
               this.$message({
@@ -204,11 +219,11 @@ export default {
             createNotification(this.form)
               .then((d) => {
                 console.log(d)
-                resolve()
+                resolve(d)
               })
               .catch((e) => {
                 console.log(e)
-                reject()
+                reject(e)
               })
             break
 

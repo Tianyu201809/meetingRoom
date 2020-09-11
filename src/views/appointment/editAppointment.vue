@@ -179,7 +179,7 @@ export default {
       if (startTime >= endTime) {
         callback(new Error('时间段选择错误，开始时间不能大于或等于结束时间'))
       }
-      debugger
+
       let numberStartTime = startTime.getTime()
       let numberEndTime = endTime.getTime()
       if (numberEndTime - numberStartTime > d) {
@@ -378,7 +378,6 @@ export default {
     //文件上传部分
     //删除文件
     handleRemove(file, fileList) {
-      debugger
       console.log(file, fileList)
       //执行删除方法
       const id = file.response ? file.response[0].data._id : file._id
@@ -392,19 +391,17 @@ export default {
           })
         })
         .catch((e) => {
-           this.$message({
+          this.$message({
             type: 'error',
             message: '附件删除失败',
           })
         })
     },
     handlePreview(file) {
-      debugger
       //下载文件方法
       console.log(file)
     },
     handleExceed(files, fileList) {
-      debugger
       this.$message.warning(
         `当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${
           files.length + fileList.length
