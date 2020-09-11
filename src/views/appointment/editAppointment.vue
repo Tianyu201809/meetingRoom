@@ -101,8 +101,40 @@
           </el-select>
         </el-form-item>
         <el-form-item label="会议相关文件">
-        
 
+          <!-- <el-upload class=""
+                      style="height:auto"
+                     action="https://jsonplaceholder.typicode.com/posts/"
+                     :on-preview="handlePreview"
+                     :on-remove="handleRemove"
+                     :before-remove="beforeRemove"
+                     multiple
+                     :limit="10"
+                     :on-exceed="handleExceed"
+                     :file-list="fileList">
+            <el-button size="small"
+                       type="primary">点击上传</el-button>
+            <div slot="tip"
+                 class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+          </el-upload> -->
+          <el-upload class="upload-demo"
+                     drag
+                     action="http://localhost:3000/upload/uploadMeetingFile"
+                     :on-preview="handlePreview"
+                     :on-remove="handleRemove"
+                     :before-remove="beforeRemove"
+                     :on-success="uploadComplete"
+                     multiple
+                     :limit="10"
+                     :data="appointmentID"
+                     :on-exceed="handleExceed"
+                     :file-list="fileList">
+            <i class="el-icon-upload"></i>
+            <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+            <div class="el-upload__tip"
+                 style="margin-top:-10px"
+                 slot="tip">相关文件列表，点击下载文件</div>
+          </el-upload>
         </el-form-item>
 
         <el-form-item label="备注">
@@ -132,6 +164,7 @@ import {
   updateAppointmentItem,
 } from '@/api/appointment'
 import { getUserList } from '@/api/user'
+import { getUploadFileList, removeAppointmentFile } from '@/api/upload'
 export default {
   name: 'createAppointment',
   components: {},
@@ -157,6 +190,11 @@ export default {
       callback()
     }
     return {
+      //name, url
+      appointmentID: {
+        appointmentID: '',
+      },
+      fileList: [],
       userList: [],
       meetingRoomList: [],
       appointmentTimeArea: {
@@ -336,11 +374,78 @@ export default {
       this.form.endTime = outPut
       return outPut
     },
+
+    //文件上传部分
+    //删除文件
+    handleRemove(file, fileList) {
+      debugger
+      console.log(file, fileList)
+      //执行删除方法
+      const id = file.response ? file.response[0].data._id : file._id
+      const url = file.response ? file.response[0].data.url : file.url
+
+      removeAppointmentFile(id, url)
+        .then((result) => {
+          this.$message({
+            type: 'success',
+            message: '附件删除成功',
+          })
+        })
+        .catch((e) => {
+           this.$message({
+            type: 'error',
+            message: '附件删除失败',
+          })
+        })
+    },
+    handlePreview(file) {
+      debugger
+      //下载文件方法
+      console.log(file)
+    },
+    handleExceed(files, fileList) {
+      debugger
+      this.$message.warning(
+        `当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${
+          files.length + fileList.length
+        } 个文件`
+      )
+    },
+    beforeRemove(file, fileList) {
+      return this.$confirm(`确定移除 ${file.name}？`, '提示', {
+        cancelButtonText: '取消',
+        confirmButtonText: '确定',
+        type: 'warning',
+      })
+      //   this.$confirm(`此操作将永久移除 ${file.name}, 是否继续?`, '提示', {
+      //     cancelButtonText: '取消',
+      //     confirmButtonText: '确定',
+      //     type: 'warning',
+      //   })
+      //     .then(() => {
+      //       return false
+      //     })
+      //     .catch(() => {
+      //       return false
+      //     })
+    },
+    uploadComplete(e) {
+      //   const id = this.$route.params.id
+      //   const itemArray = e.map((item) => {
+      //     const obj = {}
+      //     obj.url = item.url
+      //     obj.name = item.originalname
+      //     obj._id = item._id
+      //     return obj
+      //   })
+      //   this.fileList.push(...itemArray)
+    },
   },
   computed: {},
   created() {
     //查询单条预约
     const id = this.$route.params.id
+    this.appointmentID.appointmentID = id
     //执行查询方法
     //首先初始化下拉列表
     const filter = {
@@ -369,6 +474,26 @@ export default {
       .then((res) => {
         console.log(res)
         that.userList = res.data.data
+      })
+      .catch((e) => {
+        console.log(e)
+      })
+
+    //获取该会议预约的文件列表
+    getUploadFileList(id)
+      .then((result) => {
+        //获取文件列表，并进行数据过滤处理，只留下url和name两个值
+        //url指向后端文件
+        //name则是 文件名称+文件类型W
+        const filelist = result.data.data //数组
+        const showList = filelist.map((item) => {
+          const obj = {}
+          obj.url = item.url
+          obj.name = item.originalname
+          obj._id = item._id
+          return obj
+        })
+        this.fileList = showList
       })
       .catch((e) => {
         console.log(e)

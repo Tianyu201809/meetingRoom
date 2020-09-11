@@ -6,7 +6,7 @@
                             class="pageTitle">
           <i class="el-icon-search"
              style="margin-right:10px"></i>
-          <strong>会议查询</strong>
+          <strong>会议预约查询</strong>
         </el-breadcrumb-item>
       </el-breadcrumb>
       <hr style="width:97%; margin:0 auto" />

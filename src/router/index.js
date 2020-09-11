@@ -11,8 +11,11 @@ const originalPush = Router.prototype.push
 Router.prototype.push = function push(location) {
 	return originalPush.call(this, location).catch((err) => err)
 }
-//设置一个全局导航守卫
 
+/**
+ * 今后扩展：
+ * 根据用户的role权限，加载不同的导航树列表
+ */
 const router = new Router({
 	beforeRouteUpdate(to, from, next) {},
 	routes: [
@@ -116,6 +119,11 @@ const router = new Router({
 					meta: { title: '修改通知信息' },
 				},
 				{
+					path: '/specify',
+					name: 'specify',
+					component: () => import('../views/specify/specify.vue'),
+				},
+				{
 					path: '*',
 					component: () => import('../views/404.vue'),
 					//redirect: '/404',
@@ -147,11 +155,9 @@ const router = new Router({
 //将token作为请求header
 router.beforeEach((to, from, next) => {
 	const token = getToken()
-	debugger
 	if (token) {
 		store.dispatch('authorization', token).then(
 			() => {
-				debugger
 				if (to.path === '/login') next({ name: 'index' })
 				else next()
 			},

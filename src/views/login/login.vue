@@ -103,7 +103,7 @@ export default {
                   ) {
                     //localStorage.setItem('token', )
                     setToken(res.data.data.token)
-                    self.$message.success('登录成功')
+                    self.$message.success(`欢迎您，${param.userName}`)
                     // localStorage.setItem('ms_username', this.param.username)
                     self.$router.replace('/')
                   } else {

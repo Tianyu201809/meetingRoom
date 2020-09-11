@@ -90,11 +90,6 @@
                      filterable
                      multiple
                      style="width:100%">
-            <!-- <el-option-group v-for="group in options"
-                             :key="group.label"
-                             :label="group.label">
-              
-            </el-option-group> -->
             <el-option v-for="item in userList"
                        :key="item._id"
                        :label="item.userName"
@@ -125,7 +120,6 @@
 
 </template>
 <script>
-import AppointmentInfo from '@/class/AppointmentInfo'
 import { getMeetingRoomItems } from '@/api/meetingRoom'
 import { getToken, setToken } from '@/api/token'
 import { createAppointment } from '@/api/appointment'

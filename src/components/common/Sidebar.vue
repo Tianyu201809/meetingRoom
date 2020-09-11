@@ -124,6 +124,11 @@ export default {
             },
           ],
         },
+         {
+          icon: 'el-icon-star-off',
+          index: '/specify', //这里一定要注意加上 /
+          title: '项目说明',
+        },
       ],
     }
   },
