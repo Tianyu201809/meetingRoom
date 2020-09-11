@@ -1,5 +1,8 @@
 <template>
   <div>
+    <notices-dialog :noticesItem="noticesItem"
+    ref="noticesDialog"
+                    :noticesDialogFlag.sync="noticesDialogFlag"></notices-dialog>
     <el-card shadow="hover"
              style="height:372px; overflow:auto">
       <div slot="header"
@@ -12,7 +15,9 @@
                 style="width:100%; height:230px">
         <el-table-column>
           <template slot-scope="scope">
-            <div class="item-msg">{{scope.row.title}}</div>
+            <a class="item-msg"
+               href="javascript:void(0)"
+               @click="showNoticesDetail(scope.row._id)">{{scope.row.title}}</a>
           </template>
         </el-table-column>
         <el-table-column>
@@ -39,9 +44,17 @@
   </div>
 </template>
 <script>
-import { queryNotification, queryNotificationCount } from '@/api/notification'
+import {
+  queryNotification,
+  queryNotificationCount,
+  queryNoticesDetail,
+} from '@/api/notification'
+import noticesDialog from './noticesDialog'
 export default {
   name: 'notification',
+  components: {
+    noticesDialog,
+  },
   data() {
     return {
       notification: [],
@@ -49,6 +62,8 @@ export default {
       currentPage: 1,
       department: null,
       loading: true,
+      noticesItem: {},
+      noticesDialogFlag: false,
     }
   },
   props: {
@@ -112,6 +127,20 @@ export default {
           this.loading = false
         })
     },
+    showNoticesDetail(id) {
+      this.noticesDialogFlag = true
+      queryNoticesDetail(id)
+        .then((result) => {
+          debugger
+          this.noticesItem = result.data.data[0]
+          this.$refs.noticesDialog.showDialog()
+        })
+        .catch((e) => {
+          this.noticesItem = e.data
+        })
+
+      console.log(id)
+    },
   },
   created() {
     const f1 = {
@@ -141,6 +170,7 @@ export default {
 <style scoped>
 .item-msg {
   font-size: 14px;
+  color: #606266;
 }
 .item-date {
   float: right;

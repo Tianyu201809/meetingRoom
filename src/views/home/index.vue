@@ -184,19 +184,7 @@ export default {
       userName: this.userInfo.userName,
       meetingDate: this.meetingDate || dayjs(new Date()).format('YYYY-MM-DD'),
     }
-    // getUserJoinedMeetingCount(obj).then((result) => {
-    //   return new Promise((resolve1, reject1) => {
-    //     this.totalCount = result.data.count || 0
-    //     console.log(result)
-    //     resolve1()
-    //   }).then(() => {
-    //     //该用户获取当日会议（需要显示的数据）
-    //     userJoinedMeeting(obj).then((result) => {
-    //       console.log(result)
-    //       that.meetingList = result.data.data
-    //     })
-    //   })
-    // })
+
 
     Promise.all([getUserJoinedMeetingCount(obj), userJoinedMeeting(obj)])
       .then((result) => {

@@ -2,7 +2,7 @@
   <div>
     <div class="container">
       <quill-editor ref="myTextEditor"
-                    :model="content"
+                    v-model="cloneContent"
                     :options="editorOption"
                     class="editor"
                     @change="onEditorChange"></quill-editor>
@@ -26,9 +26,24 @@ export default {
       },
     }
   },
+  computed: {
+    cloneContent: {
+      get() {
+        return this.content
+      },
+      set(value) {
+        
+      },
+    },
+  },
   props: {
     content: {
       type: String,
+      default: '',
+    },
+    noticesContent: {
+      type: String,
+      default: '',
     },
   },
   components: {
@@ -37,15 +52,12 @@ export default {
   mounted() {
     addQuillTitle()
   },
-  created() {
-
-  },
+  created() {},
   methods: {
     onEditorChange({ editor, html, text }) {
       // this.content = html
       console.log(html)
       this.content2 = html
-      debugger
       this.$emit('noticesContent', this.content2)
     },
     // submit() {

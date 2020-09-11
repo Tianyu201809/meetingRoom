@@ -53,7 +53,7 @@
                               style="width: 100%;"></el-date-picker>
             </el-col>
             <el-col class="line"
-                    :span="1">----</el-col>
+                    :span="1">——</el-col>
             <el-col :span="4">
               <el-date-picker placeholder="选择日期"
                               v-model="noticesForm.endDate"
@@ -91,7 +91,7 @@ import {
   queryNoticesDetail,
 } from '@/api/notification'
 export default {
-  name: 'releaseNoticesForm',
+  name: 'modifyNoticesForm',
   components: {
     VueEditor,
   },
@@ -123,7 +123,7 @@ export default {
         },
       ],
       noticesForm: {},
-      noticesContent: '',
+      noticesContent: '11111111111111111',
       department: [
         { number: '00010', name: '技术开发部门' },
         { number: '00020', name: '产品销售部' },

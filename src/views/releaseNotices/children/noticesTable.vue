@@ -43,10 +43,12 @@
         </template>
       </el-table-column>
       <el-table-column prop="content"
-                       label="备注信息">
-        <template slot-scope="scope">
-          <!-- <span style="margin-left: 5px">{{ scope.row.content }}</span> -->
-          <span v-html="scope.row.content"></span>
+                       label="备注信息"
+                       :show-overflow-tooltip="true"
+                       max-width="100">
+        <template slot-scope="scope" :show-overflow-tooltip="true">
+          <span style="margin-left: 5px">{{ scope.row.content }}</span>
+          <!-- <span v-html="scope.row.content"></span> -->
         </template>
       </el-table-column>
       <el-table-column prop="operation"
