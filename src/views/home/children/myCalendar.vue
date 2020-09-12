@@ -13,8 +13,9 @@
                ref="selectCell">
             {{ data.isSelected ? '✔' : ''}}
             <!-- 以后扩展：用户有会的日子，使用图标进行标记-->
-            <!-- <div v-if="true">
-              <i class="el-icon-tickets icon-red"></i>
+            <!-- <div>
+              <el-badge is-dot
+                        class="item"></el-badge>
             </div> -->
           </div>
         </div>
@@ -42,13 +43,6 @@ export default {
 }
 </script>
 <style scoped>
-.wapper >>> .icon-red {
-  color: orange;
-  font-weight: 700;
-  margin: 0 !important;
-  padding: 0 !important;
-}
-
 .wapper >>> .is-selected {
   color: white;
   background-color: rgb(45, 134, 185) !important;

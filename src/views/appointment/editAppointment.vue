@@ -388,14 +388,20 @@ export default {
     handlePreview(file) {
       //下载文件方法
       console.log(file)
-      downloadFile(file.url, file.name).then((res) => {
-        const blobo = new Blob([res.data], { type: 'arraybuffer' })
-        const archor = document.createElement('a')
-        const href = window.URL.createObjectURL(blobo) //关键点3
-        archor.setAttribute('href', href)
-        // /* 关键之处：使用download属性必须要html5的页面才行 ，而且它不会刷新，文件名及扩展名均由这里控制*/
-        archor.setAttribute('download', file.name) //关键点4
-        archor.click()
+      this.$confirm(`确定下载文件 ${file.name}？`, '提示', {
+        cancelButtonText: '取消',
+        confirmButtonText: '确定',
+        type: 'warning',
+      }).then(() => {
+        downloadFile(file.url, file.name).then((res) => {
+          const blobo = new Blob([res.data], { type: 'arraybuffer' })
+          const archor = document.createElement('a')
+          const href = window.URL.createObjectURL(blobo) //关键点3
+          archor.setAttribute('href', href)
+          // /* 关键之处：使用download属性必须要html5的页面才行 ，而且它不会刷新，文件名及扩展名均由这里控制*/
+          archor.setAttribute('download', file.name) //关键点4
+          archor.click()
+        })
       })
     },
     handleExceed(files, fileList) {

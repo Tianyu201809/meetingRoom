@@ -118,6 +118,14 @@ const router = new Router({
 						import('../views/releaseNotices/editNotices.vue'),
 					meta: { title: '修改通知信息' },
 				},
+				//个人信息C:\Users\Tianyu\Desktop\meetingRoom-dev\src\views\profile\myMessage.vue
+				{
+					//个人信息设置页
+					path: '/myMessage',
+					name: 'myMessage',
+					component: () => import('../views/profile/myMessage.vue'),
+					meta: { title: '个人信息修改' },
+				},
 				{
 					path: '/specify',
 					name: 'specify',
