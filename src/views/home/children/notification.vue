@@ -17,7 +17,13 @@
           <template slot-scope="scope">
             <a class="item-msg"
                href="javascript:void(0)"
-               @click="showNoticesDetail(scope.row._id)">{{scope.row.title}}</a>
+               @click="showNoticesDetail(scope.row._id)">{{scope.row.title}}
+              <span v-if="scope.$index < 2 && currentPage == 1">
+                <i class="el-icon-loading red-icon"></i>
+              </span>
+
+            </a>
+
           </template>
         </el-table-column>
         <el-table-column>
@@ -146,6 +152,7 @@ export default {
       department: this.department,
       limit: 5,
       skip: 0,
+      sort: -1,
     }
     const f2 = {
       department: this.department,
@@ -166,9 +173,17 @@ export default {
 }
 </script>
 <style scoped>
+.red-icon {
+  color: red;
+  font-weight: 700;
+}
 .item-msg {
   font-size: 14px;
   color: #606266;
+}
+.item-msg:hover {
+  color: red;
+  text-decoration: underline;
 }
 .item-date {
   float: right;

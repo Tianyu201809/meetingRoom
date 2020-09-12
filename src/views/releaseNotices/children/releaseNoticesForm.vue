@@ -97,7 +97,8 @@ export default {
       department: [
         { number: '00010', name: '技术开发部门' },
         { number: '00020', name: '产品销售部' },
-        { number: 'all', name: '所有部门' },
+        { number: '00030', name: '人事部' },
+        { number: '00000', name: '所有部门' },
       ],
       rules: {
         title: [
@@ -161,6 +162,9 @@ export default {
           })
             .then(() => {
               this.createInfo(1)
+              this.$router.replace({
+                name: 'queryNotices',
+              })
             })
             .catch((e) => {
               this.$message({

@@ -45,6 +45,7 @@ export const queryNotification = ({
 	department = null,
 	limit = 10,
 	skip = 0,
+	sort = 1,
 }) => {
 	axios.defaults.headers['Authorization'] = getToken()
 	return axios({
@@ -54,6 +55,7 @@ export const queryNotification = ({
 			limit: limit,
 			skip: skip,
 			department: department,
+			sort: sort,
 		},
 	})
 }

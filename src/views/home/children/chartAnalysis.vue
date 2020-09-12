@@ -28,7 +28,7 @@ export default {
       options: {
         type: 'pie',
         title: {
-          text: '各部门会议预约数量',
+          text: '各部门会议预约数量统计图',
         },
         legend: {
           position: 'left',
