@@ -20,6 +20,11 @@
           <el-input v-model="form.password"
                     type="password"></el-input>
         </el-form-item>
+        <el-form-item label="确认密码"
+                      prop="confirmPassword">
+          <el-input v-model="form.confirmPassword"
+                    type="password"></el-input>
+        </el-form-item>
         <div class="btn">
           <el-button type="success"
                      @click="onSubmit">立即创建</el-button>
@@ -37,13 +42,55 @@
 import { registerUser } from '@/api/user'
 export default {
   data() {
+    var validatePass2 = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('请再次输入密码'))
+      } else if (value !== this.form.password) {
+        callback(new Error('两次输入密码不一致!'))
+      } else {
+        callback()
+      }
+    }
+    var validateEmail = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('请正确填写邮箱'))
+      } else {
+        if (value !== '') {
+          var reg = /^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/
+          if (!reg.test(value)) {
+            callback(new Error('请输入有效的邮箱'))
+          }
+        }
+        callback()
+      }
+    }
+
     return {
       form: {
         userName: '',
         email: '',
         password: '',
+        confirmPassword: '',
       },
-      rules: [],
+      rules: {
+        userName: [
+          { required: true, message: '请输入用户名', trigger: 'blur' },
+        ],
+        password: [{ required: true, message: '请输入密码', trigger: 'blur' }],
+        email: [{ validator: validateEmail, trigger: 'blur' }],
+        confirmPassword: [
+          {
+            required: true,
+            message: '请输入确认密码',
+            trigger: 'blur',
+          },
+          {
+            validator: validatePass2,
+            trigger: 'blur',
+          },
+          {},
+        ],
+      },
     }
   },
   methods: {
@@ -66,7 +113,10 @@ export default {
 
               this.$message({
                 type: status,
-                message: res.data.msg,
+                message: res.data.mes,
+              })
+              this.$router.replace({
+                name: 'login',
               })
             })
             .catch((e) => {
