@@ -44,10 +44,10 @@
         </template>
       </el-table-column>
       <el-table-column prop="createdDate"
-                       label="创建日期"
+                       label="创建时间"
                        width="220">
         <template slot-scope="scope">
-          <span style="margin-left: 5px">{{ scope.row.created }}</span>
+          <span style="margin-left: 5px">{{ TransFormDateTime(scope.row.created) }}</span>
         </template>
       </el-table-column>
       <el-table-column prop="createdBy"
@@ -205,7 +205,16 @@ export default {
     },
   },
   mounted() {},
-  computed: {},
+  computed: {
+    //时间格式化
+    TransFormDateTime(data) {
+      return function (data) {
+        return this.dayjs(data).format('YYYY-MM-DD HH:mm:ss') != 'Invalid Date'
+          ? this.dayjs(data).format('YYYY-MM-DD HH:mm:ss')
+          : ''
+      }
+    },
+  },
   created() {
     const filter = {
       limit: 10,

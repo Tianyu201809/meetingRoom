@@ -230,36 +230,7 @@ export default {
       },
     }
   },
-  mounted() {
-    //1.获取所有下拉框中的数据
-    //2.初始化信息
-    const token = getToken()
-    getMeetingRoomItems(token).then((result) => {
-      if (result.data.data.length === 0) {
-        mockMeetingRoomList = [
-          {
-            meetingRoomID: '',
-            meetingRoomNumber: '1-1102',
-            createdBy: {},
-            hasMedia: true,
-            meetingRoomSize: '4',
-            meetingRoomVolume: '',
-            meetingRoomStatus: 0,
-          },
-          {
-            meetingRoomID: '',
-            meetingRoomNumber: '1-1103',
-            createdBy: {},
-            hasMedia: false,
-            meetingRoomSize: '5',
-            meetingRoomStatus: 1,
-          },
-        ]
-        this.meetingRoomList = mockMeetingRoomList
-      }
-      this.meetingRoomList = result.data.data
-    })
-  },
+  mounted() {},
   methods: {
     //创建预约
     onSubmitForm() {
@@ -291,10 +262,12 @@ export default {
                     })
                   }
                 })
-                .catch((e) => {})
+                .catch((e) => {
+                  console.log(e)
+                })
             })
             .catch((e) => {
-              console.log()
+              console.log(e)
             })
         } else {
           return false
@@ -356,6 +329,15 @@ export default {
       .catch((e) => {
         console.log(e)
       })
+
+    //1.获取所有下拉框中的数据
+    //2.初始化信息
+    const token = getToken()
+    getMeetingRoomItems(token).then((result) => {
+      this.meetingRoomList = result.data.data.filter((item) => {
+        return item.meetingRoomStatus === '1'
+      })
+    })
   },
 }
 </script>
