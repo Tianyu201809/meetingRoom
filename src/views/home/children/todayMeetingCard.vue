@@ -9,22 +9,23 @@
            class="clearfix">
         <span>今日相关会议</span>
       </div>
-      <transition name="fade">
-        <el-table :show-header="false"
-                  :data="meetingList"
-                  v-loading="loading"
-                  style="width:100%;">
-          <el-table-column>
-            <template slot-scope="scope">
-              <a href="javascript:void(0)"
-                 class="list-item"
-                 @click="showDetail(scope.$index)">
-                {{scope.row.title}}
-              </a>
-            </template>
-          </el-table-column>
-        </el-table>
-      </transition>
+
+      <el-table :show-header="false"
+                :data="meetingList"
+                v-loading="loading"
+                empty-text="无会议"
+                style="width:100%;">
+        <el-table-column>
+          <template slot-scope="scope">
+            <a href="javascript:void(0)"
+               class="list-item"
+               @click="showDetail(scope.$index)">
+              {{scope.row.title}}
+            </a>
+          </template>
+        </el-table-column>
+      </el-table>
+
       <div class="block">
         <div class="pagingItem">
           <el-pagination small
@@ -61,7 +62,7 @@ export default {
       },
     },
     loading: {
-      type: Boolean
+      type: Boolean,
     },
     appointDate: {
       type: String,

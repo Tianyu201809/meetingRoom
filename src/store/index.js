@@ -10,8 +10,8 @@ export default new Vuex.Store({
 			userName: '',
 			userId: '',
 			email: '',
-        },
-        selectedDate:''
+		},
+		selectedDate: '',
 	},
 	getters: {},
 	mutations: {},
@@ -24,7 +24,6 @@ export default new Vuex.Store({
 		login({ commit }, { userName, password, email }) {
 			///{  }
 			return new Promise((resolve, reject) => {
-				debugger
 				loginUser({ userName, password, email })
 					.then((res) => {
 						if (
@@ -49,17 +48,14 @@ export default new Vuex.Store({
 			})
 		},
 		authorization({ commit }, token) {
-			let self = this
 			return new Promise((resolve, reject) => {
-				debugger
 				authorization(token).then((res) => {
-					debugger
 					if (res.data.code === 401) {
 						try {
-                            setToken('')
+							setToken('')
 							reject('token authorization error')
 						} catch (error) {
-							console.log(error) 
+							console.log(error)
 						}
 					} else {
 						//每次路由跳转都会生成一个新的token
@@ -71,7 +67,5 @@ export default new Vuex.Store({
 			})
 		},
 	},
-	modules: {
-
-    },
+	modules: {},
 })

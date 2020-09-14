@@ -1,15 +1,24 @@
 <template>
-  <div>
+  <div class="wapper">
     <el-card shadow="hover">
-      <div slot="header"
+      <!-- <div slot="header"
            class="clearfix">
         <span>图表分析</span>
-      </div>
-      <div style="height:278px">
+      </div> -->
+      <div class="schartBox">
+
         <schart ref="line"
                 class="schart"
                 canvasId="line"
-                :options="options"></schart>
+                v-if="!schartLoading"
+                :options="options">
+        </schart>
+        <!-- 加载动画显示 -->
+        <div v-if="schartLoading">
+          <el-table v-loading="schartLoading"
+                    empty-text=" "
+                    style="height:335px"></el-table>
+        </div>
       </div>
 
     </el-card>
@@ -25,6 +34,7 @@ export default {
   },
   data() {
     return {
+      schartLoading: true,
       options: {
         type: 'pie',
         title: {
@@ -60,6 +70,7 @@ export default {
   created() {
     debugger
     getAppointmentNumberListByDept().then((res) => {
+      this.schartLoading = false
       let _developCount = res.data.data[0].data
       let _saleCount = res.data.data[1].data
       let _hrCount = res.data.data[2].data
@@ -71,9 +82,18 @@ export default {
 }
 </script>
 <style scoped>
+.schartBox {
+  /* display: flex; */
+  height: 100%;
+  /* justify-content: center;
+  align-items: center; */
+}
 .schart {
   width: 100%;
-  height: 340px;
+  height: 335px;
+}
+.wapper >>> #line {
+  margin-top: 15px;
 }
 .todo-item {
   font-size: 14px;

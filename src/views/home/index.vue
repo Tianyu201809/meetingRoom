@@ -4,7 +4,7 @@
       <el-col :span="8">
         <!-- 传递用户信息email和name给子组件 -->
         <my-info-card :userInfo="userInfo"></my-info-card>
-        <chart-analysis :todoList="todoList"></chart-analysis>
+        <chart-analysis></chart-analysis>
 
       </el-col>
       <el-col :span="8">
