@@ -28,7 +28,7 @@
       </div>
       <div class="box mr-top-20">
         <el-button type="primary"
-                   @click="onSubmitForm()">确认修改</el-button>
+                   @click="modifyPassword()">确认修改</el-button>
         <el-button type="danger"
                    @click="onClearFormData()">取消</el-button>
       </div>
@@ -38,6 +38,8 @@
   </el-tabs>
 </template>
 <script>
+import { modifyPassword } from '@/api/user'
+import { getLocalProp } from '@/api/localMethods'
 export default {
   data() {
     return {
@@ -50,6 +52,38 @@ export default {
   methods: {
     handleClick(tab, event) {
       console.log(tab, event)
+    },
+    modifyPassword() {
+      const userName = getLocalProp('userName')
+      const email = getLocalProp('email')
+      const password = this.oldPassword
+      const newPassword = this.newPassword
+      const obj = {
+        userName,
+        email,
+        password,
+        newPassword,
+      }
+      modifyPassword(obj)
+        .then((result) => {
+          if (parseInt(result.data.code) === 200) {
+            this.$message({
+              type: 'success',
+              message: result.data.data,
+            })
+          } else {
+            this.$message({
+              type: 'error',
+              message: result.data.data,
+            })
+          }
+        })
+        .catch((e) => {
+          this.$message({
+            type: 'error',
+            message: e,
+          })
+        })
     },
   },
 }

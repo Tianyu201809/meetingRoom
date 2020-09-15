@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import { getToken, setToken } from '@/api/token'
+import { getToken } from '@/api/token'
 import store from '../store'
 
 /**

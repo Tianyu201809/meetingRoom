@@ -112,3 +112,21 @@ export const getUserList = (group) => {
 		},
 	})
 }
+
+/**
+ * 修改密码
+ */
+
+export const modifyPassword = ({ userName, email, password, newPassword }) => {
+	axios.defaults.headers['Authorization'] = getToken()
+	return axios({
+		url: '/users/modifyPassword',
+		method: 'post',
+		data: {
+			userName,
+			email,
+            password,
+            newPassword
+		},
+	})
+}
