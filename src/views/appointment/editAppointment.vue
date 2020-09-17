@@ -387,13 +387,21 @@ export default {
     },
     handlePreview(file) {
       //下载文件方法
+      debugger
+
       console.log(file)
       this.$confirm(`确定下载文件 ${file.name}？`, '提示', {
         cancelButtonText: '取消',
         confirmButtonText: '确定',
         type: 'warning',
       }).then(() => {
-        downloadFile(file.url, file.name).then((res) => {
+        let url = ''
+        if (file.response) {
+          url = file.response[0].data.url
+        } else {
+          url = file.url
+        }
+        downloadFile(url, file.name).then((res) => {
           const blobo = new Blob([res.data], { type: 'arraybuffer' })
           const archor = document.createElement('a')
           const href = window.URL.createObjectURL(blobo) //关键点3
@@ -417,17 +425,6 @@ export default {
         confirmButtonText: '确定',
         type: 'warning',
       })
-      //   this.$confirm(`此操作将永久移除 ${file.name}, 是否继续?`, '提示', {
-      //     cancelButtonText: '取消',
-      //     confirmButtonText: '确定',
-      //     type: 'warning',
-      //   })
-      //     .then(() => {
-      //       return false
-      //     })
-      //     .catch(() => {
-      //       return false
-      //     })
     },
     uploadComplete(e) {
       //   const id = this.$route.params.id

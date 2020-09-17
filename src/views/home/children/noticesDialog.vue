@@ -51,9 +51,9 @@ export default {
 }
 </script>
 <style scoped>
-.title{
-    font-size: 20px;
-    font-family: Arial, Helvetica, sans-serif;
+.title {
+  font-size: 20px;
+  font-family: Arial, Helvetica, sans-serif;
 }
 .center {
   text-align: center;
