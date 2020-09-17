@@ -17,7 +17,8 @@
           <div class="user-info-cont">
             <div class="user-info-name">{{userInfo.userName}}</div>
             <div>{{userInfo.email}}</div>
-            <div class="edit-info"><a href="#">信息修改</a></div>
+            <div class="edit-info"><a href="javascript:void(0)"
+                 @click="navToModifyInfo">信息修改</a></div>
             <div class="role">{{userInfo.role ? "":""}}</div>
           </div>
         </div>
@@ -53,6 +54,11 @@ export default {
       this.refs.avatar.src =
         'https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png'
       return true
+    },
+    navToModifyInfo() {
+      this.$router.push({
+        name: 'myMessage',
+      })
     },
   },
   computed: {},

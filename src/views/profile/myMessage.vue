@@ -2,10 +2,16 @@
   <el-tabs v-model="activeName"
            @tab-click="handleClick">
     <el-tab-pane label="基本信息修改"
-                 name="baseInfo">
-      <div>
-
-      </div>
+                 name="userInfo">
+      <el-row>
+        <el-col :span="24"
+                align="center">
+          <user-info-card style="width:50%"></user-info-card>
+          <el-button type="danger"
+                     size="small"
+                     @click="navToIndex">返回首页</el-button>
+        </el-col>
+      </el-row>
     </el-tab-pane>
     <el-tab-pane label="密码修改"
                  name="password">
@@ -38,20 +44,34 @@
   </el-tabs>
 </template>
 <script>
+import userInfoCard from './children/myInformation'
 import { modifyPassword } from '@/api/user'
 import { getLocalProp } from '@/api/localMethods'
 export default {
+  components: {
+    userInfoCard,
+  },
   data() {
     return {
-      activeName: 'password',
+      activeName: 'userInfo',
       oldPassword: '',
       newPassword: '',
       confirmPassword: '',
+      rules: {},
+      ruleForm: {},
+      fits: ['fill'],
+      url:
+        'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
     }
   },
   methods: {
     handleClick(tab, event) {
       console.log(tab, event)
+    },
+    navToIndex() {
+      this.$router.replace({
+        name: 'index',
+      })
     },
     modifyPassword() {
       const userName = getLocalProp('userName')
