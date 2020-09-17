@@ -4,24 +4,30 @@
       <el-col :span="8">
         <!-- 传递用户信息email和name给子组件 -->
         <my-info-card :userInfo="userInfo"></my-info-card>
-        <todo-list :todoList="todoList"></todo-list>
+        <chart-analysis></chart-analysis>
 
       </el-col>
       <el-col :span="8">
         <el-row :gutter="0"
                 class="mgb20">
-          <my-calendar></my-calendar>
+          <my-calendar @currentSelectDate="getSelectDate"></my-calendar>
         </el-row>
 
       </el-col>
       <el-col :span="8">
         <el-row :gutter="0"
                 class="mgb20">
-          <notification :notification="notification"></notification>
-          <today-meeting-card :meetingList="meetingList"
-                              :userInfo="userInfo"
-                              :total="totalCount"
-                              style="margin-top:10px"></today-meeting-card>
+          <notification></notification>
+          <transition name="fade">
+            <today-meeting-card :meetingList="meetingList"
+                                :userInfo="userInfo"
+                                :total="totalCount"
+                                :appointDate='meetingDate'
+                                @paingUserMeetingItems="getPagingUserMeeting"
+                                :loading.sync='loading'
+                                style="margin-top:10px"></today-meeting-card>
+          </transition>
+
         </el-row>
       </el-col>
 
@@ -36,17 +42,13 @@ import notification from './children/notification'
 import myInfoCard from './children/myInfoCard'
 import todayMeetingCard from './children/todayMeetingCard'
 import myCalendar from './children/myCalendar'
-import todoList from './children/todoList'
+import chartAnalysis from './children/chartAnalysis'
 import { getUserInfo } from '@/api/user'
 import { setToken, getToken } from '@/api/token'
-import {
-  getUserJoinedMeetingCount,
-  userJoinedMeeting,
-  
-} from '@/api/appointment'
+import { getUserJoinedMeetingCount, userJoinedMeeting } from '@/api/appointment'
 
 import store from '../../store'
-import { getLocalProp, setLocalProp } from '@/api/localMethods'
+import { getLocalProp, setLocalProp, _debounce } from '@/api/localMethods'
 import dayjs from 'dayjs'
 
 export default {
@@ -56,12 +58,11 @@ export default {
     todayMeetingCard,
     notification,
     myCalendar,
-    todoList,
+    chartAnalysis,
   },
   beforeRouteEnter(to, from, next) {
     //设置组件导航首位，如果cookit中没有页面，不进行跳转
     //并将提示信息返回给前端
-    debugger
     const path = to.path
     const token = getToken()
     console.log(this)
@@ -80,101 +81,72 @@ export default {
       userInfo: {
         userName: '',
         email: '',
+        role: 1,
         loginDate: '',
         loginTime: '',
       },
       totalCount: 0, //index页面中的当日会议的总数
       meetingDate: '',
       todoList: [],
-      meetingList: [
-        {
-          title: '技术讨论会议',
-          status: false,
-        },
-        {
-          title: '今天要修复10个bug',
-          status: false,
-        },
-        {
-          title: '写bug',
-          status: true,
-        },
-      ],
-      notification: [
-        {
-          index: 1,
-          msg: '今天晚上开会',
-          date: '2020-07-09',
-        },
-        {
-          index: 1,
-          msg: '今天晚上开会',
-          date: '2020-07-09',
-        },
-        {
-          index: 1,
-          msg: '今天晚上开会',
-          date: '2020-07-09',
-        },
-        {
-          index: 1,
-          msg: '今天晚上开会',
-          date: '2020-07-09',
-        },
-        {
-          index: 1,
-          msg: '今天晚上开会',
-          date: '2020-07-09',
-        },
-      ],
+      meetingList: [],
+      loading: true,
     }
   },
-  mounted() {
-    /**
-     * 获取用户数据部分email username
-     */
-    this.userInfo.userName = getLocalProp('userName')
-    this.userInfo.email = getLocalProp('email')
-    let dateString = dayjs(new Date()).format('YYYY-MM-DD HH:mm:ss')
-    let timeString = dateString.split(' ')[1]
-    this.userInfo.loginDate = dayjs(new Date()).format('YYYY-MM-DD')
-    this.userInfo.loginTime = timeString //登录时间以后需要修改
-
-    /**
-     * today meeting部分
-     */
-    const obj = {
-      email: this.userInfo.email,
-      meetingDate: this.meetingDate || Date.now(),
-    }
-    getUserJoinedMeetingCount(obj).then((result) => {
-      debugger
-      this.totalCount = result.data.count || 10
-      console.log(result)
-    })
-  },
+  mounted() {},
   computed: {},
   methods: {
-    changeDate() {
-      const now = new Date().getTime()
-      this.data.forEach((item, index) => {
-        const date = new Date(now - (6 - index) * 86400000)
-        item.name = `${date.getFullYear()}/${
-          date.getMonth() + 1
-        }/${date.getDate()}`
+    //获取用户
+    getPagingUserMeeting(data) {
+      this.meetingList = data
+    },
+    getSelectDate(selectDate) {
+      this.loading = true
+      this.meetingDate = selectDate
+      const filterObj = {
+        userName: this.userInfo.userName,
+        meetingDate: this.meetingDate,
+      }
+      //   this.getUserJoinedMeetingCount(filterObj).then((d) => {
+      //     that.totalCount = d.data.count
+      //     that.userJoinedMeetingItems(filterObj)
+      //   })
+
+      /**
+       * 加载速度优化，同时请求两个接口
+       */
+      Promise.all([
+        getUserJoinedMeetingCount(filterObj),
+        userJoinedMeeting(filterObj),
+      ]).then((result) => {
+        console.log(result[0])
+        console.log(result[1])
+        this.totalCount = result[0].data.count || 0
+        this.meetingList = result[1].data.data
+        this.loading = false
       })
     },
 
-    //获取登陆人当日会议数量
+    //获取登陆人当日会议数量,用于分页使用
     getUserJoinedMeetingCount(obj) {
       return new Promise((resolve, reject) => {
         getUserJoinedMeetingCount(obj)
           .then((res) => {
+            this.loading = false
             resolve(res)
           })
           .catch((e) => {
+            this.loading = false
             console.log(e)
           })
+      })
+    },
+    //获取登陆人当日会议显示条目，默认显示3条
+    //查询参会人中包含登陆人的预约条目
+    userJoinedMeetingItems(obj) {
+      return new Promise((resolve, reject) => {
+        userJoinedMeeting(obj).then((result) => {
+          this.meetingList = result.data.data
+        })
       })
     },
 
@@ -193,11 +165,44 @@ export default {
     //     this.$refs.line.renderChart();
     // }
   },
+  created() {
+    /**
+     * 获取用户数据部分email username
+     */
+    let that = this
+    this.userInfo.userName = getLocalProp('userName')
+    this.userInfo.email = getLocalProp('email')
+    let dateString = dayjs(new Date()).format('YYYY-MM-DD HH:mm:ss')
+    let timeString = dateString.split(' ')[1]
+    this.userInfo.loginDate = dayjs(new Date()).format('YYYY-MM-DD')
+    this.userInfo.loginTime = timeString //登录时间以后需要修改
+
+    /**
+     * today meeting部分
+     */
+    const obj = {
+      userName: this.userInfo.userName,
+      meetingDate: this.meetingDate || dayjs(new Date()).format('YYYY-MM-DD'),
+    }
+
+    Promise.all([getUserJoinedMeetingCount(obj), userJoinedMeeting(obj)])
+      .then((result) => {
+        console.log(result[0])
+        console.log(result[1])
+        this.totalCount = result[0].data.count || 0
+        this.meetingList = result[1].data.data
+        this.loading = false
+      })
+      .catch((e) => {
+        this.loading = false
+      })
+  },
 }
 </script>
 
 
 <style scoped>
+
 .el-row {
   margin-bottom: 10px;
 }

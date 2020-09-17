@@ -4,7 +4,7 @@
       <el-breadcrumb separator="/">
         <el-breadcrumb-item style=""
                             class="pageTitle">
-          <i class="el-icon-pie-chart"
+          <i class="el-icon-document-add"
              style="margin-right:10px"></i>
           <strong>创建会议室信息</strong>
         </el-breadcrumb-item>
@@ -15,21 +15,21 @@
     <el-form label-position="right"
              label-width="180px"
              style="margin-top:4px"
+             :rules="rules"
+             ref="createMeetingRoomForm"
              :model="mrForm">
-      <el-form-item label="会议室编号:">
+      <el-form-item label="会议室编号:"
+                    prop="meetingRoomNumber">
         <el-input v-model="mrForm.meetingRoomNumber"
                   style="width:40%"></el-input>
       </el-form-item>
-      <el-form-item label="会议室名称">
+      <el-form-item label="会议室名称"
+                    prop="meetingRoomName">
         <el-input v-model="mrForm.meetingRoomName"
                   style="width:40%"></el-input>
       </el-form-item>
-      <el-form-item label="会议室状态:">
-        <!-- <el-select v-model="meetingRoomStatus">
-          <el-option value="1">可用</el-option>
-          <el-option value="0">不可用</el-option>
-        </el-select> -->
-
+      <el-form-item label="会议室状态:"
+                    prop="meetingRoomStatus">
         <el-select v-model="mrForm.meetingRoomStatus"
                    placeholder="请选择">
           <el-option v-for="item in status"
@@ -40,7 +40,8 @@
         </el-select>
 
       </el-form-item>
-      <el-form-item label="会议室容量:">
+      <el-form-item label="会议室容量:"
+                    prop="meetingRoomSize">
         <el-select v-model="mrForm.meetingRoomSize"
                    placeholder="请选择">
           <el-option v-for="item in meetingRoomSize"
@@ -50,7 +51,8 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="是否有多媒体设备:">
+      <el-form-item label="是否有多媒体设备:"
+                    prop="hasMedia">
         <el-select v-model="mrForm.hasMedia">
           <el-option :value="1"
                      label="有"></el-option>
@@ -141,26 +143,90 @@ export default {
         lastModifyBy: '',
         description: '',
       },
+      rules: {
+        meetingRoomName: [
+          { required: true, message: '请输入会议室名称', trigger: 'blur' },
+          {
+            min: 1,
+            max: 20,
+            message: '长度在 1 到 20 个字符',
+            trigger: 'blur',
+          },
+        ],
+        meetingRoomNumber: [
+          { required: true, message: '请输入会议室编号', trigger: 'blur' },
+          {
+            min: 4,
+            max: 20,
+            message: '长度在 4 到 20 个字符',
+            trigger: 'blur',
+          },
+        ],
+        meetingRoomStatus: [
+          {
+            required: true,
+            message: '不能为空值',
+            trigger: ['blur', 'change'],
+          },
+        ],
+        hasMedia: [
+          {
+            required: true,
+            message: '不能为空值',
+            trigger: ['blur', 'change'],
+          },
+        ],
+        meetingRoomSize: [
+          {
+            required: true,
+            message: '不能为空值',
+            trigger: ['blur', 'change'],
+          },
+        ],
+      },
     }
   },
   methods: {
     createMeetingRoom() {
-      createMeetingRoom(this.mrForm)
-        .then((result) => {
-          console.log(result)
-          this.$message({
-            message: '新的会议室数据创建成功',
-            type: 'success',
+      this.$refs.createMeetingRoomForm.validate((valid) => {
+        if (valid) {
+          this.$confirm('此操作将创建会议室信息, 是否继续?', '提示', {
+            cancelButtonText: '取消',
+            confirmButtonText: '确定',
+            type: 'warning',
           })
-          //创建成功之后，跳转到会议室信息查询页面
-          //this.$router.replace();
-        })
-        .catch((e) => {
-          console.log(e)
-          this.$message.error('创建会议室数据失败')
-        })
+            .then(() => {
+              createMeetingRoom(this.mrForm)
+                .then((result) => {
+                  console.log(result)
+                  this.$message({
+                    message: '新的会议室数据创建成功',
+                    type: 'success',
+                  })
+                  //创建成功之后，跳转到会议室信息查询页面
+                  this.$router.replace({
+                    name: 'maintainMeetingRoom',
+                  })
+                })
+                .catch((e) => {
+                  console.log(e)
+                  this.$message.error('创建会议室数据失败')
+                })
+            })
+            .catch(() => {
+              this.$message({
+                message: '未提交表单',
+                type: 'error',
+              })
+            })
+        } else {
+          return false
+        }
+      })
     },
-    cancel() {},
+    cancel() {
+      this.$router.replace({ name: 'maintainMeetingRoom' })
+    },
   },
   mounted() {},
 }

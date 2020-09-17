@@ -4,9 +4,9 @@
       <el-breadcrumb separator="/">
         <el-breadcrumb-item style=""
                             class="pageTitle">
-          <i class="el-icon-document-add"
+          <i class="el-icon-edit"
              style="margin-right:10px"></i>
-          <strong>创建预约</strong>
+          <strong>修改预约信息</strong>
         </el-breadcrumb-item>
       </el-breadcrumb>
       <hr style="width:97%; margin:0 auto" />
@@ -14,11 +14,11 @@
     </div>
 
     <div class="center">
-      <el-form ref="createAppointmentForm1"
+      <el-form ref="editAppointmentForm"
                :model="form"
-               :rules="rules"
                label-width="auto"
                style="width:90%"
+               :rules="rules"
                name='form'>
         <el-form-item label="会议室"
                       prop="meetingRoomNumber">
@@ -34,7 +34,7 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="会议主题"
+        <el-form-item label="会议标题"
                       prop="title">
           <el-input v-model="form.title"></el-input>
         </el-form-item>
@@ -42,12 +42,14 @@
                       prop="department">
           <el-select v-model="form.department"
                      placeholder="请选择"
+                     filterable
                      style="width:100%">
             <el-option v-for="item in departmentList"
                        :key="item.value"
                        :label="item.value"
                        :value="item.key">
             </el-option>
+
           </el-select>
         </el-form-item>
         <el-form-item label="预约日期"
@@ -56,7 +58,6 @@
                           placeholder="选择日期"
                           v-model="form.appointDate"
                           style="width: 100%;"
-                          :editable="false"
                           format="yyyy 年 MM 月 dd 日"
                           value-format="yyyy-MM-dd"></el-date-picker>
         </el-form-item>
@@ -65,8 +66,8 @@
                       prop="meetingTimeArea">
           <el-col :span="11">
             <el-time-select placeholder="开始时间"
-                            @change="timeTransStartTime(form.startTime)"
                             :picker-options="appointmentTimeArea"
+                            @change="timeTransStartTime(form.startTime)"
                             v-model="form.startTime"
                             :editable="false"
                             style="width: 100%;"></el-time-select>
@@ -99,6 +100,26 @@
             </el-option>
           </el-select>
         </el-form-item>
+        <el-form-item label="会议相关文件">
+          <el-upload class="upload-demo"
+                     drag
+                     action="http://localhost:3000/upload/uploadMeetingFile"
+                     :on-preview="handlePreview"
+                     :on-remove="handleRemove"
+                     :before-remove="beforeRemove"
+                     :on-success="uploadComplete"
+                     multiple
+                     :limit="10"
+                     :data="appointmentID"
+                     :on-exceed="handleExceed"
+                     :file-list="fileList">
+            <i class="el-icon-upload"></i>
+            <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+            <div class="el-upload__tip"
+                 style="margin-top:-10px"
+                 slot="tip">相关文件列表，点击下载文件</div>
+          </el-upload>
+        </el-form-item>
 
         <el-form-item label="备注">
           <el-input type="textarea"
@@ -109,23 +130,31 @@
         </el-form-item>
         <div class="center">
           <el-button type="primary"
-                     @click="onSubmitForm()">创建预约</el-button>
+                     @click="updateAppointmentItem()">保存</el-button>
           <el-button type="danger"
-                     @click="onClearFormData()">取消</el-button>
+                     @click="backLastPage()">取消</el-button>
         </div>
       </el-form>
-
     </div>
   </div>
 
 </template>
 <script>
+// import AppointmentInfo from '@/class/AppointmentInfo'
 import { getMeetingRoomItems } from '@/api/meetingRoom'
 import { getToken, setToken } from '@/api/token'
-import { createAppointment } from '@/api/appointment'
+import {
+  queryAppointmentDetail,
+  updateAppointmentItem,
+} from '@/api/appointment'
 import { getUserList } from '@/api/user'
+import {
+  getUploadFileList,
+  removeAppointmentFile,
+  downloadFile,
+} from '@/api/upload'
 export default {
-  name: 'createAppointment',
+  name: 'editAppointment',
   components: {},
   data() {
     var dateValid = (rule, value, callback) => {
@@ -149,6 +178,11 @@ export default {
       callback()
     }
     return {
+      //name, url
+      appointmentID: {
+        appointmentID: '',
+      },
+      fileList: [],
       userList: [],
       meetingRoomList: [],
       appointmentTimeArea: {
@@ -161,28 +195,24 @@ export default {
         description: '',
         department: '',
         meetingRoomNumber: '',
-        //createdDate: '', //后端计算
+        //createdDate: '',
+        content: '',
         startTime: '',
         endTime: '',
         members: [],
         appointDate: '',
-        modifyDate: Date.now(),
       },
       departmentList: [
         {
-          value: '技术开发部',
+          value: '开发技术部',
           key: '00010',
         },
         {
           value: '产品销售部',
           key: '00020',
         },
-        {
-          value: '人事部',
-          key: '00030',
-        },
       ],
-      //select测试数据
+      //验证
       rules: {
         meetingRoomNumber: [
           {
@@ -233,57 +263,72 @@ export default {
   mounted() {},
   methods: {
     //创建预约
-    onSubmitForm() {
-      this.$refs.createAppointmentForm1.validate((valid) => {
-        if (valid) {
-          this.$confirm('此操作将创建会议室信息, 是否继续?', '提示', {
-            cancelButtonText: '取消',
-            confirmButtonText: '确定',
-            type: 'warning',
-          })
-            .then(() => {
-              //   let obj = JSON.parse(JSON.stringify(this.form)) //变更格式
-              //   obj.appointDate = this.dayjs(this.form.appointDate).format(
-              //     'YYYY-MM-DD HH:mm:ss'
-              //   )
-              createAppointment(this.form)
-                .then((result) => {
-                  if (result.data.code == 200) {
-                    this.$message({
-                      type: 'success',
-                      message: '创建预约信息成功',
-                    })
-                    this.$router.push({ name: 'queryMeeting' })
-                    console.log(result.data)
-                  } else {
-                    this.$message({
-                      type: 'error',
-                      message: result.data.data,
-                    })
-                  }
-                })
-                .catch((e) => {
-                  console.log(e)
-                })
-            })
-            .catch((e) => {
-              console.log(e)
-            })
-        } else {
-          return false
-        }
-      })
+    backLastPage() {
+      this.$router.push({ name: 'queryMeeting' })
     },
-    onClearFormData() {
-      this.$router.replace({ name: 'queryMeeting' })
-    },
+    //获取会议室下拉菜单列表
     getMeetingRoomList() {
       axios.get('/getMeetingRoomList').then((data) => {
-        const meetingRoomList = data.data.filter(() => {
+        const meetingRoomList = data.data.filter((item) => {
           return item.status !== 0
         })
         this.meetingRoomList = meetingRoomList
       })
+    },
+    //更新预约信息
+    updateAppointmentItem() {
+      const id = this.$route.params.id
+      const obj = this.form
+      let that = this
+      this.$refs.editAppointmentForm
+        .validate((valid) => {
+          if (valid) {
+            this.$confirm('此操作将修改当前预约信息, 是否继续?', '提示', {
+              cancelButtonText: '取消',
+              confirmButtonText: '确定',
+              type: 'warning',
+            })
+              .then(() => {
+                updateAppointmentItem(id, obj)
+                  .then((data) => {
+                    that.$message({
+                      type: 'success',
+                      message: '预约信息修改成功',
+                    })
+                    that.$router.push({ name: 'queryMeeting' })
+                  })
+                  .catch((e) => {
+                    console.log(e)
+                  })
+              })
+              .catch((e) => {
+                that.$message({
+                  type: 'error',
+                  message: '未提交修改',
+                })
+              })
+          } else {
+            return false
+          }
+        })
+        .catch((e) => {
+          that.$message({
+            type: 'error',
+            message: '未提交修改',
+          })
+        })
+    },
+    //查询预约信息
+    queryAppointmentDetail(id) {
+      let that = this
+      queryAppointmentDetail(id)
+        .then((data) => {
+          that.form = data.data.data
+          console.log(that.form.title)
+        })
+        .catch((e) => {
+          that.form = e.data.data
+        })
     },
     //时间存储与转化
     timeTransStartTime(timeString) {
@@ -317,27 +362,142 @@ export default {
       this.form.endTime = outPut
       return outPut
     },
+
+    //文件上传部分
+    //删除文件
+    handleRemove(file, fileList) {
+      console.log(file, fileList)
+      //执行删除方法
+      const id = file.response ? file.response[0].data._id : file._id
+      const url = file.response ? file.response[0].data.url : file.url
+
+      removeAppointmentFile(id, url)
+        .then((result) => {
+          this.$message({
+            type: 'success',
+            message: '附件删除成功',
+          })
+        })
+        .catch((e) => {
+          this.$message({
+            type: 'error',
+            message: '附件删除失败',
+          })
+        })
+    },
+    handlePreview(file) {
+      //下载文件方法
+      console.log(file)
+      this.$confirm(`确定下载文件 ${file.name}？`, '提示', {
+        cancelButtonText: '取消',
+        confirmButtonText: '确定',
+        type: 'warning',
+      }).then(() => {
+        downloadFile(file.url, file.name).then((res) => {
+          const blobo = new Blob([res.data], { type: 'arraybuffer' })
+          const archor = document.createElement('a')
+          const href = window.URL.createObjectURL(blobo) //关键点3
+          archor.setAttribute('href', href)
+          // /* 关键之处：使用download属性必须要html5的页面才行 ，而且它不会刷新，文件名及扩展名均由这里控制*/
+          archor.setAttribute('download', file.name) //关键点4
+          archor.click()
+        })
+      })
+    },
+    handleExceed(files, fileList) {
+      this.$message.warning(
+        `当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${
+          files.length + fileList.length
+        } 个文件`
+      )
+    },
+    beforeRemove(file, fileList) {
+      return this.$confirm(`确定移除 ${file.name}？`, '提示', {
+        cancelButtonText: '取消',
+        confirmButtonText: '确定',
+        type: 'warning',
+      })
+      //   this.$confirm(`此操作将永久移除 ${file.name}, 是否继续?`, '提示', {
+      //     cancelButtonText: '取消',
+      //     confirmButtonText: '确定',
+      //     type: 'warning',
+      //   })
+      //     .then(() => {
+      //       return false
+      //     })
+      //     .catch(() => {
+      //       return false
+      //     })
+    },
+    uploadComplete(e) {
+      //   const id = this.$route.params.id
+      //   const itemArray = e.map((item) => {
+      //     const obj = {}
+      //     obj.url = item.url
+      //     obj.name = item.originalname
+      //     obj._id = item._id
+      //     return obj
+      //   })
+      //   this.fileList.push(...itemArray)
+    },
   },
   computed: {},
   created() {
-    //初始化参会人员下拉列表
-    const group = null
-    getUserList(group)
-      .then((res) => {
-        this.userList = res.data.data
+    //查询单条预约
+    const id = this.$route.params.id
+    this.appointmentID.appointmentID = id
+    //执行查询方法
+    //首先初始化下拉列表
+    const filter = {
+      filter: {},
+      limit: 0,
+      skip: 0,
+    }
+    let that = this
+    getMeetingRoomItems(filter)
+      .then((result) => {
+        return new Promise((resolve, reject) => {
+          that.meetingRoomList = result.data.data
+          resolve(true)
+        })
+      })
+      .then(() => {
+        that.queryAppointmentDetail(id)
       })
       .catch((e) => {
         console.log(e)
       })
 
-    //1.获取所有下拉框中的数据
-    //2.初始化信息
-    const token = getToken()
-    getMeetingRoomItems(token).then((result) => {
-      this.meetingRoomList = result.data.data.filter((item) => {
-        return item.meetingRoomStatus === '1'
+    //初始化人员列表
+    const group = null
+    getUserList(group)
+      .then((res) => {
+        console.log(res)
+        that.userList = res.data.data
       })
-    })
+      .catch((e) => {
+        console.log(e)
+      })
+
+    //获取该会议预约的文件列表
+    getUploadFileList(id)
+      .then((result) => {
+        //获取文件列表，并进行数据过滤处理，只留下url和name两个值
+        //url指向后端文件
+        //name则是 文件名称+文件类型W
+        const filelist = result.data.data //数组
+        const showList = filelist.map((item) => {
+          const obj = {}
+          obj.url = item.url
+          obj.name = item.originalname
+          obj._id = item._id
+          return obj
+        })
+        this.fileList = showList
+      })
+      .catch((e) => {
+        console.log(e)
+      })
   },
 }
 </script>
@@ -358,6 +518,7 @@ body {
   font-family: Arial, Helvetica, sans-serif;
   font-size: 18px;
 }
+/* 解决不出现滚动条的问题 */
 .wrapper {
   height: 100vh;
   overflow: auto;

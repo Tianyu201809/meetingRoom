@@ -1,7 +1,7 @@
 <template>
   <div>
-<my-search></my-search>
-<meeting-room-table></meeting-room-table>
+    <my-search></my-search>
+    <meeting-room-table></meeting-room-table>
   </div>
 </template>
 <script>
@@ -10,7 +10,7 @@ import meetingRoomTable from './children/meetingRoomTable'
 export default {
   name: 'appointmentList',
   components: {
-      mySearch,
+    mySearch,
     meetingRoomTable,
   },
   data() {

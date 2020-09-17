@@ -25,11 +25,13 @@ export default {
       console.log(this.filter)
       const limit = 10
       const skip = parseInt((currentPage - 1) * limit)
-      this.$parent.queryAppointment(
-        this.filter ? this.filter : null,
-        limit,
-        skip
-      )
+      const f = {
+        filter: {}, //暂未设置的过滤条件
+        limit: limit,
+        skip: skip,
+      }
+      debugger
+      this.$parent.getMeetingRoomItemsList(f)
     },
   },
   data() {

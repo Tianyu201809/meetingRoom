@@ -6,7 +6,8 @@
              background-color="#324157"
              text-color="#bfcbd9"
              active-text-color="#20a0ff"
-             unique-opened
+             :unique-opened="false"
+             :collapse-transition="true"
              router>
       <template v-for="item in items">
         <template v-if="item.subs">
@@ -52,41 +53,53 @@ export default {
       items: [
         {
           icon: 'el-icon-s-home',
-          index: '/index', //这里一定要注意加上 / 
+          index: '/index', //这里一定要注意加上 /
           title: '系统首页',
         },
         {
           icon: 'el-icon-chat-dot-round',
-          index: '/releaseNotices',
-          title: '发布通知',
+          index: '1',
+          title: '通知管理',
+          subs: [
+            {
+              index: '/queryNotices',
+              title: '通知查询',
+            },
+            {
+              index: '/releaseNotices',
+              title: '发布通知',
+            },
+          ],
         },
         {
           icon: 'el-icon-time',
-          index: '3',
+          index: '2',
           title: '会议预约',
           subs: [
             {
               index: '/queryMeeting',
-              title: '会议查询',
+              title: '会议预约查询',
             },
             {
               index: '/createAppointment',
               title: '创建预约',
-            }
+            },
           ],
         },
         {
           icon: 'el-icon-s-management',
-          index: '0',
+          index: '3',
           title: '会议室管理',
-          subs:[{
-              index:'/maintainMeetingRoom',
-              title:'维护会议室信息'
-          },{
-              index:'/manageMeetingRoom',
-              title:'创建会议室'
-          }]
-          
+          subs: [
+            {
+              index: '/maintainMeetingRoom',
+              title: '维护会议室信息',
+            },
+            {
+              index: '/createMeetingRoom',
+              title: '创建会议室',
+            },
+          ],
         },
         {
           icon: 'el-icon-user-solid',
@@ -98,8 +111,8 @@ export default {
               title: '我的预约',
             },
             {
-                index:'/myMeeting',
-                title:'我的参加的会议'
+              index: '/myMeeting',
+              title: '我的参加的会议',
             },
             {
               index: '/myMessage',
@@ -110,7 +123,12 @@ export default {
               title: '收到的通知',
             },
           ],
-        }
+        },
+         {
+          icon: 'el-icon-star-off',
+          index: '/specify', //这里一定要注意加上 /
+          title: '项目说明',
+        },
       ],
     }
   },

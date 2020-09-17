@@ -1,5 +1,4 @@
 <template>
-
   <div class="login-wrap">
     <transition>
       <div class="middleBox">
@@ -38,7 +37,8 @@
                              class="login-tips">忘了密码？</router-link>
               </span>
               <span>
-                <router-link to='/register'
+                <router-link @click="toRegister()"
+                             :to="{name:'register'}"
                              class="login-tips"> 注册账户</router-link>
               </span>
             </span>
@@ -54,7 +54,7 @@
 <script>
 import { loginUser, getUserEmail } from '@/api/user'
 import { getToken, setToken } from '@/api/token'
-import {setLocalProp, getLocalProp} from '@/api/localMethods'
+import { setLocalProp, getLocalProp } from '@/api/localMethods'
 export default {
   data: function () {
     return {
@@ -73,6 +73,9 @@ export default {
     }
   },
   methods: {
+    toRegister() {
+      this.$router.push({ name: 'register' })
+    },
     login() {
       let self = this
       this.$refs.login.validate((valid) => {
@@ -100,11 +103,17 @@ export default {
                   ) {
                     //localStorage.setItem('token', )
                     setToken(res.data.data.token)
-                    self.$message.success('登录成功')
+                    self.$message.success(`欢迎您，${param.userName}`)
                     // localStorage.setItem('ms_username', this.param.username)
                     self.$router.replace('/')
-                  } else {
+                  } else if (parseInt(res.data.code) === 400) {
                     self.$message.error('输入的密码不正确，请重新输入')
+                    console.log(res.data)
+                    return false
+                  } else {
+                    self.$message.error(
+                      '服务器无响应，请联系管理员检查服务端系统'
+                    )
                     console.log(res.data)
                     return false
                   }
@@ -138,7 +147,8 @@ export default {
               //     })
             })
             .catch((e) => {
-              this.$message.error('输入的密码不正确，请重新输入')
+                debugger
+              this.$message.error(e.toString())
               console.log(e)
               return false
             })

@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import { getToken, setToken } from '@/api/token'
+import { getToken } from '@/api/token'
 import store from '../store'
 
 /**
@@ -11,14 +11,24 @@ const originalPush = Router.prototype.push
 Router.prototype.push = function push(location) {
 	return originalPush.call(this, location).catch((err) => err)
 }
-//设置一个全局导航守卫
 
+/**
+ * 今后扩展：
+ * 根据用户的role权限，加载不同的导航树列表
+ */
 const router = new Router({
 	beforeRouteUpdate(to, from, next) {},
 	routes: [
 		{
 			path: '/',
 			redirect: '/index',
+		},
+		{
+			path: '/login',
+			name: 'login',
+			//redirect: '/login',
+			component: () => import('../views/login/login.vue'),
+			meta: { title: '登录' },
 		},
 		{
 			path: '/',
@@ -35,6 +45,12 @@ const router = new Router({
 					name: 'releaseNotices',
 					component: () =>
 						import('../views/releaseNotices/releaseNotices.vue'),
+				},
+				{
+					path: '/queryNotices',
+					name: 'queryNotices',
+					component: () =>
+						import('../views/releaseNotices/queryNotices.vue'),
 				},
 				{
 					path: '/createAppointment',
@@ -61,11 +77,11 @@ const router = new Router({
 				// },
 				{
 					//创建会议室
-					path: '/manageMeetingRoom',
-					name: 'manageMeetingRoom',
+					path: '/createMeetingRoom',
+					name: 'createMeetingRoom',
 
 					component: () =>
-						import('../views/meetingRoom/manageMeetingRoom.vue'),
+						import('../views/meetingRoom/createMeetingRoom.vue'),
 				},
 				{
 					//查询，修改，删除会议室
@@ -73,17 +89,6 @@ const router = new Router({
 					name: 'maintainMeetingRoom',
 					component: () =>
 						import('../views/meetingRoom/maintainMeetingRoom.vue'),
-					children: [
-						// {
-						// 	//会议室详情页
-						// 	path: '/maintainMeetingRoom/meetingRoomDetail:id',
-						// 	name: 'meetingRoomDetail',
-						// 	component: () =>
-						// 		import(
-						// 			'../views/meetingRoom/meetingRoomDetail.vue'
-						// 		),
-						// },
-					],
 				},
 				{
 					//会议室详情页
@@ -93,21 +98,62 @@ const router = new Router({
 						import('../views/meetingRoom/meetingRoomDetail.vue'),
 					meta: { title: '修改会议室信息' },
 				},
+				{
+					//预约编辑页
+					path: '/editAppointment/:id',
+					name: 'editAppointment',
+					component: () =>
+						import('../views/appointment/editAppointment.vue'),
+					meta: { title: '修改预约信息' },
+				},
+				// {
+				// 	path: '*',
+				// 	redirect: '/404',  editNotices
+				// },
+				{
+					//通知编辑页
+					path: '/editNotices/:id',
+					name: 'editNotices',
+					component: () =>
+						import('../views/releaseNotices/editNotices.vue'),
+					meta: { title: '修改通知信息' },
+				},
+				//个人信息C:\Users\Tianyu\Desktop\meetingRoom-dev\src\views\profile\myMessage.vue
+				{
+					//个人信息设置页
+					path: '/myMessage',
+					name: 'myMessage',
+					component: () => import('../views/profile/myMessage.vue'),
+					meta: { title: '个人信息修改' },
+				},
+				{
+					path: '/specify',
+					name: 'specify',
+					component: () => import('../views/specify/specify.vue'),
+				},
+				{
+					path: '*',
+					component: () => import('../views/404.vue'),
+					//redirect: '/404',
+				},
 			],
 		},
 		{
 			path: '/login',
 			name: 'login',
+			//redirect: '/login',
 			component: () => import('../views/login/login.vue'),
 			meta: { title: '登录' },
 		},
 		{
 			path: '/register',
+			name: 'register',
 			component: () => import('../views/register/register.vue'),
 		},
 		{
 			path: '*',
-			redirect: '/404',
+			component: () => import('../views/404.vue'),
+			redirect: '/login',
 		},
 	],
 })
@@ -117,11 +163,9 @@ const router = new Router({
 //将token作为请求header
 router.beforeEach((to, from, next) => {
 	const token = getToken()
-	debugger
 	if (token) {
 		store.dispatch('authorization', token).then(
 			() => {
-				debugger
 				if (to.path === '/login') next({ name: 'index' })
 				else next()
 			},
