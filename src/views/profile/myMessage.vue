@@ -1,15 +1,18 @@
 <template>
   <el-tabs v-model="activeName"
            @tab-click="handleClick">
-    <el-tab-pane label="基本信息修改"
+    <el-tab-pane label="基本信息"
                  name="userInfo">
       <el-row>
         <el-col :span="24"
                 align="center">
           <user-info-card style="width:50%"></user-info-card>
-          <el-button type="danger"
-                     size="small"
-                     @click="navToIndex">返回首页</el-button>
+          <!-- <el-button type="danger"
+                     size="small">返回首页</el-button> -->
+          <el-button type="primary"
+                     icon="el-icon-refresh-left"
+                     circle
+                     @click="navToIndex"></el-button>
         </el-col>
       </el-row>
     </el-tab-pane>

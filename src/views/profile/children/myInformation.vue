@@ -35,7 +35,7 @@
            @click="editMode = !editMode">编辑个人信息</i>
       </div>
       <div v-else>
-        <i class="el-icon-upload editInfo-label red mr-right15" @click="editMode = !editMode">保存</i>
+        <i class="el-icon-upload editInfo-label blue mr-right15" @click="editMode = !editMode">保存</i>
         <i class="el-icon-refresh-left editInfo-label green" @click="editMode = !editMode">返回</i>
       </div>
       <el-divider></el-divider>
@@ -132,6 +132,9 @@ export default {
 }
 .red {
   color: #f56c6c;
+}
+.blue{
+    color:#409eff
 }
 .green {
   color: #67c23a;

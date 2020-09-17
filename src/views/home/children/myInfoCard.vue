@@ -18,7 +18,7 @@
             <div class="user-info-name">{{userInfo.userName}}</div>
             <div>{{userInfo.email}}</div>
             <div class="edit-info"><a href="javascript:void(0)"
-                 @click="navToModifyInfo">信息修改</a></div>
+                 @click="navToModifyInfo">详细信息</a></div>
             <div class="role">{{userInfo.role ? "":""}}</div>
           </div>
         </div>
