@@ -1,17 +1,10 @@
 <template>
   <div>
-    <!-- header部分  -->
-    <!-- <el-page-header @back="goBack"
-                    class="detail-header">
-      <template slot="content">
-        会议室信息修改
-      </template>
-    </el-page-header> -->
     <div>
       <el-breadcrumb separator="/">
         <el-breadcrumb-item style=""
                             class="pageTitle">
-          <i class="el-icon-pie-chart"
+          <i class="el-icon-setting"
              style="margin-right:10px"></i>
           <strong>修改会议室信息</strong>
         </el-breadcrumb-item>

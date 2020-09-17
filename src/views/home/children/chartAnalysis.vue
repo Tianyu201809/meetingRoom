@@ -82,6 +82,10 @@ export default {
 }
 </script>
 <style scoped>
+#line {
+  height: 80% !important;
+  width: 90% !important;
+}
 .schartBox {
   /* display: flex; */
   height: 100%;

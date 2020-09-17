@@ -106,8 +106,14 @@ export default {
                     self.$message.success(`欢迎您，${param.userName}`)
                     // localStorage.setItem('ms_username', this.param.username)
                     self.$router.replace('/')
-                  } else {
+                  } else if (parseInt(res.data.code) === 400) {
                     self.$message.error('输入的密码不正确，请重新输入')
+                    console.log(res.data)
+                    return false
+                  } else {
+                    self.$message.error(
+                      '服务器无响应，请联系管理员检查服务端系统'
+                    )
                     console.log(res.data)
                     return false
                   }
@@ -141,7 +147,8 @@ export default {
               //     })
             })
             .catch((e) => {
-              this.$message.error('输入的密码不正确，请重新输入')
+                debugger
+              this.$message.error(e.toString())
               console.log(e)
               return false
             })

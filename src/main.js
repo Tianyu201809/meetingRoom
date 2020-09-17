@@ -14,7 +14,6 @@ Vue.config.productionTip = false
 Vue.use(ElementUI)
 Vue.use(axios)
 Vue.prototype.dayjs = dayjs
-// axios.defaults.headers['Authorization'] = getToken() || ''
 new Vue({
 	router,
 	store,
