@@ -4,6 +4,7 @@
  * @param {*string} value    属性值
  */
 
+import dayjs from 'dayjs'
 export const setLocalProp = (propName, value) => {
 	localStorage.setItem(propName, value)
 }
@@ -13,8 +14,8 @@ export const getLocalProp = (propName) => {
 
 /**
  * 防抖函数
- * @param {*} func 
- * @param {*} delay 
+ * @param {*} func
+ * @param {*} delay
  */
 export const _debounce = function(func, delay) {
 	var timer = null
@@ -28,4 +29,13 @@ export const _debounce = function(func, delay) {
 			func.apply(that, args)
 		}, delay)
 	}
+}
+
+/**
+ * 日期格式转化函数
+ */
+
+export const dateformatTransform = (dateString, format) => {
+    debugger
+	return dayjs(new Date(dateString)).format(format)
 }

@@ -15,7 +15,7 @@
 
       </div>
       <div class="user-name">
-        <div>{{userInfo.userName}}Tianyu Zhang</div>
+        <div>{{userInfo.userName}}</div>
       </div>
       <!-- <div class="modify-avator-btn">
         <el-button type="warning"
@@ -35,8 +35,10 @@
            @click="editMode = !editMode">编辑个人信息</i>
       </div>
       <div v-else>
-        <i class="el-icon-upload editInfo-label blue mr-right15" @click="editMode = !editMode">保存</i>
-        <i class="el-icon-refresh-left editInfo-label green" @click="editMode = !editMode">返回</i>
+        <i class="el-icon-upload editInfo-label blue mr-right15"
+           @click="editMode = !editMode">保存</i>
+        <i class="el-icon-refresh-left editInfo-label green"
+           @click="editMode = !editMode">返回</i>
       </div>
       <el-divider></el-divider>
       <!-- 基本信息 -->
@@ -44,21 +46,39 @@
         <div class="baseInfo-item">
           <div class="info-propotype-name">
             <!-- <i class="el-icon-message"></i> -->
-            <label for="">📧</label>
-            #Email Address:
+            <label for=""
+                   class="el-icon-user-solid"></label>
+            #ID Number
           </div>
           <div class="info-propotype-value">
-            {{userInfo.email ? userInfo.email:'tianyu.zhang@163.com'}}
+            {{userInfo._id ? userInfo._id:'null'}}
           </div>
         </div>
         <div class="baseInfo-item">
           <div class="info-propotype-name">
+            <!-- <i class="el-icon-message"></i> -->
+            <label for="">📧 #Email Address:</label>
+          </div>
+          <div class="info-propotype-value email-text">
+            {{userInfo.email ? userInfo.email:'tianyu.zhang@163.com'}}
+            <span class="el-icon-edit email-val blue"
+                  id="email-icon"
+                  @click="updateUserEmail"
+                  title="点击修改邮箱地址"></span>
+          </div>
+        </div>
+        <div class="baseInfo-item">
+          <div class="info-propotype-name phone-number-text">
             <!-- <i class="el-icon-phone-outline"></i> -->
             <label for="">📱</label>
             #Phone Number:
           </div>
-          <div class="info-propotype-value">
+          <div class="info-propotype-value phone-number-value">
             {{userInfo.phone ? userInfo.phone:'123456789'}}
+            <span class="el-icon-edit email-val blue"
+                  @click="updateUserPhone"
+                  id="phone-number-icon"
+                  title="点击修改电话"></span>
           </div>
         </div>
         <div class="baseInfo-item">
@@ -76,7 +96,24 @@
             #Birthday
           </div>
           <div class="info-propotype-value">
-            {{userInfo.role ? userInfo.role:'1993-12-23'}}
+            <span id="userBirthdayValue">
+              {{userInfo.birthday ? userInfo.birthday:'2003-12-23'}}
+            </span>
+            <span class="el-icon-edit email-val blue"
+                  @click="updateUserBirthday"
+                  id="userBirthdayIcon"
+                  title="点击修改生日日期"></span>
+            <span>
+
+              <input type="text"
+                     v-model="userInfo.birthday"
+                     style="display:none;"
+                     @change="checkUserBirthday()"
+                     placeholder="birthday"
+                     id="userBirthdayInput">
+
+            </span>
+
           </div>
         </div>
         <div class="baseInfo-item">
@@ -92,7 +129,7 @@
             #Created Date
           </div>
           <div class="info-propotype-value">
-            {{userInfo.role ? userInfo.role:'2020-08-15'}}
+            {{userInfo.createdDate ? dateFormat(userInfo.createdDate):'2020-08-15'}}
           </div>
         </div>
 
@@ -101,6 +138,8 @@
   </div>
 </template>
 <script >
+import { getUserInfo } from '@/api/user'
+import { getLocalProp, dateformatTransform } from '@/api/localMethods'
 export default {
   name: 'myInformation',
   data() {
@@ -110,10 +149,44 @@ export default {
       editMode: false,
     }
   },
-  created() {},
+  computed: {
+    dateFormat(value) {
+      return function (value) {
+        return dateformatTransform(value, 'YYYY-MM-DD')
+      }
+    },
+  },
+  created() {
+    debugger
+    const userName = getLocalProp('userName')
+    const email = getLocalProp('email')
+
+    getUserInfo({ userName, email })
+      .then((d) => {
+        this.userInfo = d.data.user
+      })
+      .catch((e) => {
+        this.$message.error(e)
+      })
+  },
   mounted() {},
   methods: {
     errorHandler() {},
+    updateUserEmail() {},
+    updateUserBirthday($event) {
+      document.getElementById('userBirthdayInput').style.display = 'block'
+      document.getElementById('userBirthdayValue').style.display = 'none'
+    },
+    checkUserBirthday() {
+      console.log(1)
+      document.getElementById('userBirthdayValue').style.display = 'inline'
+      document.getElementById('userBirthdayInput').style.display = 'none'
+      this.$confirm('是否修改生日日期?', '提示', {
+        cancelButtonText: '取消',
+        confirmButtonText: '确定',
+        type: 'warning',
+      })
+    },
   },
 }
 </script>
@@ -121,6 +194,10 @@ export default {
 /* .wapper{
     text-align: left;
 } */
+.email-val {
+  display: none;
+}
+
 .mr-right15 {
   margin-right: 15px;
 }
@@ -133,8 +210,8 @@ export default {
 .red {
   color: #f56c6c;
 }
-.blue{
-    color:#409eff
+.blue {
+  color: #409eff;
 }
 .green {
   color: #67c23a;
@@ -149,6 +226,19 @@ export default {
 .info-propotype-value {
   font-size: 0.85rem;
   color: black;
+}
+
+.info-propotype-value:hover span#userBirthdayIcon {
+  display: inline;
+}
+/* 修改邮箱部分css */
+.phone-number-value:hover span#phone-number-icon {
+  display: inline;
+}
+
+/* 修改 */
+.email-text:hover span#email-icon {
+  display: inline;
 }
 .user-level {
   margin-top: 6px;

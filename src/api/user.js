@@ -13,28 +13,6 @@ import { getToken } from './token'
 // 		},
 // 	})
 // }
-// export const login = ({ userName, password }) => {
-// 	return axios.request({
-// 		url: '/index/login',
-// 		method: 'post',
-// 		data: {
-// 			userName,
-// 			password,
-// 		},
-// 	})
-// }
-
-// export const registerUser = ({ userName, email, password }) => {
-// 	return axios.request({
-// 		url: '/register',
-// 		methods: 'post',
-// 		data: {
-// 			userName,
-// 			email,
-// 			password
-// 		},
-// 	})
-// }
 
 export const registerUser = ({ userName, email, password }) => {
 	return axios({
@@ -125,8 +103,22 @@ export const modifyPassword = ({ userName, email, password, newPassword }) => {
 		data: {
 			userName,
 			email,
-            password,
-            newPassword
+			password,
+			newPassword,
+		},
+	})
+}
+
+/**
+ * 获取人员详细信
+ */
+export const getUserInfo = ({ userName, email }) => {
+	return axios({
+		method: 'get',
+		url: '/users/getUserInfo',
+		params: {
+			userName,
+			email,
 		},
 	})
 }
