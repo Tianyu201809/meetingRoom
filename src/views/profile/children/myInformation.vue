@@ -61,7 +61,7 @@
           </div>
           <div class="info-propotype-value email-text">
             {{userInfo.email ? userInfo.email:'tianyu.zhang@163.com'}}
-            <span class="el-icon-edit email-val blue"
+            <span class="el-icon-edit hidden-element blue"
                   id="email-icon"
                   @click="updateUserEmail"
                   title="点击修改邮箱地址"></span>
@@ -75,7 +75,7 @@
           </div>
           <div class="info-propotype-value phone-number-value">
             {{userInfo.phone ? userInfo.phone:'123456789'}}
-            <span class="el-icon-edit email-val blue"
+            <span class="el-icon-edit hidden-element blue"
                   @click="updateUserPhone"
                   id="phone-number-icon"
                   title="点击修改电话"></span>
@@ -99,7 +99,7 @@
             <span id="userBirthdayValue">
               {{userInfo.birthday ? userInfo.birthday:'2003-12-23'}}
             </span>
-            <span class="el-icon-edit email-val blue"
+            <span class="el-icon-edit hidden-element blue"
                   @click="updateUserBirthday"
                   id="userBirthdayIcon"
                   title="点击修改生日日期"></span>
@@ -173,19 +173,20 @@ export default {
   methods: {
     errorHandler() {},
     updateUserEmail() {},
+    updateUserPhone(){},
     updateUserBirthday($event) {
-      document.getElementById('userBirthdayInput').style.display = 'block'
-      document.getElementById('userBirthdayValue').style.display = 'none'
+      //   document.getElementById('userBirthdayInput').style.display = 'block'
+      //   document.getElementById('userBirthdayValue').style.display = 'none'
     },
     checkUserBirthday() {
       console.log(1)
-      document.getElementById('userBirthdayValue').style.display = 'inline'
-      document.getElementById('userBirthdayInput').style.display = 'none'
-      this.$confirm('是否修改生日日期?', '提示', {
-        cancelButtonText: '取消',
-        confirmButtonText: '确定',
-        type: 'warning',
-      })
+      //   document.getElementById('userBirthdayValue').style.display = 'inline'
+      //   document.getElementById('userBirthdayInput').style.display = 'none'
+      //   this.$confirm('是否修改生日日期?', '提示', {
+      //     cancelButtonText: '取消',
+      //     confirmButtonText: '确定',
+      //     type: 'warning',
+      //   })
     },
   },
 }
@@ -194,7 +195,7 @@ export default {
 /* .wapper{
     text-align: left;
 } */
-.email-val {
+.hidden-element {
   display: none;
 }
 
