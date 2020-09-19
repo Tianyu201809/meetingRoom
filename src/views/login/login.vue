@@ -103,10 +103,6 @@ export default {
                   ) {
                     setToken(res.data.data.token)
                     self.$message.success(`欢迎您，${param.userName}`)
-<<<<<<< HEAD
-                    // localStorage.setItem('ms_username', this.param.username)
-=======
->>>>>>> 8147be6406ef915fc26910f46ffa0ac6f9d5aaf2
                     self.$router.replace('/')
                   } else if (parseInt(res.data.code) === 400) {
                     self.$message.error('输入的密码不正确，请重新输入')
@@ -148,10 +144,6 @@ export default {
               //     })
             })
             .catch((e) => {
-<<<<<<< HEAD
-                debugger
-=======
->>>>>>> 8147be6406ef915fc26910f46ffa0ac6f9d5aaf2
               this.$message.error(e.toString())
               console.log(e)
               return false
