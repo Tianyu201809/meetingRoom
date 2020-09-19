@@ -36,6 +36,5 @@ export const _debounce = function(func, delay) {
  */
 
 export const dateformatTransform = (dateString, format) => {
-    debugger
 	return dayjs(new Date(dateString)).format(format)
 }

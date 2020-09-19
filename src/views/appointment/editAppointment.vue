@@ -103,7 +103,7 @@
         <el-form-item label="会议相关文件">
           <el-upload class="upload-demo"
                      drag
-                     action="http://localhost:3000/upload/uploadMeetingFile"
+                     action="/upload/uploadMeetingFile"
                      :on-preview="handlePreview"
                      :on-remove="handleRemove"
                      :before-remove="beforeRemove"

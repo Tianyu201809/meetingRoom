@@ -122,3 +122,21 @@ export const getUserInfo = ({ userName, email }) => {
 		},
 	})
 }
+
+/**
+ * 修改人员信息接口
+ * @param {String} userId
+ * @param {Object} data
+ */
+
+export const updateUserInfo = (userId, data) => {
+	axios.defaults.headers['Authorization'] = getToken()
+	return axios({
+		method: 'post',
+		url: '/users/updateUserInfo',
+		data: {
+			id: userId,
+			data: data,
+		},
+	})
+}

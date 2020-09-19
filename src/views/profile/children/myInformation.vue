@@ -1,5 +1,10 @@
 <template>
-  <div class="wapper">
+  <div class="wapper"
+       v-cloak>
+    <modify-info-dialog ref="infoDialog"
+                        :modified-prop="modifiedProp"
+                        @change-value="getModifiedValue"
+                        :prop-title="propTitle"></modify-info-dialog>
     <el-card shadow="hover"
              class="mgb20"
              style="height:100%; width:100%">
@@ -46,12 +51,10 @@
         <div class="baseInfo-item">
           <div class="info-propotype-name">
             <!-- <i class="el-icon-message"></i> -->
-            <label for=""
-                   class="el-icon-user-solid"></label>
-            #ID Number
+            <label class="el-icon-user-solid">#ID Number</label>
           </div>
           <div class="info-propotype-value">
-            {{userInfo._id ? userInfo._id:'null'}}
+            {{userInfo._id ? userInfo._id:'*****-*****-*****'}}
           </div>
         </div>
         <div class="baseInfo-item">
@@ -92,12 +95,11 @@
         </div>
         <div class="baseInfo-item">
           <div class="info-propotype-name">
-            <label>🎂</label>
-            #Birthday
+            <label>🎂#Birthday</label>
           </div>
           <div class="info-propotype-value">
             <span id="userBirthdayValue">
-              {{userInfo.birthday ? userInfo.birthday:'2003-12-23'}}
+              {{userInfo.birthday ? dateFormat(userInfo.birthday):'2020-9-18'}}
             </span>
             <span class="el-icon-edit hidden-element blue"
                   @click="updateUserBirthday"
@@ -111,7 +113,6 @@
                      @change="checkUserBirthday()"
                      placeholder="birthday"
                      id="userBirthdayInput">
-
             </span>
 
           </div>
@@ -125,8 +126,7 @@
         <div class="baseInfo-item">
           <div class="info-propotype-name">
             <!-- <i class="el-icon-watch"></i> -->
-            <label for="">⌚</label>
-            #Created Date
+            <label for="">⌚#Created Date</label>
           </div>
           <div class="info-propotype-value">
             {{userInfo.createdDate ? dateFormat(userInfo.createdDate):'2020-08-15'}}
@@ -138,15 +138,28 @@
   </div>
 </template>
 <script >
+import modifyInfoDialog from './modifyInfoDialog'
 import { getUserInfo } from '@/api/user'
-import { getLocalProp, dateformatTransform } from '@/api/localMethods'
+import {
+  getLocalProp,
+  dateformatTransform,
+  setLocalProp,
+} from '@/api/localMethods'
+
 export default {
   name: 'myInformation',
+  components: {
+    modifyInfoDialog,
+  },
   data() {
     return {
       rate: 3.5,
-      userInfo: {},
+      userInfo: {
+        birthday: '',
+      },
       editMode: false,
+      modifiedProp: '', //传给dialog子组件的属性
+      propTitle: '', //传给dialog子组件的属性
     }
   },
   computed: {
@@ -160,7 +173,6 @@ export default {
     debugger
     const userName = getLocalProp('userName')
     const email = getLocalProp('email')
-
     getUserInfo({ userName, email })
       .then((d) => {
         this.userInfo = d.data.user
@@ -172,21 +184,36 @@ export default {
   mounted() {},
   methods: {
     errorHandler() {},
-    updateUserEmail() {},
-    updateUserPhone(){},
-    updateUserBirthday($event) {
-      //   document.getElementById('userBirthdayInput').style.display = 'block'
-      //   document.getElementById('userBirthdayValue').style.display = 'none'
+    updateUserEmail() {
+      const PROP = 'email'
+      const TITLE = '电子邮箱'
+      this.changeUserInfo(PROP, TITLE)
     },
-    checkUserBirthday() {
-      console.log(1)
-      //   document.getElementById('userBirthdayValue').style.display = 'inline'
-      //   document.getElementById('userBirthdayInput').style.display = 'none'
-      //   this.$confirm('是否修改生日日期?', '提示', {
-      //     cancelButtonText: '取消',
-      //     confirmButtonText: '确定',
-      //     type: 'warning',
-      //   })
+
+    updateUserPhone() {
+      const PROP = 'phone'
+      const TITLE = '手机号'
+      this.changeUserInfo(PROP, TITLE)
+    },
+    updateUserBirthday() {
+      const PROP = 'birthday'
+      const TITLE = '生日'
+      this.changeUserInfo(PROP, TITLE)
+    },
+    //获取从dialog中修改的birthday
+    getModifiedValue(obj) {
+      //父组件做出响应
+      for (const key in obj) {
+        this.userInfo[key] = obj[key]
+      }
+    },
+
+    // 传递属性名和属性值给dialog子组件
+    changeUserInfo(prop, title) {
+      this.modifiedProp = prop
+      this.propTitle = title
+      //调用子组件方法
+      this.$refs.infoDialog.openDialog()
     },
   },
 }
@@ -195,6 +222,9 @@ export default {
 /* .wapper{
     text-align: left;
 } */
+[v-cloak] {
+  display: none;
+}
 .hidden-element {
   display: none;
 }

@@ -19,10 +19,9 @@
     <el-tab-pane label="密码修改"
                  name="password">
       <div class="box mr-top-20">
-        <el-form :label-position="left"
+        <el-form label-position="left"
                  label-width="120px"
-                 style="width:60%"
-                 :model="formLabelAlign">
+                 style="width:60%">
           <el-form-item label="原密码：">
             <el-input v-model="oldPassword"></el-input>
           </el-form-item>
