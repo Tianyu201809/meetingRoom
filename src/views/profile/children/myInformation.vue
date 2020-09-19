@@ -1,5 +1,14 @@
 <template>
+<<<<<<< HEAD
   <div class="wapper">
+=======
+  <div class="wapper"
+       v-cloak>
+    <modify-info-dialog ref="infoDialog"
+                        :modified-prop="modifiedProp"
+                        @change-value="getModifiedValue"
+                        :prop-title="propTitle"></modify-info-dialog>
+>>>>>>> 8147be6406ef915fc26910f46ffa0ac6f9d5aaf2
     <el-card shadow="hover"
              class="mgb20"
              style="height:100%; width:100%">
@@ -15,7 +24,11 @@
 
       </div>
       <div class="user-name">
+<<<<<<< HEAD
         <div>{{userInfo.userName}}Tianyu Zhang</div>
+=======
+        <div>{{userInfo.userName}}</div>
+>>>>>>> 8147be6406ef915fc26910f46ffa0ac6f9d5aaf2
       </div>
       <!-- <div class="modify-avator-btn">
         <el-button type="warning"
@@ -35,8 +48,15 @@
            @click="editMode = !editMode">编辑个人信息</i>
       </div>
       <div v-else>
+<<<<<<< HEAD
         <i class="el-icon-upload editInfo-label blue mr-right15" @click="editMode = !editMode">保存</i>
         <i class="el-icon-refresh-left editInfo-label green" @click="editMode = !editMode">返回</i>
+=======
+        <i class="el-icon-upload editInfo-label blue mr-right15"
+           @click="editMode = !editMode">保存</i>
+        <i class="el-icon-refresh-left editInfo-label green"
+           @click="editMode = !editMode">返回</i>
+>>>>>>> 8147be6406ef915fc26910f46ffa0ac6f9d5aaf2
       </div>
       <el-divider></el-divider>
       <!-- 基本信息 -->
@@ -44,21 +64,53 @@
         <div class="baseInfo-item">
           <div class="info-propotype-name">
             <!-- <i class="el-icon-message"></i> -->
+<<<<<<< HEAD
             <label for="">📧</label>
             #Email Address:
           </div>
           <div class="info-propotype-value">
             {{userInfo.email ? userInfo.email:'tianyu.zhang@163.com'}}
+=======
+            <label class="el-icon-user-solid">#ID Number</label>
+          </div>
+          <div class="info-propotype-value">
+            {{userInfo._id ? userInfo._id:'*****-*****-*****'}}
+>>>>>>> 8147be6406ef915fc26910f46ffa0ac6f9d5aaf2
           </div>
         </div>
         <div class="baseInfo-item">
           <div class="info-propotype-name">
+<<<<<<< HEAD
+=======
+            <!-- <i class="el-icon-message"></i> -->
+            <label for="">📧 #Email Address:</label>
+          </div>
+          <div class="info-propotype-value email-text">
+            {{userInfo.email ? userInfo.email:'tianyu.zhang@163.com'}}
+            <span class="el-icon-edit hidden-element blue"
+                  id="email-icon"
+                  @click="updateUserEmail"
+                  title="点击修改邮箱地址"></span>
+          </div>
+        </div>
+        <div class="baseInfo-item">
+          <div class="info-propotype-name phone-number-text">
+>>>>>>> 8147be6406ef915fc26910f46ffa0ac6f9d5aaf2
             <!-- <i class="el-icon-phone-outline"></i> -->
             <label for="">📱</label>
             #Phone Number:
           </div>
+<<<<<<< HEAD
           <div class="info-propotype-value">
             {{userInfo.phone ? userInfo.phone:'123456789'}}
+=======
+          <div class="info-propotype-value phone-number-value">
+            {{userInfo.phone ? userInfo.phone:'123456789'}}
+            <span class="el-icon-edit hidden-element blue"
+                  @click="updateUserPhone"
+                  id="phone-number-icon"
+                  title="点击修改电话"></span>
+>>>>>>> 8147be6406ef915fc26910f46ffa0ac6f9d5aaf2
           </div>
         </div>
         <div class="baseInfo-item">
@@ -72,11 +124,34 @@
         </div>
         <div class="baseInfo-item">
           <div class="info-propotype-name">
+<<<<<<< HEAD
             <label>🎂</label>
             #Birthday
           </div>
           <div class="info-propotype-value">
             {{userInfo.role ? userInfo.role:'1993-12-23'}}
+=======
+            <label>🎂#Birthday</label>
+          </div>
+          <div class="info-propotype-value">
+            <span id="userBirthdayValue">
+              {{userInfo.birthday ? dateFormat(userInfo.birthday):'2020-9-18'}}
+            </span>
+            <span class="el-icon-edit hidden-element blue"
+                  @click="updateUserBirthday"
+                  id="userBirthdayIcon"
+                  title="点击修改生日日期"></span>
+            <span>
+
+              <input type="text"
+                     v-model="userInfo.birthday"
+                     style="display:none;"
+                     @change="checkUserBirthday()"
+                     placeholder="birthday"
+                     id="userBirthdayInput">
+            </span>
+
+>>>>>>> 8147be6406ef915fc26910f46ffa0ac6f9d5aaf2
           </div>
         </div>
         <div class="baseInfo-item">
@@ -88,11 +163,18 @@
         <div class="baseInfo-item">
           <div class="info-propotype-name">
             <!-- <i class="el-icon-watch"></i> -->
+<<<<<<< HEAD
             <label for="">⌚</label>
             #Created Date
           </div>
           <div class="info-propotype-value">
             {{userInfo.role ? userInfo.role:'2020-08-15'}}
+=======
+            <label for="">⌚#Created Date</label>
+          </div>
+          <div class="info-propotype-value">
+            {{userInfo.createdDate ? dateFormat(userInfo.createdDate):'2020-08-15'}}
+>>>>>>> 8147be6406ef915fc26910f46ffa0ac6f9d5aaf2
           </div>
         </div>
 
@@ -101,6 +183,7 @@
   </div>
 </template>
 <script >
+<<<<<<< HEAD
 export default {
   name: 'myInformation',
   data() {
@@ -114,6 +197,85 @@ export default {
   mounted() {},
   methods: {
     errorHandler() {},
+=======
+import modifyInfoDialog from './modifyInfoDialog'
+import { getUserInfo } from '@/api/user'
+import {
+  getLocalProp,
+  dateformatTransform,
+  setLocalProp,
+} from '@/api/localMethods'
+
+export default {
+  name: 'myInformation',
+  components: {
+    modifyInfoDialog,
+  },
+  data() {
+    return {
+      rate: 3.5,
+      userInfo: {
+        birthday: '',
+      },
+      editMode: false,
+      modifiedProp: '', //传给dialog子组件的属性
+      propTitle: '', //传给dialog子组件的属性
+    }
+  },
+  computed: {
+    dateFormat(value) {
+      return function (value) {
+        return dateformatTransform(value, 'YYYY-MM-DD')
+      }
+    },
+  },
+  created() {
+    debugger
+    const userName = getLocalProp('userName')
+    const email = getLocalProp('email')
+    getUserInfo({ userName, email })
+      .then((d) => {
+        this.userInfo = d.data.user
+      })
+      .catch((e) => {
+        this.$message.error(e)
+      })
+  },
+  mounted() {},
+  methods: {
+    errorHandler() {},
+    updateUserEmail() {
+      const PROP = 'email'
+      const TITLE = '电子邮箱'
+      this.changeUserInfo(PROP, TITLE)
+    },
+
+    updateUserPhone() {
+      const PROP = 'phone'
+      const TITLE = '手机号'
+      this.changeUserInfo(PROP, TITLE)
+    },
+    updateUserBirthday() {
+      const PROP = 'birthday'
+      const TITLE = '生日'
+      this.changeUserInfo(PROP, TITLE)
+    },
+    //获取从dialog中修改的birthday
+    getModifiedValue(obj) {
+      //父组件做出响应
+      for (const key in obj) {
+        this.userInfo[key] = obj[key]
+      }
+    },
+
+    // 传递属性名和属性值给dialog子组件
+    changeUserInfo(prop, title) {
+      this.modifiedProp = prop
+      this.propTitle = title
+      //调用子组件方法
+      this.$refs.infoDialog.openDialog()
+    },
+>>>>>>> 8147be6406ef915fc26910f46ffa0ac6f9d5aaf2
   },
 }
 </script>
@@ -121,6 +283,16 @@ export default {
 /* .wapper{
     text-align: left;
 } */
+<<<<<<< HEAD
+=======
+[v-cloak] {
+  display: none;
+}
+.hidden-element {
+  display: none;
+}
+
+>>>>>>> 8147be6406ef915fc26910f46ffa0ac6f9d5aaf2
 .mr-right15 {
   margin-right: 15px;
 }
@@ -133,8 +305,13 @@ export default {
 .red {
   color: #f56c6c;
 }
+<<<<<<< HEAD
 .blue{
     color:#409eff
+=======
+.blue {
+  color: #409eff;
+>>>>>>> 8147be6406ef915fc26910f46ffa0ac6f9d5aaf2
 }
 .green {
   color: #67c23a;
@@ -150,6 +327,22 @@ export default {
   font-size: 0.85rem;
   color: black;
 }
+<<<<<<< HEAD
+=======
+
+.info-propotype-value:hover span#userBirthdayIcon {
+  display: inline;
+}
+/* 修改邮箱部分css */
+.phone-number-value:hover span#phone-number-icon {
+  display: inline;
+}
+
+/* 修改 */
+.email-text:hover span#email-icon {
+  display: inline;
+}
+>>>>>>> 8147be6406ef915fc26910f46ffa0ac6f9d5aaf2
 .user-level {
   margin-top: 6px;
   display: flex;

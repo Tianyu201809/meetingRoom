@@ -31,6 +31,16 @@ const router = new Router({
 			meta: { title: '登录' },
 		},
 		{
+<<<<<<< HEAD
+=======
+			path: '/404',
+			name: '404',
+			//redirect: '/login',
+			component: () => import('../views/404.vue'),
+			meta: { title: '未找到指定页面' },
+		},
+		{
+>>>>>>> 8147be6406ef915fc26910f46ffa0ac6f9d5aaf2
 			path: '/',
 			component: () =>
 				import(/* webpackChunkName: "home" */ '../views/Home.vue'),
@@ -153,7 +163,11 @@ const router = new Router({
 		{
 			path: '*',
 			component: () => import('../views/404.vue'),
+<<<<<<< HEAD
 			redirect: '/login',
+=======
+			redirect: '/404',
+>>>>>>> 8147be6406ef915fc26910f46ffa0ac6f9d5aaf2
 		},
 	],
 })
@@ -163,6 +177,12 @@ const router = new Router({
 //将token作为请求header
 router.beforeEach((to, from, next) => {
 	const token = getToken()
+<<<<<<< HEAD
+=======
+	// if (to.fullPath == '/register') {
+	// 	next()
+	// }
+>>>>>>> 8147be6406ef915fc26910f46ffa0ac6f9d5aaf2
 	if (token) {
 		store.dispatch('authorization', token).then(
 			() => {
@@ -180,8 +200,10 @@ router.beforeEach((to, from, next) => {
 		// 	next({ name: 'login' })
 		// })
 	} else {
-		if (to.path === '/login' || to.path === '/register') next()
-		else next({ name: 'login' })
+		if (to.path === '/login') next()
+		else if (to.path == '/register') {
+			next()
+		} else next({ name: 'login' })
 	}
 })
 

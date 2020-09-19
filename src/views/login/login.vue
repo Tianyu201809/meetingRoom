@@ -13,6 +13,7 @@
                    class="ms-content">
             <el-form-item prop="userName">
               <el-input v-model="param.userName"
+                        auto-complete="off"
                         placeholder="账户名">
                 <el-button slot="prepend"
                            icon="el-icon-user-solid"></el-button>
@@ -20,6 +21,7 @@
             </el-form-item>
             <el-form-item prop="password">
               <el-input type="password"
+                        auto-complete="off"
                         placeholder="密码"
                         v-model="param.password"
                         @keyup.enter.native="submitForm()">
@@ -82,17 +84,15 @@ export default {
         if (valid) {
           console.log(this.param)
           getUserEmail(self.param)
-            .then((email) => {
-              self.$store.state.userInfo.email = email.data.data.email
+            .then((d) => {
+              self.$store.state.userInfo.email = d.data.data.email
               self.$store.state.userInfo.userName = self.param.userName
               self.$store.state.userInfo.password = self.param.password
 
               //将数据设置在localStoreage中（web本地存储器）
-              setLocalProp('email', email.data.data.email)
+              setLocalProp('email', d.data.data.email)
               setLocalProp('userName', self.param.userName)
-              //setLocalProp('password', self.param.password)
-
-              console.log(self.param)
+              setLocalProp('userId', d.data.data.userId)
               let param = self.param
               self.$store
                 .dispatch('login', self.$store.state.userInfo)
@@ -101,10 +101,12 @@ export default {
                     parseInt(res.data.code) === 200 &&
                     res.data.mes === 'success'
                   ) {
-                    //localStorage.setItem('token', )
                     setToken(res.data.data.token)
                     self.$message.success(`欢迎您，${param.userName}`)
+<<<<<<< HEAD
                     // localStorage.setItem('ms_username', this.param.username)
+=======
+>>>>>>> 8147be6406ef915fc26910f46ffa0ac6f9d5aaf2
                     self.$router.replace('/')
                   } else if (parseInt(res.data.code) === 400) {
                     self.$message.error('输入的密码不正确，请重新输入')
@@ -119,7 +121,6 @@ export default {
                   }
                 })
                 .catch((error) => {
-                  debugger
                   self.$message.error(error.mes)
                   return false
                 })
@@ -147,7 +148,10 @@ export default {
               //     })
             })
             .catch((e) => {
+<<<<<<< HEAD
                 debugger
+=======
+>>>>>>> 8147be6406ef915fc26910f46ffa0ac6f9d5aaf2
               this.$message.error(e.toString())
               console.log(e)
               return false

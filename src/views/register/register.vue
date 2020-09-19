@@ -9,16 +9,33 @@
                label-width="80px">
         <el-form-item label="用户名"
                       prop="userName">
+<<<<<<< HEAD
           <el-input v-model="form.userName"></el-input>
         </el-form-item>
         <el-form-item label="邮箱"
                       prop="email">
           <el-input v-model="form.email"></el-input>
+=======
+          <el-input v-model="form.userName"
+                    auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="邮箱"
+                      prop="email">
+          <el-input v-model="form.email"
+                    auto-complete="off"></el-input>
+>>>>>>> 8147be6406ef915fc26910f46ffa0ac6f9d5aaf2
         </el-form-item>
         <el-form-item label="密码"
                       prop="password">
           <el-input v-model="form.password"
-                    type="password"></el-input>
+                    type="password"
+                    auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="确认密码"
+                      prop="confirmPassword">
+          <el-input v-model="form.confirmPassword"
+                    type="password"
+                    auto-complete="off"></el-input>
         </el-form-item>
         <el-form-item label="确认密码"
                       prop="confirmPassword">
