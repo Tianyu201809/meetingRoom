@@ -103,10 +103,6 @@ export const modifyPassword = ({ userName, email, password, newPassword }) => {
 		data: {
 			userName,
 			email,
-<<<<<<< HEAD
-            password,
-            newPassword
-=======
 			password,
 			newPassword,
 		},
@@ -141,7 +137,6 @@ export const updateUserInfo = (userId, data) => {
 		data: {
 			id: userId,
 			data: data,
->>>>>>> 8147be6406ef915fc26910f46ffa0ac6f9d5aaf2
 		},
 	})
 }

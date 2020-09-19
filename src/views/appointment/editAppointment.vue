@@ -103,11 +103,7 @@
         <el-form-item label="会议相关文件">
           <el-upload class="upload-demo"
                      drag
-<<<<<<< HEAD
-                     action="http://localhost:3000/upload/uploadMeetingFile"
-=======
                      action="/upload/uploadMeetingFile"
->>>>>>> 8147be6406ef915fc26910f46ffa0ac6f9d5aaf2
                      :on-preview="handlePreview"
                      :on-remove="handleRemove"
                      :before-remove="beforeRemove"
@@ -391,20 +387,14 @@ export default {
     },
     handlePreview(file) {
       //下载文件方法
-<<<<<<< HEAD
-=======
       debugger
 
->>>>>>> 8147be6406ef915fc26910f46ffa0ac6f9d5aaf2
       console.log(file)
       this.$confirm(`确定下载文件 ${file.name}？`, '提示', {
         cancelButtonText: '取消',
         confirmButtonText: '确定',
         type: 'warning',
       }).then(() => {
-<<<<<<< HEAD
-        downloadFile(file.url, file.name).then((res) => {
-=======
         let url = ''
         if (file.response) {
           url = file.response[0].data.url
@@ -412,7 +402,6 @@ export default {
           url = file.url
         }
         downloadFile(url, file.name).then((res) => {
->>>>>>> 8147be6406ef915fc26910f46ffa0ac6f9d5aaf2
           const blobo = new Blob([res.data], { type: 'arraybuffer' })
           const archor = document.createElement('a')
           const href = window.URL.createObjectURL(blobo) //关键点3
@@ -436,20 +425,6 @@ export default {
         confirmButtonText: '确定',
         type: 'warning',
       })
-<<<<<<< HEAD
-      //   this.$confirm(`此操作将永久移除 ${file.name}, 是否继续?`, '提示', {
-      //     cancelButtonText: '取消',
-      //     confirmButtonText: '确定',
-      //     type: 'warning',
-      //   })
-      //     .then(() => {
-      //       return false
-      //     })
-      //     .catch(() => {
-      //       return false
-      //     })
-=======
->>>>>>> 8147be6406ef915fc26910f46ffa0ac6f9d5aaf2
     },
     uploadComplete(e) {
       //   const id = this.$route.params.id
