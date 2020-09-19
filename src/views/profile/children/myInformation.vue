@@ -1,14 +1,10 @@
 <template>
-<<<<<<< HEAD
-  <div class="wapper">
-=======
   <div class="wapper"
        v-cloak>
     <modify-info-dialog ref="infoDialog"
                         :modified-prop="modifiedProp"
                         @change-value="getModifiedValue"
                         :prop-title="propTitle"></modify-info-dialog>
->>>>>>> 8147be6406ef915fc26910f46ffa0ac6f9d5aaf2
     <el-card shadow="hover"
              class="mgb20"
              style="height:100%; width:100%">
@@ -24,11 +20,7 @@
 
       </div>
       <div class="user-name">
-<<<<<<< HEAD
-        <div>{{userInfo.userName}}Tianyu Zhang</div>
-=======
         <div>{{userInfo.userName}}</div>
->>>>>>> 8147be6406ef915fc26910f46ffa0ac6f9d5aaf2
       </div>
       <!-- <div class="modify-avator-btn">
         <el-button type="warning"
@@ -48,15 +40,10 @@
            @click="editMode = !editMode">编辑个人信息</i>
       </div>
       <div v-else>
-<<<<<<< HEAD
-        <i class="el-icon-upload editInfo-label blue mr-right15" @click="editMode = !editMode">保存</i>
-        <i class="el-icon-refresh-left editInfo-label green" @click="editMode = !editMode">返回</i>
-=======
         <i class="el-icon-upload editInfo-label blue mr-right15"
            @click="editMode = !editMode">保存</i>
         <i class="el-icon-refresh-left editInfo-label green"
            @click="editMode = !editMode">返回</i>
->>>>>>> 8147be6406ef915fc26910f46ffa0ac6f9d5aaf2
       </div>
       <el-divider></el-divider>
       <!-- 基本信息 -->
@@ -64,24 +51,14 @@
         <div class="baseInfo-item">
           <div class="info-propotype-name">
             <!-- <i class="el-icon-message"></i> -->
-<<<<<<< HEAD
-            <label for="">📧</label>
-            #Email Address:
-          </div>
-          <div class="info-propotype-value">
-            {{userInfo.email ? userInfo.email:'tianyu.zhang@163.com'}}
-=======
             <label class="el-icon-user-solid">#ID Number</label>
           </div>
           <div class="info-propotype-value">
             {{userInfo._id ? userInfo._id:'*****-*****-*****'}}
->>>>>>> 8147be6406ef915fc26910f46ffa0ac6f9d5aaf2
           </div>
         </div>
         <div class="baseInfo-item">
           <div class="info-propotype-name">
-<<<<<<< HEAD
-=======
             <!-- <i class="el-icon-message"></i> -->
             <label for="">📧 #Email Address:</label>
           </div>
@@ -95,22 +72,16 @@
         </div>
         <div class="baseInfo-item">
           <div class="info-propotype-name phone-number-text">
->>>>>>> 8147be6406ef915fc26910f46ffa0ac6f9d5aaf2
             <!-- <i class="el-icon-phone-outline"></i> -->
             <label for="">📱</label>
             #Phone Number:
           </div>
-<<<<<<< HEAD
-          <div class="info-propotype-value">
-            {{userInfo.phone ? userInfo.phone:'123456789'}}
-=======
           <div class="info-propotype-value phone-number-value">
             {{userInfo.phone ? userInfo.phone:'123456789'}}
             <span class="el-icon-edit hidden-element blue"
                   @click="updateUserPhone"
                   id="phone-number-icon"
                   title="点击修改电话"></span>
->>>>>>> 8147be6406ef915fc26910f46ffa0ac6f9d5aaf2
           </div>
         </div>
         <div class="baseInfo-item">
@@ -124,13 +95,6 @@
         </div>
         <div class="baseInfo-item">
           <div class="info-propotype-name">
-<<<<<<< HEAD
-            <label>🎂</label>
-            #Birthday
-          </div>
-          <div class="info-propotype-value">
-            {{userInfo.role ? userInfo.role:'1993-12-23'}}
-=======
             <label>🎂#Birthday</label>
           </div>
           <div class="info-propotype-value">
@@ -151,7 +115,6 @@
                      id="userBirthdayInput">
             </span>
 
->>>>>>> 8147be6406ef915fc26910f46ffa0ac6f9d5aaf2
           </div>
         </div>
         <div class="baseInfo-item">
@@ -163,18 +126,10 @@
         <div class="baseInfo-item">
           <div class="info-propotype-name">
             <!-- <i class="el-icon-watch"></i> -->
-<<<<<<< HEAD
-            <label for="">⌚</label>
-            #Created Date
-          </div>
-          <div class="info-propotype-value">
-            {{userInfo.role ? userInfo.role:'2020-08-15'}}
-=======
             <label for="">⌚#Created Date</label>
           </div>
           <div class="info-propotype-value">
             {{userInfo.createdDate ? dateFormat(userInfo.createdDate):'2020-08-15'}}
->>>>>>> 8147be6406ef915fc26910f46ffa0ac6f9d5aaf2
           </div>
         </div>
 
@@ -183,21 +138,6 @@
   </div>
 </template>
 <script >
-<<<<<<< HEAD
-export default {
-  name: 'myInformation',
-  data() {
-    return {
-      rate: 3.5,
-      userInfo: {},
-      editMode: false,
-    }
-  },
-  created() {},
-  mounted() {},
-  methods: {
-    errorHandler() {},
-=======
 import modifyInfoDialog from './modifyInfoDialog'
 import { getUserInfo } from '@/api/user'
 import {
@@ -275,7 +215,6 @@ export default {
       //调用子组件方法
       this.$refs.infoDialog.openDialog()
     },
->>>>>>> 8147be6406ef915fc26910f46ffa0ac6f9d5aaf2
   },
 }
 </script>
@@ -283,8 +222,6 @@ export default {
 /* .wapper{
     text-align: left;
 } */
-<<<<<<< HEAD
-=======
 [v-cloak] {
   display: none;
 }
@@ -292,7 +229,6 @@ export default {
   display: none;
 }
 
->>>>>>> 8147be6406ef915fc26910f46ffa0ac6f9d5aaf2
 .mr-right15 {
   margin-right: 15px;
 }
@@ -305,13 +241,8 @@ export default {
 .red {
   color: #f56c6c;
 }
-<<<<<<< HEAD
-.blue{
-    color:#409eff
-=======
 .blue {
   color: #409eff;
->>>>>>> 8147be6406ef915fc26910f46ffa0ac6f9d5aaf2
 }
 .green {
   color: #67c23a;
@@ -327,8 +258,6 @@ export default {
   font-size: 0.85rem;
   color: black;
 }
-<<<<<<< HEAD
-=======
 
 .info-propotype-value:hover span#userBirthdayIcon {
   display: inline;
@@ -342,7 +271,6 @@ export default {
 .email-text:hover span#email-icon {
   display: inline;
 }
->>>>>>> 8147be6406ef915fc26910f46ffa0ac6f9d5aaf2
 .user-level {
   margin-top: 6px;
   display: flex;

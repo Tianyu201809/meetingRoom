@@ -35,8 +35,6 @@ export const _debounce = function(func, delay) {
 		}, delay)
 	}
 }
-<<<<<<< HEAD
-=======
 
 /**
  * 日期格式转化函数
@@ -45,4 +43,3 @@ export const _debounce = function(func, delay) {
 export const dateformatTransform = (dateString, format) => {
 	return dayjs(new Date(dateString)).format(format)
 }
->>>>>>> 8147be6406ef915fc26910f46ffa0ac6f9d5aaf2
