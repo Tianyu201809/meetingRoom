@@ -46,7 +46,7 @@ export const queryNotification = ({
 	status = undefined,
 	limit = 10,
 	skip = 0,
-	sort = 1,
+	sort = -1,
 }) => {
 	axios.defaults.headers['Authorization'] = getToken()
 	return axios({
