@@ -35,7 +35,7 @@
                  show-score
                  text-color="#ff9900"></el-rate>
       </div>
-      <div v-if="!editMode">
+      <!-- <div v-if="!editMode">
         <i class="el-icon-edit editInfo-label"
            @click="editMode = !editMode">编辑个人信息</i>
       </div>
@@ -44,7 +44,7 @@
            @click="editMode = !editMode">保存</i>
         <i class="el-icon-refresh-left editInfo-label green"
            @click="editMode = !editMode">返回</i>
-      </div>
+      </div> -->
       <el-divider></el-divider>
       <!-- 基本信息 -->
       <div class="baseInfo">
@@ -53,7 +53,7 @@
             <!-- <i class="el-icon-message"></i> -->
             <label class="el-icon-user-solid">#ID Number</label>
           </div>
-          <div class="info-propotype-value">
+          <div class="info-propotype-value user-id-color">
             {{userInfo._id ? userInfo._id:'*****-*****-*****'}}
           </div>
         </div>
@@ -89,7 +89,7 @@
             <i class="el-icon-user"></i>
             #Position
           </div>
-          <div class="info-propotype-value">
+          <div class="info-propotype-value user-created-color">
             {{userInfo.Position ? userInfo.Position:'3.5'}}
           </div>
         </div>
@@ -119,7 +119,7 @@
         </div>
         <div class="baseInfo-item">
           <div class="info-propotype-name">#Role</div>
-          <div class="info-propotype-value">
+          <div class="info-propotype-value user-created-color">
             {{userInfo.role ? userInfo.role:'普通用户'}}
           </div>
         </div>
@@ -128,7 +128,7 @@
             <!-- <i class="el-icon-watch"></i> -->
             <label for="">⌚#Created Date</label>
           </div>
-          <div class="info-propotype-value">
+          <div class="info-propotype-value user-created-color">
             {{userInfo.createdDate ? dateFormat(userInfo.createdDate):'2020-08-15'}}
           </div>
         </div>
@@ -225,6 +225,7 @@ export default {
 [v-cloak] {
   display: none;
 }
+
 .hidden-element {
   display: none;
 }
@@ -299,5 +300,10 @@ export default {
 .user-info {
   display: flex;
   justify-content: center;
+}
+.user-id-color,
+.user-created-color,
+.user-position-color {
+  color: #9c9c9c;
 }
 </style>
