@@ -150,25 +150,29 @@ export default {
   created() {
     const f1 = {
       department: this.department,
+      status: 1, //只查询发布状态的通知
       limit: 5,
       skip: 0,
       sort: -1,
     }
     const f2 = {
       department: this.department,
+      status: 1, //只查询发布状态的数量
     }
     this.loading = true
-    Promise.all([
-      this.queryNotification(f1),
-      this.queryNotificationCount(f2),
-    ]).then(
-      function (result) {
-        this.total = result[1].data.data
-        this.notification = result[0].data.data
-        console.log(result)
-        this.loading = false
-      }.bind(this)
-    )
+    Promise.all([this.queryNotification(f1), this.queryNotificationCount(f2)])
+      .then(
+        function (result) {
+          debugger
+          this.total = result[1].data.data
+          this.notification = result[0].data.data
+          console.log(result)
+          this.loading = false
+        }.bind(this)
+      )
+      .catch((e) => {
+        console.log(e)
+      })
   },
 }
 </script>
