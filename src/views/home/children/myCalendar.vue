@@ -87,7 +87,8 @@ export default {
 .wapper >>> .is-selected {
   color: whitesmoke;
 
-  background-color: rgba(14, 156, 92, 0.3) !important;
+  /* background-color: rgba(14, 156, 92, 0.281) !important; */
+  background-color: rgb(45, 134, 185, 0.65) !important;
   padding: 0;
   margin: 0;
   cursor: pointer;
