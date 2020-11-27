@@ -13,7 +13,7 @@ Router.prototype.push = function push(location) {
 }
 
 /**
- * 今后扩展：
+ * 今后扩展：1
  * 根据用户的role权限，加载不同的导航树列表
  */
 const router = new Router({
