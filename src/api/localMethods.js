@@ -14,13 +14,8 @@ export const getLocalProp = (propName) => {
 
 /**
  * 防抖函数
-<<<<<<< HEAD
- * @param {*} func 
- * @param {*} delay 
-=======
  * @param {*} func
  * @param {*} delay
->>>>>>> 8147be6406ef915fc26910f46ffa0ac6f9d5aaf2
  */
 export const _debounce = function(func, delay) {
 	var timer = null
