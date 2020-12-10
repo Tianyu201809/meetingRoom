@@ -37,15 +37,16 @@ export const editNotification = (_id, obj) => {
 }
 
 /**
- * 传递三个值 1部门编号，limit，skip
+ * 传递5个值 1部门编号，2状态 3limit（查询数量），4skip（跳过数量）
  * @param {*} limit
  * @param {*} skip
  */
 export const queryNotification = ({
 	department = null,
+	status = undefined,
 	limit = 10,
 	skip = 0,
-	sort = 1,
+	sort = -1,
 }) => {
 	axios.defaults.headers['Authorization'] = getToken()
 	return axios({
@@ -55,6 +56,7 @@ export const queryNotification = ({
 			limit: limit,
 			skip: skip,
 			department: department,
+			status: parseInt(status) || undefined,
 			sort: sort,
 		},
 	})
@@ -62,14 +64,16 @@ export const queryNotification = ({
 
 /**
  * 获取通知数量
+ * //0代表未发布， 1代表已发布， 2已撤销
  */
-export const queryNotificationCount = ({ department }) => {
+export const queryNotificationCount = ({ department, status }) => {
 	axios.defaults.headers['Authorization'] = getToken()
 	return axios({
 		url: '/notification/queryNotificationCount',
 		method: 'get',
 		params: {
 			department: department,
+			status: parseInt(status) || undefined,
 		},
 	})
 }

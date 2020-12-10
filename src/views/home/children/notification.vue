@@ -12,18 +12,16 @@
       <el-table :show-header="false"
                 :data="notification"
                 v-loading="loading"
-                style="width:100%; height:230px">
+                style="width:100%; height:230px; overflow:auto">
         <el-table-column>
           <template slot-scope="scope">
             <a class="item-msg"
                href="javascript:void(0)"
                @click="showNoticesDetail(scope.row._id)">{{scope.row.title}}
-              <span v-if="scope.$index < 2 && currentPage == 1">
+              <span v-if="((scope.$index) < 3 && (currentPage === 1))">
                 <i class="el-icon-loading red-icon"></i>
               </span>
-
             </a>
-
           </template>
         </el-table-column>
         <el-table-column>
@@ -36,7 +34,7 @@
         <div class="pagingItem">
           <el-pagination small
                          layout="prev, pager, next"
-                         :page-size="5"
+                         :page-size="4"
                          :total="total"
                          :current-page="currentPage"
                          @current-change="handleCurrentChange">
@@ -72,20 +70,7 @@ export default {
       noticesDialogFlag: false,
     }
   },
-  props: {
-    // notification: {
-    //   type: Array,
-    //   default: function () {
-    //     return []
-    //   },
-    // },
-    // department: {
-    //   type: Object,
-    //   default: function () {
-    //     return {}
-    //   },
-    // },
-  },
+  props: {},
   computed: {
     dateFormat(date) {
       return function (date) {
@@ -117,19 +102,23 @@ export default {
       })
     },
     handleCurrentChange(page) {
-      const limit = 5
+      const limit = 4
       this.loading = true
+
       const f1 = {
         department: this.department,
         limit: parseInt(limit),
         skip: parseInt((page - 1) * limit),
+        sort: -1,
       }
       this.queryNotification(f1)
         .then((d) => {
           this.notification = d.data.data
+          this.currentPage = page //同步page
           this.loading = false
         })
         .catch(() => {
+          this.currentPage = page //同步page
           this.loading = false
         })
     },
@@ -150,25 +139,29 @@ export default {
   created() {
     const f1 = {
       department: this.department,
-      limit: 5,
+      status: 1, //只查询发布状态的通知
+      limit: 4,
       skip: 0,
       sort: -1,
     }
     const f2 = {
       department: this.department,
+      status: 1, //只查询发布状态的数量
     }
     this.loading = true
-    Promise.all([
-      this.queryNotification(f1),
-      this.queryNotificationCount(f2),
-    ]).then(
-      function (result) {
-        this.total = result[1].data.data
-        this.notification = result[0].data.data
-        console.log(result)
-        this.loading = false
-      }.bind(this)
-    )
+    Promise.all([this.queryNotification(f1), this.queryNotificationCount(f2)])
+      .then(
+        function (result) {
+          debugger
+          this.total = result[1].data.data
+          this.notification = result[0].data.data
+          console.log(result)
+          this.loading = false
+        }.bind(this)
+      )
+      .catch((e) => {
+        console.log(e)
+      })
   },
 }
 </script>

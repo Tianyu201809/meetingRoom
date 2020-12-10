@@ -28,14 +28,14 @@
             class="dialog-footer">
         <el-button @click="DialogVisible = false">取 消</el-button>
         <el-button type="primary"
-                   @click="modifyUserInfo">确 定</el-button>
+                   @click="onSubmitted()">确 定</el-button>
       </span>
     </el-dialog>
   </div>
 </template>
 <script>
 import { updateUserInfo } from '@/api/user'
-import { getLocalProp } from '@/api/localMethods'
+import { getLocalProp, debounce, setLocalProp } from '@/api/localMethods'
 export default {
   name: 'modifyInfoDialog',
   data() {
@@ -58,6 +58,9 @@ export default {
     openDialog() {
       this.DialogVisible = true
     },
+    onSubmitted() {
+      this.modifyUserInfo()
+    },
     modifyUserInfo() {
       //修改的数据属性和值
       const userId = getLocalProp('userId')
@@ -67,6 +70,10 @@ export default {
       }
       let val = this.value
       const that = this
+      if (!val) {
+        debounce(this.$message.error, 0)('不能设置空值')
+        return
+      }
 
       updateUserInfo(userId, data)
         .then((d) => {
@@ -80,7 +87,7 @@ export default {
               /**
                * 同步cookie中的值与数据库中的值保持一致
                */
-              setLocalProp(that.modifiedProp, value)
+              setLocalProp('email', val)
             }
             that.DialogVisible = false
             that.value = ''
