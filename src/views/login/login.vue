@@ -2,124 +2,131 @@
   <div class="login-wrap">
     <transition>
       <div class="middleBox">
-        <img class="logo"
-             src="../../assets/img/login2.png">
+        <img class="logo" src="../../assets/img/login2.png" />
         <div class="ms-login">
           <div class="ms-title">会议室预定系统</div>
-          <el-form :model="param"
-                   :rules="rules"
-                   ref="login"
-                   label-width="0px"
-                   class="ms-content">
+          <el-form
+            :model="param"
+            :rules="rules"
+            ref="login"
+            label-width="0px"
+            class="ms-content"
+          >
             <el-form-item prop="userName">
-              <el-input v-model="param.userName"
-                        auto-complete="off"
-                        placeholder="账户名">
-                <el-button slot="prepend"
-                           icon="el-icon-user-solid"></el-button>
+              <el-input
+                v-model="param.userName"
+                auto-complete="off"
+                placeholder="账户名"
+              >
+                <el-button slot="prepend" icon="el-icon-user-solid"></el-button>
               </el-input>
             </el-form-item>
             <el-form-item prop="password">
-              <el-input type="password"
-                        auto-complete="off"
-                        placeholder="密码"
-                        v-model="param.password"
-                        @keyup.enter.native="submitForm()">
-                <el-button slot="prepend"
-                           icon="el-icon-lock"></el-button>
+              <el-input
+                type="password"
+                auto-complete="off"
+                placeholder="密码"
+                v-model="param.password"
+                @keyup.enter.native="submitForm()"
+              >
+                <el-button slot="prepend" icon="el-icon-lock"></el-button>
               </el-input>
             </el-form-item>
             <div class="login-btn">
-              <el-button type="primary"
-                         @click="login()">登录</el-button>
+              <el-button type="primary" @click="login()">登录</el-button>
             </div>
             <span>
               <span>
-                <router-link to='/'
-                             class="login-tips">忘了密码？</router-link>
+                <router-link to="/" class="login-tips">忘了密码？</router-link>
               </span>
               <span>
-                <router-link @click="toRegister()"
-                             :to="{name:'register'}"
-                             class="login-tips"> 注册账户</router-link>
+                <router-link
+                  @click="toRegister()"
+                  :to="{ name: 'register' }"
+                  class="login-tips"
+                >
+                  注册账户</router-link
+                >
               </span>
             </span>
-
           </el-form>
         </div>
       </div>
     </transition>
-
   </div>
 </template>
 
 <script>
-import { loginUser, getUserEmail } from '@/api/user'
-import { getToken, setToken } from '@/api/token'
-import { setLocalProp, getLocalProp } from '@/api/localMethods'
+import { loginUser, getUserEmail } from "@/api/user";
+import { getToken, setToken } from "@/api/token";
+import { setLocalProp, getLocalProp } from "@/api/localMethods";
 export default {
   data: function () {
     return {
       param: {
-        userName: '',
-        password: '',
-        email: '',
+        userName: "",
+        password: "",
+        email: "",
       },
 
       rules: {
         userName: [
-          { required: true, message: '请输入用户名', trigger: 'blur' },
+          { required: true, message: "请输入用户名", trigger: "blur" },
         ],
-        password: [{ required: true, message: '请输入密码', trigger: 'blur' }],
+        password: [{ required: true, message: "请输入密码", trigger: "blur" }],
       },
-    }
+    };
+  },
+  mounted() {
+    debugger;
+    console.log(this.$refs.login);
   },
   methods: {
     toRegister() {
-      this.$router.push({ name: 'register' })
+      this.$router.push({ name: "register" });
     },
     login() {
-      let self = this
+      let self = this;
       this.$refs.login.validate((valid) => {
         if (valid) {
-          console.log(this.param)
+          console.log(this.param);
           getUserEmail(self.param)
             .then((d) => {
-              self.$store.state.userInfo.email = d.data.data.email
-              self.$store.state.userInfo.userName = self.param.userName
-              self.$store.state.userInfo.password = self.param.password
+              self.$store.state.userInfo.email = d.data.data.email;
+              self.$store.state.userInfo.userName = self.param.userName;
+              self.$store.state.userInfo.password = self.param.password;
 
               //将数据设置在localStoreage中（web本地存储器）
-              setLocalProp('email', d.data.data.email)
-              setLocalProp('userName', self.param.userName)
-              setLocalProp('userId', d.data.data.userId)
-              let param = self.param
+              setLocalProp("email", d.data.data.email);
+              setLocalProp("userName", self.param.userName);
+              setLocalProp("userId", d.data.data.userId);
+              let param = self.param;
               self.$store
-                .dispatch('login', self.$store.state.userInfo)
+                .dispatch("login", self.$store.state.userInfo)
                 .then((res) => {
                   if (
                     parseInt(res.data.code) === 200 &&
-                    res.data.mes === 'success'
+                    res.data.mes === "success"
                   ) {
-                    setToken(res.data.data.token)
-                    self.$message.success(`欢迎您，${param.userName}`)
-                    self.$router.replace('/')
+                    setToken(res.data.data.token);
+                    self.$message.success(`欢迎您，${param.userName}`);
+                    self.$router.replace("/");
                   } else if (parseInt(res.data.code) === 400) {
-                    self.$message.error('输入的密码不正确，请重新输入')
-                    console.log(res.data)
-                    return false
+                    self.$message.error("输入的密码不正确，请重新输入");
+                    console.log(res.data);
+                    return false;
                   } else {
                     self.$message.error(
-                      '服务器无响应，请联系管理员检查服务端系统'
-                    )
-                    console.log(res.data)
-                    return false
+                      "服务器无响应，请联系管理员检查服务端系统"
+                    );
+                    console.log(res.data);
+                    return false;
                   }
                 })
                 .catch((error) => {
-                  self.$message.error(error.mes)
-                  return false
-                })
+                  self.$message.error(error.mes);
+                  return false;
+                });
               //   loginUser(this.param)
               //     .then((res) => {
               //       if (
@@ -144,19 +151,19 @@ export default {
               //     })
             })
             .catch((e) => {
-              this.$message.error(e.toString())
-              console.log(e)
-              return false
-            })
+              this.$message.error(e.toString());
+              console.log(e);
+              return false;
+            });
         } else {
-          this.$message.error('请输入账号和密码')
-          console.log(e)
-          return false
+          this.$message.error("请输入账号和密码");
+          console.log(e);
+          return false;
         }
-      })
+      });
     },
   },
-}
+};
 </script>
 
 <style scoped>

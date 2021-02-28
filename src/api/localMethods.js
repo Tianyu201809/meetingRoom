@@ -17,17 +17,38 @@ export const getLocalProp = (propName) => {
  * @param {*} func
  * @param {*} delay
  */
-export const _debounce = function(func, delay) {
-	var timer = null
-	var that = this
-	delay = delay || 500
+export const debounce = function(fn, delay) {
+	let timer // 维护一个 timer
 	return function() {
+		let _this = this // 取debounce执行作用域的this
+		let args = arguments
 		if (timer) {
 			clearTimeout(timer)
 		}
 		timer = setTimeout(function() {
-			func.apply(that, args)
+			fn.apply(_this, args)
+			//用apply指向调用debounce的对象，相当于_this.fn(args);
 		}, delay)
+	}
+}
+
+/**
+ * 说明：
+ * 所谓节流，就是指连续触发事件但是在 n 秒中只执行一次函数
+ *
+ * @param {function} *func 需要节流处理的函数名称
+ * @param {number} *wait 延时时间
+ */
+export const throttle = function(func, wait) {
+	let previous = 0
+	return function() {
+		let now = Date.now()
+		let that = this
+		let args = arguments
+		if (now - previous > wait) {
+			func.apply(that, args)
+			previous = now
+		}
 	}
 }
 

@@ -3,56 +3,63 @@
     <el-row :gutter="20">
       <el-col :span="8">
         <!-- 传递用户信息email和name给子组件 -->
-        <my-info-card :userInfo="userInfo"></my-info-card>
-        <chart-analysis></chart-analysis>
-
+        <keep-alive>
+          <my-info-card :userInfo="userInfo"></my-info-card>
+        </keep-alive>
+        <keep-alive>
+          <chart-analysis></chart-analysis>
+        </keep-alive>
       </el-col>
       <el-col :span="8">
-        <el-row :gutter="0"
-                class="mgb20">
+        <el-row :gutter="0" class="mgb20">
           <my-calendar @currentSelectDate="getSelectDate"></my-calendar>
         </el-row>
-
       </el-col>
       <el-col :span="8">
-        <el-row :gutter="0"
-                class="mgb20">
-          <notification></notification>
-          <transition name="fade">
-            <today-meeting-card :meetingList="meetingList"
-                                :userInfo="userInfo"
-                                :total="totalCount"
-                                :appointDate='meetingDate'
-                                @paingUserMeetingItems="getPagingUserMeeting"
-                                :loading.sync='loading'
-                                style="margin-top:10px"></today-meeting-card>
-          </transition>
+        <el-row :gutter="0" class="mgb20">
+          <keep-alive>
+            <notification></notification>
+          </keep-alive>
 
+          <transition name="fade">
+            <keep-alive>
+              <today-meeting-card
+                :meetingList="meetingList"
+                :userInfo="userInfo"
+                :total="totalCount"
+                :appointDate="meetingDate"
+                @paingUserMeetingItems="getPagingUserMeeting"
+                :loading.sync="loading"
+                style="margin-top: 10px"
+              ></today-meeting-card>
+            </keep-alive>
+          </transition>
         </el-row>
       </el-col>
-
     </el-row>
   </div>
 </template>
-
 <script>
 //import Schart from 'vue-schart'
-import bus from '../../components/common/bus'
-import notification from './children/notification'
-import myInfoCard from './children/myInfoCard'
-import todayMeetingCard from './children/todayMeetingCard'
-import myCalendar from './children/myCalendar'
-import chartAnalysis from './children/chartAnalysis'
-import { getUserInfo } from '@/api/user'
-import { setToken, getToken } from '@/api/token'
-import { getUserJoinedMeetingCount, userJoinedMeeting } from '@/api/appointment'
+import bus from "../../components/common/bus";
+import notification from "./children/notification";
+import myInfoCard from "./children/myInfoCard";
+import todayMeetingCard from "./children/todayMeetingCard";
+import myCalendar from "./children/myCalendar";
+import chartAnalysis from "./children/chartAnalysis";
+import { getUserInfo } from "@/api/user";
+import { setToken, getToken } from "@/api/token";
+import {
+  getUserJoinedMeetingCount,
+  userJoinedMeeting,
+} from "@/api/appointment";
 
-import store from '../../store'
-import { getLocalProp, setLocalProp, _debounce } from '@/api/localMethods'
-import dayjs from 'dayjs'
+import store from "../../store";
+import { getLocalProp, setLocalProp, _debounce } from "@/api/localMethods";
+import dayjs from "dayjs";
 
 export default {
-  name: 'index',
+  name: "index",
   components: {
     myInfoCard,
     todayMeetingCard,
@@ -63,49 +70,49 @@ export default {
   beforeRouteEnter(to, from, next) {
     //设置组件导航首位，如果cookit中没有页面，不进行跳转
     //并将提示信息返回给前端
-    const path = to.path
-    const token = getToken()
-    console.log(this)
+    const path = to.path;
+    const token = getToken();
+    console.log(this);
     if (!token) {
-      this.$router.push('/login')
+      this.$router.push("/login");
     }
-    if (path === '/login') {
-      next(false)
+    if (path === "/login") {
+      next(false);
     }
     //登录成功之后，后端会返回一个成功的验证信息给前端
 
-    next(true)
+    next(true);
   },
   data() {
     return {
       userInfo: {
-        userName: '',
-        email: '',
+        userName: "",
+        email: "",
         role: 1,
-        loginDate: '',
-        loginTime: '',
+        loginDate: "",
+        loginTime: "",
       },
       totalCount: 0, //index页面中的当日会议的总数
-      meetingDate: '',
+      meetingDate: "",
       todoList: [],
       meetingList: [],
       loading: true,
-    }
+    };
   },
   mounted() {},
   computed: {},
   methods: {
     //获取用户
     getPagingUserMeeting(data) {
-      this.meetingList = data
+      this.meetingList = data;
     },
     getSelectDate(selectDate) {
-      this.loading = true
-      this.meetingDate = selectDate
+      this.loading = true;
+      this.meetingDate = selectDate;
       const filterObj = {
         userName: this.userInfo.userName,
         meetingDate: this.meetingDate,
-      }
+      };
       //   this.getUserJoinedMeetingCount(filterObj).then((d) => {
       //     that.totalCount = d.data.count
       //     that.userJoinedMeetingItems(filterObj)
@@ -118,12 +125,12 @@ export default {
         getUserJoinedMeetingCount(filterObj),
         userJoinedMeeting(filterObj),
       ]).then((result) => {
-        console.log(result[0])
-        console.log(result[1])
-        this.totalCount = result[0].data.count || 0
-        this.meetingList = result[1].data.data
-        this.loading = false
-      })
+        console.log(result[0]);
+        console.log(result[1]);
+        this.totalCount = result[0].data.count || 0;
+        this.meetingList = result[1].data.data;
+        this.loading = false;
+      });
     },
 
     //获取登陆人当日会议数量,用于分页使用
@@ -131,23 +138,23 @@ export default {
       return new Promise((resolve, reject) => {
         getUserJoinedMeetingCount(obj)
           .then((res) => {
-            this.loading = false
-            resolve(res)
+            this.loading = false;
+            resolve(res);
           })
           .catch((e) => {
-            this.loading = false
-            console.log(e)
-          })
-      })
+            this.loading = false;
+            console.log(e);
+          });
+      });
     },
     //获取登陆人当日会议显示条目，默认显示3条
     //查询参会人中包含登陆人的预约条目
     userJoinedMeetingItems(obj) {
       return new Promise((resolve, reject) => {
         userJoinedMeeting(obj).then((result) => {
-          this.meetingList = result.data.data
-        })
-      })
+          this.meetingList = result.data.data;
+        });
+      });
     },
 
     // handleListener() {
@@ -169,40 +176,39 @@ export default {
     /**
      * 获取用户数据部分email username
      */
-    let that = this
-    this.userInfo.userName = getLocalProp('userName')
-    this.userInfo.email = getLocalProp('email')
-    let dateString = dayjs(new Date()).format('YYYY-MM-DD HH:mm:ss')
-    let timeString = dateString.split(' ')[1]
-    this.userInfo.loginDate = dayjs(new Date()).format('YYYY-MM-DD')
-    this.userInfo.loginTime = timeString //登录时间以后需要修改
+    let that = this;
+    this.userInfo.userName = getLocalProp("userName");
+    this.userInfo.email = getLocalProp("email");
+    let dateString = dayjs(new Date()).format("YYYY-MM-DD HH:mm:ss");
+    let timeString = dateString.split(" ")[1];
+    this.userInfo.loginDate = dayjs(new Date()).format("YYYY-MM-DD");
+    this.userInfo.loginTime = timeString; //登录时间以后需要修改
 
     /**
      * today meeting部分
      */
     const obj = {
       userName: this.userInfo.userName,
-      meetingDate: this.meetingDate || dayjs(new Date()).format('YYYY-MM-DD'),
-    }
+      meetingDate: this.meetingDate || dayjs(new Date()).format("YYYY-MM-DD"),
+    };
 
     Promise.all([getUserJoinedMeetingCount(obj), userJoinedMeeting(obj)])
       .then((result) => {
-        console.log(result[0])
-        console.log(result[1])
-        this.totalCount = result[0].data.count || 0
-        this.meetingList = result[1].data.data
-        this.loading = false
+        console.log(result[0]);
+        console.log(result[1]);
+        this.totalCount = result[0].data.count || 0;
+        this.meetingList = result[1].data.data;
+        this.loading = false;
       })
       .catch((e) => {
-        this.loading = false
-      })
+        this.loading = false;
+      });
   },
-}
+};
 </script>
 
 
 <style scoped>
-
 .el-row {
   margin-bottom: 10px;
 }

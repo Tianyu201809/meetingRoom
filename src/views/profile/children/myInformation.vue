@@ -38,6 +38,7 @@
           ></el-rate>
         </div>
       </div>
+<<<<<<< HEAD
       <div v-if="!editMode">
         <i class="el-icon-edit editInfo-label" @click="editMode = !editMode"
           >编辑个人信息</i
@@ -55,6 +56,18 @@
           >返回</i
         >
       </div>
+=======
+      <!-- <div v-if="!editMode">
+        <i class="el-icon-edit editInfo-label"
+           @click="editMode = !editMode">编辑个人信息</i>
+      </div>
+      <div v-else>
+        <i class="el-icon-upload editInfo-label blue mr-right15"
+           @click="editMode = !editMode">保存</i>
+        <i class="el-icon-refresh-left editInfo-label green"
+           @click="editMode = !editMode">返回</i>
+      </div> -->
+>>>>>>> dev
       <el-divider></el-divider>
       <!-- 基本信息 -->
       <div class="baseInfo">
@@ -63,8 +76,13 @@
             <!-- <i class="el-icon-message"></i> -->
             <label class="el-icon-user-solid">#ID Number</label>
           </div>
+<<<<<<< HEAD
           <div class="info-propotype-value">
             {{ userInfo._id ? userInfo._id : "*****-*****-*****" }}
+=======
+          <div class="info-propotype-value user-id-color">
+            {{userInfo._id ? userInfo._id:'*****-*****-*****'}}
+>>>>>>> dev
           </div>
         </div>
         <div class="baseInfo-item">
@@ -103,8 +121,13 @@
             <i class="el-icon-user"></i>
             #Position
           </div>
+<<<<<<< HEAD
           <div class="info-propotype-value">
             {{ userInfo.Position ? userInfo.Position : "3.5" }}
+=======
+          <div class="info-propotype-value user-created-color">
+            {{userInfo.Position ? userInfo.Position:'3.5'}}
+>>>>>>> dev
           </div>
         </div>
         <div class="baseInfo-item">
@@ -137,8 +160,13 @@
         </div>
         <div class="baseInfo-item">
           <div class="info-propotype-name">#Role</div>
+<<<<<<< HEAD
           <div class="info-propotype-value">
             {{ userInfo.role ? userInfo.role : "普通用户" }}
+=======
+          <div class="info-propotype-value user-created-color">
+            {{userInfo.role ? userInfo.role:'普通用户'}}
+>>>>>>> dev
           </div>
         </div>
         <div class="baseInfo-item">
@@ -146,12 +174,17 @@
             <!-- <i class="el-icon-watch"></i> -->
             <label for="">⌚#Created Date</label>
           </div>
+<<<<<<< HEAD
           <div class="info-propotype-value">
             {{
               userInfo.createdDate
                 ? dateFormat(userInfo.createdDate)
                 : "2020-08-15"
             }}
+=======
+          <div class="info-propotype-value user-created-color">
+            {{userInfo.createdDate ? dateFormat(userInfo.createdDate):'2020-08-15'}}
+>>>>>>> dev
           </div>
         </div>
       </div>
@@ -246,6 +279,7 @@ export default {
 [v-cloak] {
   display: none;
 }
+
 .hidden-element {
   display: none;
 }
@@ -320,5 +354,10 @@ export default {
 .user-info {
   display: flex;
   justify-content: center;
+}
+.user-id-color,
+.user-created-color,
+.user-position-color {
+  color: #9c9c9c;
 }
 </style>

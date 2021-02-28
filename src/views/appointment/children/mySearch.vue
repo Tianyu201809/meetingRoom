@@ -86,6 +86,7 @@ export default {
       this.$emit('filterCondition', filter)
       this.$parent.queryMeetingRoomByFilter(filter)
       this.$parent.resetPages(filter)
+      
     },
     resetData() {
       this.forma.title = ''

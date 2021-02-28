@@ -43,24 +43,24 @@ const router = new Router({
 				import(/* webpackChunkName: "home" */ '../views/Home.vue'),
 			children: [
 				{
-					path: '/index',
+					path: 'index',
 					name: 'index',
 					component: () => import('../views/home/index.vue'),
 				},
 				{
-					path: '/releaseNotices',
+					path: 'releaseNotices',
 					name: 'releaseNotices',
 					component: () =>
 						import('../views/releaseNotices/releaseNotices.vue'),
 				},
 				{
-					path: '/queryNotices',
+					path: 'queryNotices',
 					name: 'queryNotices',
 					component: () =>
 						import('../views/releaseNotices/queryNotices.vue'),
 				},
 				{
-					path: '/createAppointment',
+					path: 'createAppointment',
 					name: 'createAppointment',
 					component: () =>
 						import('../views/appointment/createAppointment.vue'),
@@ -73,7 +73,7 @@ const router = new Router({
 				},
 
 				{
-					path: '/queryMeeting',
+					path: 'queryMeeting',
 					name: 'queryMeeting',
 					component: () =>
 						import('../views/appointment/queryMeeting.vue'),
@@ -84,22 +84,21 @@ const router = new Router({
 				// },
 				{
 					//创建会议室
-					path: '/createMeetingRoom',
+					path: 'createMeetingRoom',
 					name: 'createMeetingRoom',
-
 					component: () =>
 						import('../views/meetingRoom/createMeetingRoom.vue'),
 				},
 				{
 					//查询，修改，删除会议室
-					path: '/maintainMeetingRoom',
+					path: 'maintainMeetingRoom',
 					name: 'maintainMeetingRoom',
 					component: () =>
 						import('../views/meetingRoom/maintainMeetingRoom.vue'),
 				},
 				{
 					//会议室详情页
-					path: '/meetingRoomDetail/:id',
+					path: 'meetingRoomDetail/:id',
 					name: 'meetingRoomDetail',
 					component: () =>
 						import('../views/meetingRoom/meetingRoomDetail.vue'),
@@ -107,7 +106,7 @@ const router = new Router({
 				},
 				{
 					//预约编辑页
-					path: '/editAppointment/:id',
+					path: 'editAppointment/:id',
 					name: 'editAppointment',
 					component: () =>
 						import('../views/appointment/editAppointment.vue'),
@@ -119,7 +118,7 @@ const router = new Router({
 				// },
 				{
 					//通知编辑页
-					path: '/editNotices/:id',
+					path: 'editNotices/:id',
 					name: 'editNotices',
 					component: () =>
 						import('../views/releaseNotices/editNotices.vue'),
@@ -128,15 +127,20 @@ const router = new Router({
 				//个人信息C:\Users\Tianyu\Desktop\meetingRoom-dev\src\views\profile\myMessage.vue
 				{
 					//个人信息设置页
-					path: '/myMessage',
+					path: 'myMessage',
 					name: 'myMessage',
 					component: () => import('../views/profile/myMessage.vue'),
 					meta: { title: '个人信息修改' },
 				},
 				{
-					path: '/specify',
+					path: 'specify',
 					name: 'specify',
 					component: () => import('../views/specify/specify.vue'),
+				},
+				{
+					path: 'myAppointment',
+					name: 'myAppointment',
+					component: () => import('../views/profile/myAppointment.vue'),
 				},
 				{
 					path: '*',

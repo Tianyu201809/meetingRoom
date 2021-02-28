@@ -14,7 +14,7 @@
     </div>
     <div style="margin-left:17px">
       <my-search @filterCondition='getFilter'
-                 :current-page.sync="currentPage"></my-search>
+                 :current-page.sync="currentPage" ref="search1"></my-search>
       <meeting-room-table :tableData="tableData"
                           @itemTotal="getTotalItem"
                           :filter="filter"
@@ -139,6 +139,8 @@ export default {
   },
   mounted() {},
   created() {
+    //打印
+    console.log(this.$refs.search1);
     //初始加载动画
     this.loading = true
     this.getQueryAppointCount({})
